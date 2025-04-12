@@ -1,47 +1,54 @@
-<script setup lang="ts">
-import HelloWorld from './components/HelloWorld.vue'
-import TheWelcome from './components/TheWelcome.vue'
-</script>
+<script setup lang="ts"></script>
 
 <template>
-  <header>
-    <img alt="Vue logo" class="logo" src="./assets/logo.svg" width="125" height="125" />
-
-    <div class="wrapper">
-      <HelloWorld msg="You did it!" />
-    </div>
-  </header>
-
-  <main>
-    <TheWelcome />
-  </main>
+  <sl-split-panel>
+    <template v-slot:start>
+      <div
+        style="
+          height: 400px;
+          background: var(--sl-color-neutral-50);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          overflow: hidden;
+        "
+      >
+        Start
+      </div>
+    </template>
+    <template v-slot:end>
+      <div>
+        <sl-split-panel vertical style="height: 400px">
+          <template v-slot:start>
+            <div
+              style="
+                height: 100%;
+                background: var(--sl-color-neutral-50);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                overflow: hidden;
+              "
+            >
+              Top
+            </div>
+          </template>
+          <template v-slot:end>
+            <div
+              style="
+                height: 100%;
+                background: var(--sl-color-neutral-50);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                overflow: hidden;
+              "
+            >
+              Bottom
+            </div>
+          </template>
+        </sl-split-panel>
+      </div>
+    </template>
+  </sl-split-panel>
 </template>
-
-<style scoped>
-header {
-  line-height: 1.5;
-}
-
-.logo {
-  display: block;
-  margin: 0 auto 2rem;
-}
-
-@media (min-width: 1024px) {
-  header {
-    display: flex;
-    place-items: center;
-    padding-right: calc(var(--section-gap) / 2);
-  }
-
-  .logo {
-    margin: 0 2rem 0 0;
-  }
-
-  header .wrapper {
-    display: flex;
-    place-items: flex-start;
-    flex-wrap: wrap;
-  }
-}
-</style>
