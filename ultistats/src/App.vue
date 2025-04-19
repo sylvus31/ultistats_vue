@@ -2,6 +2,38 @@
 import '@shoelace-style/shoelace/dist/components/split-panel/split-panel.js'
 import '@shoelace-style/shoelace/dist/components/button/button.js'
 import '@shoelace-style/shoelace/dist/components/details/details.js'
+import VideoPlayer, { type VideoPlayerInstance } from './components/VideoPlayer.vue'
+import { onKeyStroke, useFocus } from '@vueuse/core'
+import { ref } from 'vue'
+
+const videoPlayerRef = ref<VideoPlayerInstance | null>(null)
+const videoPlayerKeys = [' ', 'ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight']
+onKeyStroke(true, (event: KeyboardEvent) => {
+  event.preventDefault()
+  if (videoPlayerKeys.includes(event.key)) {
+    if (videoPlayerRef.value) {
+      switch (event.key) {
+        case 'ArrowUp':
+          videoPlayerRef.value.changeSpeed(true)
+          break
+        case 'ArrowDown':
+          videoPlayerRef.value.changeSpeed(false)
+          break
+        case 'ArrowLeft':
+          videoPlayerRef.value.seek(-2)
+          break
+        case 'ArrowRight':
+          videoPlayerRef.value.seek(5)
+          break
+        case ' ':
+          videoPlayerRef.value.playPause()
+          break
+        default:
+          break
+      }
+    }
+  }
+})
 </script>
 
 <template>
@@ -11,11 +43,8 @@ import '@shoelace-style/shoelace/dist/components/details/details.js'
   <!-- eslint-disable vue/no-deprecated-slot-attribute -->
   <!-- prettier-ignore -->
   <sl-split-panel>
-    <div slot="start">
-      <sl-split-panel vertical>
-        <div slot="start">a1</div>
-        <div slot="end">a2</div>
-      </sl-split-panel>
+    <div slot="start" >
+      <VideoPlayer ref="videoPlayerRef" />
     </div>
     <div slot="end">
       <sl-details summary="Toggle Me">
