@@ -22,7 +22,7 @@ const props = defineProps({
   title: String,
   childComponent: String,
 })
-const AsyncComp = defineAsyncComponent(() => import(`./${props.childComponent}.vue`))
+const AsyncComp = defineAsyncComponent(() => import(`./sub/${props.childComponent}.vue`))
 
 const isMinimized = ref(false)
 
