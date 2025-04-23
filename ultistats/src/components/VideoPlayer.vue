@@ -6,21 +6,34 @@
 
     <!-- Custom Controls -->
     <div class="custom-controls">
-      <button @click="playPause">{{ isPlaying ? 'Pause' : 'Play' }}</button>
-      <button @click="seek(-2)">&lt;&lt; 2s [←]</button>
-      <button @click="seek(5)">&gt;&gt; 5s [→]</button>
-      <button @click="changeSpeed(false)">Speed down [↓]</button>
-      <button @click="changeSpeed(true)">Speed Up [↑]</button>
+      <button @click="playPause">
+        <span class="mdi" :class="isPlaying ? 'mdi-pause' : 'mdi-play'"></span> [SPACE]
+      </button>
+      <button @click="seek(-2)"><span class="mdi" :class="'mdi-rewind'"></span> 2s [←]</button>
+      <button @click="seek(5)"><span class="mdi" :class="'mdi-fast-forward'"></span> 5s [→]</button>
+      <button @click="changeSpeed(false)">
+        <span class="mdi" :class="'mdi-play-speed'"></span> [↓]
+      </button>
+      <button @click="changeSpeed(true)">
+        <span class="mdi" :class="'mdi-play-speed'"></span> [↑]
+      </button>
       <span>Speed: {{ currentSpeed.toFixed(2) }}x</span>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, onBeforeUnmount } from 'vue' // Removed computed as it wasn't used directly
-import videojs, { type VideoJsPlayer, type VideoJsPlayerOptions } from 'video.js'
+import { ref, onMounted, onBeforeUnmount } from 'vue'
+import videojs from 'video.js'
+import VideoJsPlayerOptions from 'video.js'
+import VideoJsPlayer from 'video.js'
 import 'video.js/dist/video-js.css'
+import { onKeyStroke } from '@vueuse/core'
 
+// Import the YouTube tech
+import 'videojs-youtube' // <-- Add this line
+
+const videoPlayerKeys = [' ', 'ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight']
 // --- Props ---
 interface Props {
   options?: VideoJsPlayerOptions
@@ -28,6 +41,7 @@ interface Props {
 
 const frameDuration = 1 / 30
 
+// Modify default options to include YouTube tech
 const props = withDefaults(defineProps<Props>(), {
   options: () => ({
     autoplay: false,
@@ -43,21 +57,12 @@ const props = withDefaults(defineProps<Props>(), {
       fullscreenToggle: false,
     },
     userActions: {
-      // Keep click handler if needed, but disable default spacebar hotkey if video.js has one
       click: function (event: Event) {
         console.log('player clicked', event)
-        // Optionally toggle play/pause on click as well
-        // playPause();
       },
-      doubleClick: false, // Keep double click disabled if desired
+      doubleClick: false,
       hotkeys: false,
     },
-    sources: [
-      {
-        src: 'https://files.vidstack.io/sprite-fight/480p.mp4',
-        type: 'video/mp4',
-      },
-    ],
   }),
 })
 
@@ -66,12 +71,12 @@ const videoNode = ref<HTMLVideoElement | null>(null)
 const player = ref<VideoJsPlayer | null>(null)
 const isPlaying = ref(false)
 const currentSpeed = ref(1.0)
-const playerWrapper = ref<HTMLDivElement | null>(null) // Ref for the root div
+const playerWrapper = ref<HTMLDivElement | null>(null)
 
 // --- Lifecycle Hooks ---
 onMounted(() => {
-  // Initialize Video.js Player
   if (videoNode.value) {
+    // Initialize Video.js - it will now understand YouTube sources
     player.value = videojs(videoNode.value, props.options, () => {
       console.log('Video player is ready')
       if (player.value) {
@@ -89,17 +94,11 @@ onMounted(() => {
             currentSpeed.value = player.value.playbackRate()
           }
         })
-
-        // Focus the wrapper initially if desired, so keydown works immediately
-        // playerWrapper.value?.focus();
       }
     })
   } else {
     console.error('Video element not found for Video.js initialization.')
   }
-
-  // Note: Keydown listener is now handled directly in the template
-  // with @keydown.space.prevent="handleSpacebar"
 })
 
 onBeforeUnmount(() => {
@@ -108,10 +107,10 @@ onBeforeUnmount(() => {
     player.value.dispose()
     player.value = null
   }
-  // No need to manually remove listener added via template directive
 })
 
 // --- Control Methods ---
+// playPause, seek, changeSpeed remain the same...
 const playPause = () => {
   if (!player.value) return
   if (player.value.paused()) {
@@ -124,8 +123,11 @@ const playPause = () => {
 const seek = (seconds: number) => {
   if (!player.value) return
   const currentTime = player.value.currentTime() || 0
+  // Adjust seek logic if needed for YouTube, but standard seek should work
   if (!isPlaying.value || player.value.playbackRate() == 0) {
     const direction = seconds > 0 ? 1 : -1
+    // Frame-by-frame might not work reliably with YouTube tech
+    // Consider simplifying or adjusting this logic if issues arise
     player.value.currentTime(currentTime + frameDuration * direction)
   } else {
     player.value.currentTime(currentTime + seconds)
@@ -134,37 +136,89 @@ const seek = (seconds: number) => {
 
 const changeSpeed = (up: boolean) => {
   if (!player.value) return
+  // Note: YouTube playback speed support might differ from local files
   const currentRate = player.value.playbackRate()
-  const possibleRates: [number] = player.value.playbackRates()
-  const currentIndex = possibleRates.lastIndexOf(currentRate)
+  const possibleRates: number[] = player.value.playbackRates() // Ensure type is number[]
+  const currentIndex = possibleRates.indexOf(currentRate) // Use indexOf for arrays
   let newRate = 1
-  if (currentIndex >= 0) {
+  if (currentIndex !== -1) {
+    // Check if currentRate is found
     const shift = up ? 1 : -1
     const newIndex = Math.max(0, Math.min(possibleRates.length - 1, currentIndex + shift))
     newRate = possibleRates[newIndex]
   } else {
-    console.log('wrong playspeed', currentRate, possibleRates, 'set to 1')
+    console.warn(
+      'Current playback rate not found in available rates. Setting to 1.',
+      currentRate,
+      possibleRates,
+    )
+    // Find the closest rate or default to 1
+    newRate = 1.0
   }
   player.value.playbackRate(newRate)
 }
 
+// --- Method to load a video source (no changes needed here) ---
+const loadVideo = (source: { src: string; type: string }) => {
+  if (player.value) {
+    console.log('Loading new video source:', source)
+    player.value.src(source)
+    player.value.load() // Important to load the new source
+  } else {
+    console.error('Video player not available to load new source.')
+  }
+}
+
+// --- Keyboard Shortcuts ---
+onKeyStroke(true, (event: KeyboardEvent) => {
+  event.preventDefault()
+  if (videoPlayerKeys.includes(event.key)) {
+    switch (event.key) {
+      case 'ArrowUp':
+        changeSpeed(true)
+        break
+      case 'ArrowDown':
+        changeSpeed(false)
+        break
+      case 'ArrowLeft':
+        seek(-2)
+        break
+      case 'ArrowRight':
+        seek(5)
+        break
+      case ' ':
+        playPause()
+        break
+      default:
+        break
+    }
+  }
+})
+
+export interface VideoPlayerInstance {
+  playPause: () => void
+  isPlaying: typeof isPlaying
+  seek: (seconds: number) => void
+  changeSpeed: (up: boolean) => void
+  currentSpeed: typeof currentSpeed
+  loadVideo: (source: { src: string; type: string }) => void
+}
+
 defineExpose({
   playPause,
-  isPlaying, // Expose the ref directly
+  isPlaying,
   seek,
   changeSpeed,
-  currentSpeed, // Expose the ref directly
+  currentSpeed,
+  loadVideo,
 })
 </script>
 
 <style scoped>
-/* Add focus outline for accessibility on the wrapper */
 [tabindex='0']:focus {
   outline: 2px solid dodgerblue; /* Or your preferred focus style */
   outline-offset: 2px;
 }
-
-/* Add some basic styling for the controls */
 .custom-controls {
   margin-top: 10px;
   display: flex;
@@ -172,14 +226,12 @@ defineExpose({
   align-items: center;
   flex-wrap: wrap;
 }
-
 .custom-controls button {
   padding: 5px 10px;
   cursor: pointer;
   border: none;
   border-radius: 3px;
 }
-
 .custom-controls span {
   font-family: sans-serif;
   font-size: 0.9em;
