@@ -6,6 +6,8 @@ import '@shoelace-style/shoelace/dist/components/details/details.js'
 import VideoPlayer, { type VideoPlayerInstance } from './components/VideoPlayer.vue'
 import { ref } from 'vue'
 import ButtonContainer from './components/ButtonContainer.vue'
+import BetterButtonContainer from './components/BetterButtonContainer.vue'
+import PlayerSelector from './components/PlayerSelector.vue'
 
 const videoPlayerRef = ref<VideoPlayerInstance | null>(null)
 const fileInputRef = ref<HTMLInputElement | null>(null) // Ref for the hidden file input
@@ -72,7 +74,9 @@ const handleFileChange = (event: Event) => {
     </div>
     <div slot="end">
       <ButtonContainer title="Players" childComponent="PlayerSelector"/>
-      <ButtonContainer title="Actions"/>
+      <BetterButtonContainer title="Actions">
+        <PlayerSelector/>
+      </BetterButtonContainer>
       <ButtonContainer title="Stats"/>
     </div>
   </sl-split-panel>

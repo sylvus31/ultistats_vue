@@ -17,7 +17,7 @@
       <button @click="changeSpeed(true)">
         <span class="mdi" :class="'mdi-play-speed'"></span> [↑]
       </button>
-      <span>Speed: {{ currentSpeed.toFixed(2) }}x</span>
+      <span>Speed: {{ currentSpeed?.toFixed(2) }}x</span>
     </div>
   </div>
 </template>
@@ -25,8 +25,8 @@
 <script setup lang="ts">
 import { ref, onMounted, onBeforeUnmount } from 'vue'
 import videojs from 'video.js'
-import VideoJsPlayerOptions from 'video.js'
-import VideoJsPlayer from 'video.js'
+import type Player from 'video.js/dist/types/player'
+import { defineProps, withDefaults, defineExpose } from 'vue'
 import 'video.js/dist/video-js.css'
 import { onKeyStroke } from '@vueuse/core'
 
@@ -36,7 +36,7 @@ import 'videojs-youtube' // <-- Add this line
 const videoPlayerKeys = [' ', 'ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight']
 // --- Props ---
 interface Props {
-  options?: VideoJsPlayerOptions
+  options?: object
 }
 
 const frameDuration = 1 / 30
@@ -68,9 +68,9 @@ const props = withDefaults(defineProps<Props>(), {
 
 // --- Refs ---
 const videoNode = ref<HTMLVideoElement | null>(null)
-const player = ref<VideoJsPlayer | null>(null)
+const player = ref<Player | null>(null)
 const isPlaying = ref(false)
-const currentSpeed = ref(1.0)
+const currentSpeed = ref<number | undefined>(1.0)
 const playerWrapper = ref<HTMLDivElement | null>(null)
 
 // --- Lifecycle Hooks ---
@@ -139,7 +139,8 @@ const changeSpeed = (up: boolean) => {
   // Note: YouTube playback speed support might differ from local files
   const currentRate = player.value.playbackRate()
   const possibleRates: number[] = player.value.playbackRates() // Ensure type is number[]
-  const currentIndex = possibleRates.indexOf(currentRate) // Use indexOf for arrays
+  const currentIndex = currentRate ? possibleRates.indexOf(currentRate) : 1.0
+
   let newRate = 1
   if (currentIndex !== -1) {
     // Check if currentRate is found
