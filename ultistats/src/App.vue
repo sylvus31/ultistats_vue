@@ -2,13 +2,11 @@
 import '@shoelace-style/shoelace/dist/components/split-panel/split-panel.js'
 import '@shoelace-style/shoelace/dist/components/button/button.js'
 import '@shoelace-style/shoelace/dist/components/details/details.js'
-// Make sure the path and type import are correct
 import VideoPlayer, { type VideoPlayerInstance } from './components/VideoPlayer.vue'
 import { ref } from 'vue'
-import BetterButtonContainer from './components/WindowHolder.vue'
 import PlayerSelector from './components/PlayerSelector.vue'
-import Window from './components/WindowHolder.vue'
 import WindowHolder from './components/WindowHolder.vue'
+import YoutubeVideoSelector from './components/YoutubeVideoSelector.vue'
 
 const videoPlayerRef = ref<VideoPlayerInstance | null>(null)
 const fileInputRef = ref<HTMLInputElement | null>(null) // Ref for the hidden file input
@@ -48,6 +46,14 @@ const handleFileChange = (event: Event) => {
     console.error('Video player ref not available.')
   }
 }
+const handleLoadYoutubeVideo = (source: { src: string; type: string }) => {
+  console.log('App.vue received load-video event:', source)
+  if (videoPlayerRef.value) {
+    videoPlayerRef.value.loadVideo(source)
+  } else {
+    console.error('Video player ref not available when trying to load YouTube video.')
+  }
+}
 </script>
 
 <template>
@@ -63,8 +69,7 @@ const handleFileChange = (event: Event) => {
   <!-- Button to open the file dialog -->
   <sl-button @click="openFileDialog">Load Video</sl-button>
 
-  <sl-button>Button</sl-button>
-  <!-- Existing button -->
+  <YoutubeVideoSelector @load-video="handleLoadYoutubeVideo" />
 
   <!-- eslint-disable vue/no-deprecated-slot-attribute -->
   <!-- prettier-ignore -->

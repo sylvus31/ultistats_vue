@@ -24,14 +24,14 @@
 
 <script setup lang="ts">
 import { ref, onMounted, onBeforeUnmount } from 'vue'
+import 'videojs-youtube'
 import videojs from 'video.js'
 import type Player from 'video.js/dist/types/player'
-import { defineProps, withDefaults, defineExpose } from 'vue'
 import 'video.js/dist/video-js.css'
 import { onKeyStroke } from '@vueuse/core'
+import { useKeyboardStore } from '../stores/keyboardStore'
 
-// Import the YouTube tech
-import 'videojs-youtube' // <-- Add this line
+const keyboardStore = useKeyboardStore()
 
 const videoPlayerKeys = [' ', 'ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight']
 // --- Props ---
@@ -63,6 +63,7 @@ const props = withDefaults(defineProps<Props>(), {
       doubleClick: false,
       hotkeys: false,
     },
+    techOrder: ['html5', 'youtube'],
   }),
 })
 
@@ -76,7 +77,7 @@ const playerWrapper = ref<HTMLDivElement | null>(null)
 // --- Lifecycle Hooks ---
 onMounted(() => {
   if (videoNode.value) {
-    // Initialize Video.js - it will now understand YouTube sources
+    console.log('Initializing video player')
     player.value = videojs(videoNode.value, props.options, () => {
       console.log('Video player is ready')
       if (player.value) {
@@ -159,12 +160,10 @@ const changeSpeed = (up: boolean) => {
   player.value.playbackRate(newRate)
 }
 
-// --- Method to load a video source (no changes needed here) ---
 const loadVideo = (source: { src: string; type: string }) => {
   if (player.value) {
     console.log('Loading new video source:', source)
     player.value.src(source)
-    player.value.load() // Important to load the new source
   } else {
     console.error('Video player not available to load new source.')
   }
@@ -172,6 +171,10 @@ const loadVideo = (source: { src: string; type: string }) => {
 
 // --- Keyboard Shortcuts ---
 onKeyStroke(true, (event: KeyboardEvent) => {
+  console.log(keyboardStore.onFocusOnly)
+  if (keyboardStore.onFocusOnly) {
+    return
+  }
   event.preventDefault()
   if (videoPlayerKeys.includes(event.key)) {
     switch (event.key) {
