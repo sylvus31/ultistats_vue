@@ -1,20 +1,22 @@
 <template>
-  <sl-button @click="triggerLoadVideo">Open</sl-button>
-  <input
-    ref="youtubeInputRef"
-    class="borderless-input"
-    type="search"
-    list="browsers"
-    name="myBrowser"
-    id="youtubeInput"
-    placeholder="https://www.youtube.com/..."
-    @focusin="handleGetFocus"
-    @focusout="handleLosseFocus"
-  />
-  <datalist id="browsers">
-    <option value="Finale Indoor"></option>
-    <option value="Demi finale indoor"></option>
-  </datalist>
+  <div class="input-container">
+    <sl-button @click="triggerLoadVideo">Open</sl-button>
+    <!-- Use standard HTML input for datalist support -->
+    <input
+      ref="youtubeInputRef"
+      id="youtubeInput"
+      type="text"
+      placeholder="https://www.youtube.com/..."
+      @focusin="handleGetFocus"
+      @focusout="handleLosseFocus"
+      list="ytVideosList"
+      class="styled-input"
+    />
+    <datalist id="ytVideosList">
+      <option value="Finale Indoor"></option>
+      <option value="Demi finale indoor"></option>
+    </datalist>
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -22,7 +24,7 @@ import { ref } from 'vue' // Import ref
 import { useKeyboardStore } from '../stores/keyboardStore'
 
 const keyboardStore = useKeyboardStore()
-const youtubeInputRef = ref<HTMLInputElement | null>(null) // Ref for the input
+const youtubeInputRef = ref<HTMLInputElement | null>(null) // Ref for the HTML input
 
 // Define the event the component can emit
 const emit = defineEmits<{
@@ -70,14 +72,30 @@ const handleLosseFocus = () => {
 </script>
 
 <style scoped>
-.borderless-input {
-  border: none;
-  outline: none;
-  /* background-color: transparent; */
-  /* padding: 5px; */
+.styled-input {
+  /* Base styling */
+  font-family: inherit; /* Inherit font from body */
+  font-size: inherit;
+  line-height: inherit;
+  border: 2px solid #444; /* Match button border */
+  border-radius: 5px; /* Match button radius */
+  background-color: #333; /* Match button background */
+  color: #e0e0e0; /* Match button text color */
+  padding: 5px 10px; /* Match button padding */
+  margin: 5px; /* Match button margin */
+  min-width: 100px; /* Match button min-width */
+  width: 300px; /* Specific width */
+  box-sizing: border-box; /* Include padding and border in the element's total width and height */
+  height: 50px; /* Explicit height to match button - Adjust if needed */
 }
-/* Add focus style for accessibility */
-.borderless-input:focus {
-  background-color: #eee;
+
+.styled-input:focus {
+  border-color: #00bcd4; /* Accent color on focus */
+  outline: none; /* Remove default browser outline */
+}
+
+.input-container {
+  gap: 10px; /* Add some space between button and input */
+  margin-bottom: 0px;
 }
 </style>

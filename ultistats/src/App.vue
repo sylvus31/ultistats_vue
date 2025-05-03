@@ -1,6 +1,9 @@
 <script setup lang="ts">
 import '@shoelace-style/shoelace/dist/components/split-panel/split-panel.js'
 import '@shoelace-style/shoelace/dist/components/button/button.js'
+// Import the Shoelace dark theme
+import '@shoelace-style/shoelace/dist/themes/dark.css'
+
 import '@shoelace-style/shoelace/dist/components/details/details.js'
 import VideoPlayer, { type VideoPlayerInstance } from './components/VideoPlayer.vue'
 import { ref } from 'vue'
@@ -56,21 +59,22 @@ const handleLoadYoutubeVideo = (source: { src: string; type: string }) => {
 }
 </script>
 
-<template>
-  <!-- Hidden file input -->
-  <input
-    type="file"
-    ref="fileInputRef"
-    @change="handleFileChange"
-    accept="video/*"
-    style="display: none"
-  />
+<!-- Apply the Shoelace dark theme class -->
+<template class="sl-theme-dark">
+  <div class="input-container">
+    <!-- Hidden file input -->
+    <input
+      type="file"
+      ref="fileInputRef"
+      @change="handleFileChange"
+      accept="video/*"
+      style="display: none"
+    />
 
-  <!-- Button to open the file dialog -->
-  <sl-button @click="openFileDialog">Load Video</sl-button>
+    <sl-button @click="openFileDialog">Load Video</sl-button>
 
-  <YoutubeVideoSelector @load-video="handleLoadYoutubeVideo" />
-
+    <YoutubeVideoSelector @load-video="handleLoadYoutubeVideo" />
+  </div>
   <!-- eslint-disable vue/no-deprecated-slot-attribute -->
   <!-- prettier-ignore -->
   <sl-split-panel>
@@ -89,5 +93,69 @@ const handleLoadYoutubeVideo = (source: { src: string; type: string }) => {
 </template>
 
 <style>
-/* Add any global styles if needed */
+/* Apply Shoelace dark theme and global dark styles */
+body {
+  background-color: #1a1a1a; /* Dark background */
+  color: #e0e0e0; /* Light text */
+  margin: 0; /* Remove default body margin */
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* Modern font stack */
+}
+
+/* Ensure Shoelace components use the dark theme */
+:root,
+.sl-theme-dark {
+  color-scheme: dark;
+  /* You can override Shoelace variables here if needed */
+  /* --sl-color-primary-600: #00bcd4; */ /* Example: Teal accent */
+}
+
+/* Style the split panel handle */
+sl-split-panel::part(divider) {
+  background-color: #333;
+}
+
+sl-split-panel::part(divider):hover {
+  background-color: #2a4a52;
+}
+
+sl-button.active::part(base) {
+  border: 2px solid #00bcd4; /* Techy teal accent for active */
+  background-color: #2a4a52; /* Darker teal background for active */
+  color: #fff; /* White text for active */
+}
+
+sl-button::part(base) {
+  margin: 5px;
+  padding: 5px 10px;
+  min-width: 100px;
+  background-color: #333; /* Dark background */
+  color: #e0e0e0; /* Light text */
+  text-align: center;
+  border-radius: 5px;
+  border: 2px solid #444; /* Darker border */
+  cursor: pointer;
+}
+sl-button:hover:not(.active)::part(base) {
+  background-color: #444; /* Slightly lighter on hover */
+}
+
+/* Add some padding around the app */
+#app {
+  /* Assuming your root element has id="app" in index.html or main.ts */
+  padding: 1rem;
+}
+.input-container {
+  display: flex;
+  align-items: center; /* Vertically align items */
+  gap: 20px; /* Add more space between button and input */
+  margin-bottom: 10px; /* Add some space below the container */
+}
+
+/* Apply specific padding to align start panel content with button above */
+sl-split-panel > div[slot='start'] {
+  padding: 10px 10px 10px 5px; /* Match button left margin (5px) */
+}
+sl-split-panel > div[slot='end'] {
+  padding: 10px;
+}
 </style>

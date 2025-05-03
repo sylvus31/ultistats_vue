@@ -18,12 +18,13 @@
         <span class="mdi" :class="'mdi-play-speed'"></span> [↑]
       </button>
       <span>Speed: {{ currentSpeed?.toFixed(2) }}x</span>
+      <span>Time: {{ formattedTime }}</span>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, onBeforeUnmount } from 'vue'
+import { ref, onMounted, onBeforeUnmount, computed } from 'vue'
 import 'videojs-youtube'
 import videojs from 'video.js'
 import type Player from 'video.js/dist/types/player'
@@ -73,6 +74,7 @@ const player = ref<Player | null>(null)
 const isPlaying = ref(false)
 const currentSpeed = ref<number | undefined>(1.0)
 const playerWrapper = ref<HTMLDivElement | null>(null)
+const elapsedTime = ref(0) // Add ref for elapsed time
 
 // --- Lifecycle Hooks ---
 onMounted(() => {
@@ -83,6 +85,11 @@ onMounted(() => {
       if (player.value) {
         isPlaying.value = !player.value.paused()
         currentSpeed.value = player.value.playbackRate()
+        elapsedTime.value = player.value.currentTime() || 0 // Initialize time
+
+        // --- Event Listeners ---
+        // Store handler function to remove it later
+        const timeUpdateHandler = () => (elapsedTime.value = player.value?.currentTime() || 0)
 
         player.value.on('play', () => {
           isPlaying.value = true
@@ -95,6 +102,14 @@ onMounted(() => {
             currentSpeed.value = player.value.playbackRate()
           }
         })
+        player.value.on('timeupdate', timeUpdateHandler) // Listen for time updates
+
+        // Store the handler on the player instance for cleanup in onBeforeUnmount
+        // Storing the handler on the player instance for cleanup
+        ;(player.value as Player & { _timeUpdateHandler?: () => void })._timeUpdateHandler =
+          timeUpdateHandler
+      } else {
+        console.error('Player instance not available after ready callback.')
       }
     })
   } else {
@@ -105,6 +120,12 @@ onMounted(() => {
 onBeforeUnmount(() => {
   if (player.value) {
     console.log('Disposing video player')
+    // Clean up the timeupdate listener using the stored handler
+    const timeUpdateHandler = (player.value as Player & { _timeUpdateHandler?: () => void })
+      ._timeUpdateHandler
+    if (timeUpdateHandler) {
+      player.value.off('timeupdate', timeUpdateHandler)
+    }
     player.value.dispose()
     player.value = null
   }
@@ -171,7 +192,6 @@ const loadVideo = (source: { src: string; type: string }) => {
 
 // --- Keyboard Shortcuts ---
 onKeyStroke(true, (event: KeyboardEvent) => {
-  console.log(keyboardStore.onFocusOnly)
   if (keyboardStore.onFocusOnly) {
     return
   }
@@ -199,6 +219,21 @@ onKeyStroke(true, (event: KeyboardEvent) => {
   }
 })
 
+// --- Computed Properties ---
+const formattedTime = computed(() => {
+  const totalSeconds = Math.floor(elapsedTime.value)
+  const hours = Math.floor(totalSeconds / 3600)
+  const minutes = Math.floor((totalSeconds % 3600) / 60)
+  const seconds = totalSeconds % 60
+
+  const paddedMinutes = String(minutes).padStart(2, '0')
+  const paddedSeconds = String(seconds).padStart(2, '0')
+
+  return hours > 0
+    ? `${hours}:${paddedMinutes}:${paddedSeconds}`
+    : `${paddedMinutes}:${paddedSeconds}`
+})
+
 export interface VideoPlayerInstance {
   playPause: () => void
   isPlaying: typeof isPlaying
@@ -219,26 +254,30 @@ defineExpose({
 </script>
 
 <style scoped>
-[tabindex='0']:focus {
-  outline: 2px solid dodgerblue; /* Or your preferred focus style */
-  outline-offset: 2px;
-}
 .custom-controls {
+  background-color: #242424; /* Slightly lighter dark background for controls */
+  border-radius: 5px;
   margin-top: 10px;
   display: flex;
-  gap: 10px;
   align-items: center;
   flex-wrap: wrap;
 }
 .custom-controls button {
-  padding: 5px 10px;
+  margin: 5px;
+  padding: 5px;
   cursor: pointer;
-  border: none;
+  border: 1px solid #444; /* Darker border */
   border-radius: 3px;
+  background-color: #333; /* Dark button background */
+  color: #e0e0e0; /* Light text */
+}
+.custom-controls button:hover {
+  background-color: #444; /* Slightly lighter on hover */
 }
 .custom-controls span {
   font-family: sans-serif;
   font-size: 0.9em;
   margin-left: 5px;
+  margin-right: 10px; /* Add some space after the time */
 }
 </style>

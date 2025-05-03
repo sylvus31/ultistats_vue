@@ -9,7 +9,7 @@
         </button>
       </div>
     </div>
-    <div class="buttons" v-show="!isMinimized"><slot /></div>
+    <div v-show="!isMinimized"><slot /></div>
   </div>
 </template>
 
@@ -43,9 +43,14 @@ const edit = () => {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  margin: 5px;
   padding: 5px 10px;
-  background-color: #f0f0f0;
-  border-bottom: 1px solid #ccc;
+  min-width: 100px;
+  background-color: #333; /* Dark background */
+  color: #e0e0e0; /* Light text */
+  text-align: center;
+  border-radius: 5px;
+  border: 2px solid #444; /* Darker border */
 }
 
 .title {
@@ -62,12 +67,6 @@ const edit = () => {
   background-color: transparent;
   border: none;
   cursor: pointer;
-}
-
-.buttons {
-  display: flex;
-  flex-wrap: wrap;
-  padding: 10px;
-  gap: 10px;
+  color: #e0e0e0; /* Light text */
 }
 </style>
