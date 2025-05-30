@@ -9,12 +9,12 @@ export const useTeamStore = defineStore('team', () => {
   // Use ref to hold the array of Player objects
   const players = ref<Player[]>([
     // You can initialize with some default players if needed
-    { id: 'p1', name: 'Alice', number: 10, isActive: false, key: '7' },
-    { id: 'p2', name: 'Bob', number: 7, isActive: false, key: '8' },
-    { id: 'p3', name: 'Charlie', isActive: false, key: '9' },
-    { id: 'p4', name: 'David', isActive: false, key: '4' },
-    { id: 'p5', name: 'Eve', isActive: false, key: '5' },
-    { id: 'p6', name: 'Frank', isActive: false, key: '6' },
+    { id: 'p1', name: 'Alice', number: 10, isActive: false, key_code: 'Numpad7' },
+    { id: 'p2', name: 'Bob', number: 7, isActive: false, key_code: 'Numpad8' },
+    { id: 'p3', name: 'Charlie', isActive: false, key_code: 'Numpad9' },
+    { id: 'p4', name: 'David', isActive: false, key_code: 'Numpad4' },
+    { id: 'p5', name: 'Eve', isActive: false, key_code: 'Numpad5' },
+    { id: 'p6', name: 'Frank', isActive: false, key_code: 'Numpad6' },
     { id: 'p7', name: 'Grace', isActive: false },
   ])
 
@@ -25,6 +25,9 @@ export const useTeamStore = defineStore('team', () => {
   // Example getter: Get a player by their ID
   const getPlayerById = computed(() => {
     return (playerId: string) => players.value.find((p) => p.id === playerId)
+  })
+  const getPlayerByKeyCode = computed(() => {
+    return (keycode: string) => players.value.find((p) => p.key_code === keycode)
   })
 
   // --- Actions ---
@@ -69,7 +72,6 @@ export const useTeamStore = defineStore('team', () => {
       player.isActive = player.id === playerId
     })
   }
-
   // --- Return ---
   // Make state, getters, and actions available to components
   return {
@@ -78,6 +80,7 @@ export const useTeamStore = defineStore('team', () => {
     // Getters
     activePlayers,
     getPlayerById,
+    getPlayerByKeyCode,
     // Actions
     addPlayer,
     removePlayer,

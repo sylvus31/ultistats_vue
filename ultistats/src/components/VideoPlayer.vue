@@ -29,10 +29,10 @@ import 'videojs-youtube'
 import videojs from 'video.js'
 import type Player from 'video.js/dist/types/player'
 import 'video.js/dist/video-js.css'
-import { onKeyStroke } from '@vueuse/core'
 import { useKeyboardStore } from '../stores/keyboardStore'
 
 const keyboardStore = useKeyboardStore()
+const componentId = 'VideoPlayer'
 
 const videoPlayerKeys = [' ', 'ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight']
 // --- Props ---
@@ -190,34 +190,36 @@ const loadVideo = (source: { src: string; type: string }) => {
   }
 }
 
+keyboardStore.addKeyBinding(componentId, 'ArrowUp', 'Speed up video', keyStrokeCallBack)
+keyboardStore.addKeyBinding(componentId, 'ArrowDown', 'Slow down video', keyStrokeCallBack)
+keyboardStore.addKeyBinding(componentId, 'ArrowLeft', 'Seek backward', keyStrokeCallBack)
+keyboardStore.addKeyBinding(componentId, 'ArrowRight', 'Seek forward', keyStrokeCallBack)
+keyboardStore.addKeyBinding(componentId, 'Space', 'Toggle play/pause', keyStrokeCallBack)
+
 // --- Keyboard Shortcuts ---
-onKeyStroke(true, (event: KeyboardEvent) => {
-  if (keyboardStore.onFocusOnly) {
-    return
-  }
+function keyStrokeCallBack(event: KeyboardEvent) {
   event.preventDefault()
-  if (videoPlayerKeys.includes(event.key)) {
-    switch (event.key) {
-      case 'ArrowUp':
-        changeSpeed(true)
-        break
-      case 'ArrowDown':
-        changeSpeed(false)
-        break
-      case 'ArrowLeft':
-        seek(-2)
-        break
-      case 'ArrowRight':
-        seek(5)
-        break
-      case ' ':
-        playPause()
-        break
-      default:
-        break
-    }
+  switch (event.code) {
+    case 'ArrowUp':
+      changeSpeed(true)
+      break
+    case 'ArrowDown':
+      changeSpeed(false)
+      break
+    case 'ArrowLeft':
+      seek(-2)
+      break
+    case 'ArrowRight':
+      seek(5)
+      break
+    case 'Space':
+      playPause()
+      break
+    default:
+      console.log('unexpected call to keyStrokeCallBack', event)
+      break
   }
-})
+}
 
 // --- Computed Properties ---
 const formattedTime = computed(() => {

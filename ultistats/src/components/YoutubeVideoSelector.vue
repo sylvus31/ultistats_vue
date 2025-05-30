@@ -22,6 +22,7 @@
 <script setup lang="ts">
 import { ref } from 'vue' // Import ref
 import { useKeyboardStore } from '../stores/keyboardStore'
+const componentId = 'YTvideoSelector'
 
 const keyboardStore = useKeyboardStore()
 const youtubeInputRef = ref<HTMLInputElement | null>(null) // Ref for the HTML input
@@ -63,11 +64,11 @@ const triggerLoadVideo = () => {
 }
 
 const handleGetFocus = () => {
-  keyboardStore.setOnFocusOnly(true)
+  keyboardStore.requestFocus(componentId)
 }
 
 const handleLosseFocus = () => {
-  keyboardStore.setOnFocusOnly(false)
+  keyboardStore.freeFocus()
 }
 </script>
 
