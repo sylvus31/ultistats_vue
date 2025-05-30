@@ -4,7 +4,6 @@ import { storeToRefs } from 'pinia'
 import type { Player } from '@/types/Player'
 import '@shoelace-style/shoelace/dist/components/button/button.js'
 import { useKeyboardStore } from '../stores/keyboardStore'
-import { onKeyStroke } from '@vueuse/core'
 
 const teamStore = useTeamStore()
 const { players } = storeToRefs(teamStore)
@@ -22,7 +21,6 @@ const playerKeys = players.value
 
 console.log('type of playerKeys', typeof playerKeys)
 console.log('playerKeys', playerKeys)
-const isPlayerKey = (event: KeyboardEvent) => playerKeys.includes(event.code)
 players.value.forEach((p) => {
   if (p.key_code) {
     console.log('binding', p.name, p.key_code)
@@ -30,9 +28,17 @@ players.value.forEach((p) => {
     keyboardStore.addKeyBinding(componentId, p.key_code, 'player: ' + p.name, logPlayer)
   }
 })
+
+keyboardStore.addKeyBinding('a', 'a', 'test 1', logPlayer)
+keyboardStore.addKeyBinding('a', 'a', 'test 2', logPlayer)
+keyboardStore.removeKeyBinding('a')
+keyboardStore.addKeyBinding('a', 'a', 'test 3', logPlayer)
+keyboardStore.addKeyBinding('a', 'a', 'test 4', logPlayer)
+
 function logPlayer(event: KeyboardEvent) {
   console.log('logPlayer called by keystore')
   const player = teamStore.getPlayerByKeyCode(event.code)
+  teamStore.selectActivePlayer(player?.id)
   console.log(player?.name)
   console.log(event)
 }

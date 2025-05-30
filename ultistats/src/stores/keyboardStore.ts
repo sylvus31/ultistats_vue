@@ -37,7 +37,16 @@ export const useKeyboardStore = defineStore('keyboard', () => {
     msg: string,
     callback: (event: KeyboardEvent) => void,
   ) {
+    if (keyBindings.value.has(keycode)) {
+      console.log(keycode + ' already present', keyBindings.value.get(keycode))
+      return false
+    }
     keyBindings.value.set(keycode, new KeyBinding(comp, msg, callback))
+    return true
+  }
+
+  function removeKeyBinding(keyCode: string) {
+    keyBindings.value.delete(keyCode)
   }
 
   onKeyStroke((event) => {
@@ -56,5 +65,5 @@ export const useKeyboardStore = defineStore('keyboard', () => {
       console.log('no binding for', event.code)
     }
   })
-  return { requestFocus, freeFocus, addKeyBinding }
+  return { requestFocus, freeFocus, addKeyBinding, removeKeyBinding }
 })

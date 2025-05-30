@@ -59,15 +59,7 @@ export const useTeamStore = defineStore('team', () => {
     }
   }
 
-  // Action to toggle a player's active status
-  function togglePlayerStatus(playerId: string) {
-    const player = getPlayerById.value(playerId) // Use the getter
-    if (player) {
-      player.isActive = !player.isActive
-    }
-  }
-
-  function selectActivePlayer(playerId: string) {
+  function selectActivePlayer(playerId: string | undefined) {
     players.value.forEach((player) => {
       player.isActive = player.id === playerId
     })
@@ -85,7 +77,6 @@ export const useTeamStore = defineStore('team', () => {
     addPlayer,
     removePlayer,
     updatePlayer,
-    togglePlayerStatus,
     selectActivePlayer,
   }
 })
