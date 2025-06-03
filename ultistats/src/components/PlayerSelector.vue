@@ -29,18 +29,9 @@ players.value.forEach((p) => {
   }
 })
 
-keyboardStore.addKeyBinding('a', 'a', 'test 1', logPlayer)
-keyboardStore.addKeyBinding('a', 'a', 'test 2', logPlayer)
-keyboardStore.removeKeyBinding('a')
-keyboardStore.addKeyBinding('a', 'a', 'test 3', logPlayer)
-keyboardStore.addKeyBinding('a', 'a', 'test 4', logPlayer)
-
 function logPlayer(event: KeyboardEvent) {
-  console.log('logPlayer called by keystore')
   const player = teamStore.getPlayerByKeyCode(event.code)
   teamStore.selectActivePlayer(player?.id)
-  console.log(player?.name)
-  console.log(event)
 }
 </script>
 

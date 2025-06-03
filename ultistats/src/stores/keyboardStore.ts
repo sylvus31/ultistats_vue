@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
-import { onKeyStroke } from '@vueuse/core'
+import { onKeyStroke, onKeyUp } from '@vueuse/core'
 
 export const useKeyboardStore = defineStore('keyboard', () => {
   const keyBindings = ref<Map<string, KeyBinding>>(new Map())
@@ -41,6 +41,7 @@ export const useKeyboardStore = defineStore('keyboard', () => {
       console.log(keycode + ' already present', keyBindings.value.get(keycode))
       return false
     }
+    console.log('setting: ', keycode)
     keyBindings.value.set(keycode, new KeyBinding(comp, msg, callback))
     return true
   }
@@ -49,7 +50,25 @@ export const useKeyboardStore = defineStore('keyboard', () => {
     keyBindings.value.delete(keyCode)
   }
 
+  const modifierKeys = ['ControlRight', 'ShiftRight', 'ShiftLeft']
+  let activeModifiers: string[] = []
+
+  onKeyUp(true, (event: KeyboardEvent) => {
+    console.log('up', event.code)
+    activeModifiers = activeModifiers.filter((modifier) => modifier !== event.code)
+    console.log(activeModifiers)
+  })
+
   onKeyStroke((event) => {
+    // Ignore repeated key presses when the key is held down
+    if (event.repeat) {
+      return
+    }
+    if (modifierKeys.includes(event.code)) {
+      activeModifiers.push(event.code)
+      console.log(activeModifiers)
+      return
+    }
     if (keyBindings.value.has(event.code)) {
       if (
         focusHolderid === defaultFocusCompId ||
