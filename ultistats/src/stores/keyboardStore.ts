@@ -10,11 +10,13 @@ export const useKeyboardStore = defineStore('keyboard', () => {
     msg: string
     callback: keyBindingCallback
     component: string
+    modifiers: string[]
 
-    constructor(component: string, msg: string, callback: keyBindingCallback) {
+    constructor(component: string, msg: string, modifiers: string[], callback: keyBindingCallback) {
       this.msg = msg
       this.callback = callback
       this.component = component
+      this.modifiers = modifiers
     }
   }
   const defaultFocusCompId = ''
@@ -35,6 +37,7 @@ export const useKeyboardStore = defineStore('keyboard', () => {
     comp: string,
     keycode: string,
     msg: string,
+    modifiers: string[],
     callback: (event: KeyboardEvent) => void,
   ) {
     if (keyBindings.value.has(keycode)) {
@@ -42,7 +45,7 @@ export const useKeyboardStore = defineStore('keyboard', () => {
       return false
     }
     console.log('setting: ', keycode)
-    keyBindings.value.set(keycode, new KeyBinding(comp, msg, callback))
+    keyBindings.value.set(keycode, new KeyBinding(comp, msg, modifiers, callback))
     return true
   }
 
@@ -84,5 +87,5 @@ export const useKeyboardStore = defineStore('keyboard', () => {
       console.log('no binding for', event.code)
     }
   })
-  return { requestFocus, freeFocus, addKeyBinding, removeKeyBinding }
+  return { requestFocus, freeFocus, addKeyBinding, removeKeyBinding, activeModifiers }
 })

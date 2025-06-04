@@ -10,7 +10,14 @@ export const useTeamStore = defineStore('team', () => {
   const players = ref<Player[]>([
     // You can initialize with some default players if needed
     { id: 'p1', name: 'Alice', number: 10, isActive: false, key_code: 'Numpad7' },
-    { id: 'p2', name: 'Bob', number: 7, isActive: false, key_code: 'Numpad8' },
+    {
+      id: 'p2',
+      name: 'Bob',
+      number: 7,
+      isActive: false,
+      key_code: 'Numpad7',
+      modifiers: ['ShiftRight'],
+    },
     { id: 'p3', name: 'Charlie', isActive: false, key_code: 'Numpad9' },
     { id: 'p4', name: 'David', isActive: false, key_code: 'Numpad4' },
     { id: 'p5', name: 'Eve', isActive: false, key_code: 'Numpad5' },
@@ -26,8 +33,9 @@ export const useTeamStore = defineStore('team', () => {
   const getPlayerById = computed(() => {
     return (playerId: string) => players.value.find((p) => p.id === playerId)
   })
-  const getPlayerByKeyCode = computed(() => {
-    return (keycode: string) => players.value.find((p) => p.key_code === keycode)
+  const getPlayerByKeyCodeAndModifiers = computed(() => {
+    return (keycode: string, modifiers: string[]) =>
+      players.value.find((p) => p.key_code === keycode)
   })
 
   // --- Actions ---
@@ -72,7 +80,7 @@ export const useTeamStore = defineStore('team', () => {
     // Getters
     activePlayers,
     getPlayerById,
-    getPlayerByKeyCode,
+    getPlayerByKeyCodeAndModifiers,
     // Actions
     addPlayer,
     removePlayer,

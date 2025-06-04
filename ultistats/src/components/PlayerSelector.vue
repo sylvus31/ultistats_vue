@@ -25,12 +25,12 @@ players.value.forEach((p) => {
   if (p.key_code) {
     console.log('binding', p.name, p.key_code)
 
-    keyboardStore.addKeyBinding(componentId, p.key_code, 'player: ' + p.name, logPlayer)
+    keyboardStore.addKeyBinding(componentId, p.key_code, 'player: ' + p.name, [], logPlayer)
   }
 })
 
 function logPlayer(event: KeyboardEvent) {
-  const player = teamStore.getPlayerByKeyCode(event.code)
+  const player = teamStore.getPlayerByKeyCodeAndModifiers(event.code, keyboardStore.activeModifiers)
   teamStore.selectActivePlayer(player?.id)
 }
 </script>
@@ -43,9 +43,18 @@ function logPlayer(event: KeyboardEvent) {
       @click="selectPlayer(player)"
       :class="{ active: player.isActive }"
     >
-      <span v-if="player.number">{{ player.number }} : </span>
-      <span class="player-name">{{ player.name }}</span>
-      <span class="player-key" v-if="player.key_code"> [{{ player.key_code }}]</span>
+      <div class="player-button-content">
+        <div>
+          <span v-if="player.number">{{ player.number }} : </span>
+          <span class="player-name">{{ player.name }}</span>
+        </div>
+        <div>
+          <span class="player-key" v-if="player.modifiers">
+            [{{ player.modifiers.join(',') }}]</span
+          >
+          <span class="player-key" v-if="player.key_code"> [{{ player.key_code }}]</span>
+        </div>
+      </div>
     </sl-button>
   </div>
 </template>
@@ -59,11 +68,17 @@ function logPlayer(event: KeyboardEvent) {
   font-size: 0.8em;
 }
 sl-button::part(base) {
-  justify-content: center;
   width: 150px;
+  height: 50px;
 }
 .buttons {
   display: flexbox;
   flex-wrap: wrap;
+}
+.player-button-content {
+  display: flex;
+  flex-direction: column;
+  justify-content: center; /* Vertically centers content */
+  height: 100%; /* Ensure the container fills the parent's height */
 }
 </style>
