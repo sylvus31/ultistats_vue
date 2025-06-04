@@ -59,7 +59,7 @@ export const useKeyboardStore = defineStore('keyboard', () => {
   onKeyUp(true, (event: KeyboardEvent) => {
     console.log('up', event.code)
     activeModifiers = activeModifiers.filter((modifier) => modifier !== event.code)
-    console.log(activeModifiers)
+    console.log('onKeyUp', activeModifiers)
   })
 
   onKeyStroke((event) => {
@@ -69,7 +69,7 @@ export const useKeyboardStore = defineStore('keyboard', () => {
     }
     if (modifierKeys.includes(event.code)) {
       activeModifiers.push(event.code)
-      console.log(activeModifiers)
+      console.log('onKeyStroke', activeModifiers)
       return
     }
     if (keyBindings.value.has(event.code)) {

@@ -33,10 +33,37 @@ export const useTeamStore = defineStore('team', () => {
   const getPlayerById = computed(() => {
     return (playerId: string) => players.value.find((p) => p.id === playerId)
   })
-  const getPlayerByKeyCodeAndModifiers = computed(() => {
-    return (keycode: string, modifiers: string[]) =>
-      players.value.find((p) => p.key_code === keycode)
-  })
+  function haveSameElements<T>(arr1: T[], arr2: T[]): boolean {
+    if (arr1.length !== arr2.length) {
+      return false
+    }
+
+    const frequencyMap = new Map<T, number>()
+
+    // Populate frequency map with elements from the first array
+    for (const element of arr1) {
+      frequencyMap.set(element, (frequencyMap.get(element) || 0) + 1)
+    }
+
+    // Check elements from the second array against the frequency map
+    for (const element of arr2) {
+      const count = frequencyMap.get(element)
+      if (!count) {
+        // Element not in arr1 or count already depleted
+        return false
+      }
+      frequencyMap.set(element, count - 1)
+    }
+
+    return true // All elements matched with correct frequencies
+  }
+
+  function getPlayerByKeyCodeAndModifiers(keycode: string, modifiers: string[]) {
+    console.log('getPlayerByKeyCodeAndModifiers ', modifiers)
+    return players.value.find(
+      (p) => p.key_code === keycode && haveSameElements(p.modifiers || [], modifiers),
+    )
+  }
 
   // --- Actions ---
   // Action to add a new player

@@ -15,12 +15,6 @@ const selectPlayer = (player: Player) => {
 const keyboardStore = useKeyboardStore()
 const componentId = 'PlayerSelector'
 
-const playerKeys = players.value
-  .filter((player) => player.key_code)
-  .map((player) => player.key_code as string)
-
-console.log('type of playerKeys', typeof playerKeys)
-console.log('playerKeys', playerKeys)
 players.value.forEach((p) => {
   if (p.key_code) {
     console.log('binding', p.name, p.key_code)
