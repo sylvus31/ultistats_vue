@@ -23,8 +23,8 @@ players.value.forEach((p) => {
   }
 })
 
-function logPlayer(event: KeyboardEvent) {
-  const player = teamStore.getPlayerByKeyCodeAndModifiers(event.code, keyboardStore.activeModifiers)
+function logPlayer(event: KeyboardEvent, activeModifiers: Set<string>) {
+  const player = teamStore.getPlayerByKeyCodeAndModifiers(event.code, activeModifiers)
   teamStore.selectActivePlayer(player?.id)
 }
 </script>
@@ -44,7 +44,7 @@ function logPlayer(event: KeyboardEvent) {
         </div>
         <div>
           <span class="player-key" v-if="player.modifiers">
-            [{{ player.modifiers.join(',') }}]</span
+            [{{ Array.from(player.modifiers).join(',') }}]</span
           >
           <span class="player-key" v-if="player.key_code"> [{{ player.key_code }}]</span>
         </div>

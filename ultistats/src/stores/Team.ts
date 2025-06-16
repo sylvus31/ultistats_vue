@@ -16,7 +16,7 @@ export const useTeamStore = defineStore('team', () => {
       number: 7,
       isActive: false,
       key_code: 'Numpad7',
-      modifiers: ['ShiftRight'],
+      modifiers: new Set(['NumpadEnter']),
     },
     { id: 'p3', name: 'Charlie', isActive: false, key_code: 'Numpad9' },
     { id: 'p4', name: 'David', isActive: false, key_code: 'Numpad4' },
@@ -33,35 +33,23 @@ export const useTeamStore = defineStore('team', () => {
   const getPlayerById = computed(() => {
     return (playerId: string) => players.value.find((p) => p.id === playerId)
   })
-  function haveSameElements<T>(arr1: T[], arr2: T[]): boolean {
-    if (arr1.length !== arr2.length) {
-      return false
+  function haveSameElements<T>(ref: Set<T>, comp: Set<T>): boolean {
+    if (ref.size !== comp.size) {
+      return false // Different number of elements
     }
-
-    const frequencyMap = new Map<T, number>()
-
-    // Populate frequency map with elements from the first array
-    for (const element of arr1) {
-      frequencyMap.set(element, (frequencyMap.get(element) || 0) + 1)
-    }
-
-    // Check elements from the second array against the frequency map
-    for (const element of arr2) {
-      const count = frequencyMap.get(element)
-      if (!count) {
-        // Element not in arr1 or count already depleted
-        return false
+    for (const element of ref) {
+      if (!comp.has(element)) {
+        return false // Missing element
       }
-      frequencyMap.set(element, count - 1)
     }
-
     return true // All elements matched with correct frequencies
   }
 
-  function getPlayerByKeyCodeAndModifiers(keycode: string, modifiers: string[]) {
+  function getPlayerByKeyCodeAndModifiers(keycode: string, modifiers: Set<string>) {
     console.log('getPlayerByKeyCodeAndModifiers ', modifiers)
     return players.value.find(
-      (p) => p.key_code === keycode && haveSameElements(p.modifiers || [], modifiers),
+      (p) =>
+        p.key_code === keycode && haveSameElements(p.modifiers || new Set<string>(), modifiers),
     )
   }
 

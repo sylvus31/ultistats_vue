@@ -5,7 +5,7 @@ import { onKeyStroke, onKeyUp } from '@vueuse/core'
 export const useKeyboardStore = defineStore('keyboard', () => {
   const keyBindings = ref<Map<string, KeyBinding>>(new Map())
 
-  type keyBindingCallback = (event: KeyboardEvent) => void
+  type keyBindingCallback = (event: KeyboardEvent, modifiers: Set<string>) => void
   class KeyBinding {
     msg: string
     callback: keyBindingCallback
@@ -38,7 +38,7 @@ export const useKeyboardStore = defineStore('keyboard', () => {
     keycode: string,
     msg: string,
     modifiers: string[],
-    callback: (event: KeyboardEvent) => void,
+    callback: (event: KeyboardEvent, modifiers: Set<string>) => void,
   ) {
     if (keyBindings.value.has(keycode)) {
       console.log(keycode + ' already present', keyBindings.value.get(keycode))
@@ -53,31 +53,35 @@ export const useKeyboardStore = defineStore('keyboard', () => {
     keyBindings.value.delete(keyCode)
   }
 
-  const modifierKeys = ['ControlRight', 'ShiftRight', 'ShiftLeft']
-  let activeModifiers: string[] = []
-
-  onKeyUp(true, (event: KeyboardEvent) => {
-    console.log('up', event.code)
-    activeModifiers = activeModifiers.filter((modifier) => modifier !== event.code)
-    console.log('onKeyUp', activeModifiers)
-  })
+  const modifierKeys: string[] = ['NumpadEnter'] //['ControlRight', 'ShiftRight', 'ShiftLeft'] // AltxxKey
+  const forbiddenKeys = ['MetaLeft', 'MetaRight', 'NumLock']
+  const activeModifiers: Set<string> = new Set()
+  const shift = 'SHIFT'
+  const alt = 'ALT'
+  const control = 'CONTROL'
+  const userSpecialModifiers = [shift, control]
 
   onKeyStroke((event) => {
     // Ignore repeated key presses when the key is held down
     if (event.repeat) {
       return
     }
+    console.log('onKeyStroke: event', event)
+
     if (modifierKeys.includes(event.code)) {
-      activeModifiers.push(event.code)
-      console.log('onKeyStroke', activeModifiers)
+      activeModifiers.add(event.code)
       return
     }
+    //special keys
     if (keyBindings.value.has(event.code)) {
       if (
         focusHolderid === defaultFocusCompId ||
         focusHolderid === keyBindings.value.get(event.code)!.component
       ) {
-        keyBindings.value.get(event.code)!.callback(event)
+        const specialModifiers = addModifiersForSpecialKeys(event)
+        const tmpModifiers = new Set([...activeModifiers, ...specialModifiers])
+        keyBindings.value.get(event.code)!.callback(event, tmpModifiers)
+        console.log('onKeyStroke: tmpModifiers', tmpModifiers)
       } else {
         console.log(
           keyBindings.value.get(event.code)!.component + ' does not match ' + focusHolderid,
@@ -87,5 +91,27 @@ export const useKeyboardStore = defineStore('keyboard', () => {
       console.log('no binding for', event.code)
     }
   })
+
+  onKeyUp(true, (event) => {
+    event.preventDefault()
+
+    //no need to check if it a modifier or not
+    activeModifiers.delete(event.code)
+    console.log('up', activeModifiers)
+  })
+  function addModifiersForSpecialKeys(event: KeyboardEvent): Set<string> {
+    const tmpModifiers = new Set<string>()
+    if (event.shiftKey && userSpecialModifiers.includes(shift)) {
+      tmpModifiers.add(shift)
+    }
+    if (event.altKey && userSpecialModifiers.includes(alt)) {
+      tmpModifiers.add(alt)
+    }
+    if (event.ctrlKey && userSpecialModifiers.includes(control)) {
+      tmpModifiers.add(control)
+    }
+    return tmpModifiers
+  }
+
   return { requestFocus, freeFocus, addKeyBinding, removeKeyBinding, activeModifiers }
 })
