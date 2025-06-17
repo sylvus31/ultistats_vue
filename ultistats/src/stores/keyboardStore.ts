@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
 import { onKeyStroke, onKeyUp } from '@vueuse/core'
+import { KeyboardConstants } from '@/types/keyConstants'
 
 export const useKeyboardStore = defineStore('keyboard', () => {
   const keyBindings = ref<Map<string, KeyBinding>>(new Map())
@@ -10,13 +11,11 @@ export const useKeyboardStore = defineStore('keyboard', () => {
     msg: string
     callback: keyBindingCallback
     component: string
-    modifiers: string[]
 
-    constructor(component: string, msg: string, modifiers: string[], callback: keyBindingCallback) {
+    constructor(component: string, msg: string, callback: keyBindingCallback) {
       this.msg = msg
       this.callback = callback
       this.component = component
-      this.modifiers = modifiers
     }
   }
   const defaultFocusCompId = ''
@@ -37,7 +36,6 @@ export const useKeyboardStore = defineStore('keyboard', () => {
     comp: string,
     keycode: string,
     msg: string,
-    modifiers: string[],
     callback: (event: KeyboardEvent, modifiers: Set<string>) => void,
   ) {
     if (keyBindings.value.has(keycode)) {
@@ -45,7 +43,7 @@ export const useKeyboardStore = defineStore('keyboard', () => {
       return false
     }
     console.log('setting: ', keycode)
-    keyBindings.value.set(keycode, new KeyBinding(comp, msg, modifiers, callback))
+    keyBindings.value.set(keycode, new KeyBinding(comp, msg, callback))
     return true
   }
 
@@ -56,10 +54,8 @@ export const useKeyboardStore = defineStore('keyboard', () => {
   const modifierKeys: string[] = ['NumpadEnter'] //['ControlRight', 'ShiftRight', 'ShiftLeft'] // AltxxKey
   const forbiddenKeys = ['MetaLeft', 'MetaRight', 'NumLock']
   const activeModifiers: Set<string> = new Set()
-  const shift = 'SHIFT'
-  const alt = 'ALT'
-  const control = 'CONTROL'
-  const userSpecialModifiers = [shift, control]
+
+  const userSpecialModifiers = [KeyboardConstants.SHIFT, KeyboardConstants.CTRL]
 
   onKeyStroke((event) => {
     // Ignore repeated key presses when the key is held down
@@ -101,17 +97,24 @@ export const useKeyboardStore = defineStore('keyboard', () => {
   })
   function addModifiersForSpecialKeys(event: KeyboardEvent): Set<string> {
     const tmpModifiers = new Set<string>()
-    if (event.shiftKey && userSpecialModifiers.includes(shift)) {
-      tmpModifiers.add(shift)
+    if (event.shiftKey && userSpecialModifiers.includes(KeyboardConstants.SHIFT)) {
+      tmpModifiers.add(KeyboardConstants.SHIFT)
     }
-    if (event.altKey && userSpecialModifiers.includes(alt)) {
-      tmpModifiers.add(alt)
+    if (event.altKey && userSpecialModifiers.includes(KeyboardConstants.ALT)) {
+      tmpModifiers.add(KeyboardConstants.ALT)
     }
-    if (event.ctrlKey && userSpecialModifiers.includes(control)) {
-      tmpModifiers.add(control)
+    if (event.ctrlKey && userSpecialModifiers.includes(KeyboardConstants.CTRL)) {
+      tmpModifiers.add(KeyboardConstants.CTRL)
     }
     return tmpModifiers
   }
 
-  return { requestFocus, freeFocus, addKeyBinding, removeKeyBinding, activeModifiers }
+  return {
+    requestFocus,
+    freeFocus,
+    addKeyBinding,
+    removeKeyBinding,
+    activeModifiers,
+    userSpecialModifiers,
+  }
 })

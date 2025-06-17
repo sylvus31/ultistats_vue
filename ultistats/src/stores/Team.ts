@@ -9,20 +9,22 @@ export const useTeamStore = defineStore('team', () => {
   // Use ref to hold the array of Player objects
   const players = ref<Player[]>([
     // You can initialize with some default players if needed
-    { id: 'p1', name: 'Alice', number: 10, isActive: false, key_code: 'Numpad7' },
+    { id: 'p1', name: 'Thomas', isActive: false, key_code: 'Numpad7' },
     {
       id: 'p2',
-      name: 'Bob',
-      number: 7,
+      name: 'Guimsou',
+      // number: 7,
       isActive: false,
-      key_code: 'Numpad7',
-      modifiers: new Set(['NumpadEnter']),
+      key_code: 'Numpad8',
+      // modifiers: new Set(['NumpadEnter']),
     },
-    { id: 'p3', name: 'Charlie', isActive: false, key_code: 'Numpad9' },
-    { id: 'p4', name: 'David', isActive: false, key_code: 'Numpad4' },
-    { id: 'p5', name: 'Eve', isActive: false, key_code: 'Numpad5' },
-    { id: 'p6', name: 'Frank', isActive: false, key_code: 'Numpad6' },
-    { id: 'p7', name: 'Grace', isActive: false },
+    { id: 'p3', name: 'Clar', isActive: false, key_code: 'Numpad9' },
+    { id: 'p4', name: 'Toto', isActive: false, key_code: 'Numpad4' },
+    { id: 'p5', name: 'Yann', isActive: false, key_code: 'Numpad5' },
+    { id: 'p6', name: 'Matteo', isActive: false, key_code: 'Numpad6' },
+    { id: 'p7', name: 'Lucian', isActive: false, key_code: 'Numpad1' },
+    { id: 'p8', name: 'Lyloo', isActive: false, key_code: 'NumpadDivide' },
+    { id: 'p9', name: 'Salma', isActive: false, key_code: 'NumpadMultiply' },
   ])
 
   // --- Getters ---
@@ -61,7 +63,7 @@ export const useTeamStore = defineStore('team', () => {
     const playerToAdd: Player = {
       ...newPlayer,
       id: id,
-      isActive: true, // Default new players to active
+      isActive: false, // Default new players to active
     }
     players.value.push(playerToAdd)
   }

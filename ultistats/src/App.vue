@@ -10,7 +10,7 @@ import { ref } from 'vue'
 import PlayerSelector from './components/PlayerSelector.vue'
 import WindowHolder from './components/WindowHolder.vue'
 import YoutubeVideoSelector from './components/YoutubeVideoSelector.vue'
-import ActionSelector from './components/ActionSelector.vue'
+import PassesSelector from './components/PassesSelector.vue'
 
 const videoPlayerRef = ref<VideoPlayerInstance | null>(null)
 const fileInputRef = ref<HTMLInputElement | null>(null) // Ref for the hidden file input
@@ -87,7 +87,7 @@ const handleLoadYoutubeVideo = (source: { src: string; type: string }) => {
       <WindowHolder title="Players">
         <PlayerSelector/>
       </WindowHolder>
-      <WindowHolder title="Actions"><ActionSelector /></WindowHolder>
+      <WindowHolder title="Passes"><PassesSelector /></WindowHolder>
       <WindowHolder title="Stats"/>
     </div>
   </sl-split-panel>
