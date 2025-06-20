@@ -2,14 +2,17 @@
   <div class="button-container">
     <div class="title-bar">
       <div class="title">{{ title }}</div>
+      <div><slot name="menu" /></div>
       <div class="actions">
-        <button class="edit-button" @click="edit">Edit</button>
+        <button class="edit-button" @click="edit">
+          <span class="mdi" :class="'mdi-pencil'"></span>
+        </button>
         <button class="minimize-button" @click="minimize">
           <span class="mdi" :class="isMinimized ? 'mdi-plus' : 'mdi-minus'"></span>
         </button>
       </div>
     </div>
-    <div v-show="!isMinimized"><slot /></div>
+    <div v-show="!isMinimized"><slot name="main" /></div>
   </div>
 </template>
 

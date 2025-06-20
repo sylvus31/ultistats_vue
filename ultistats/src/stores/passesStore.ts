@@ -1,7 +1,6 @@
 import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
 import type { Pass, passModifier } from '@/types/Passes'
-import { useKeyboardStore } from './keyboardStore'
 import { KeyboardConstants } from '@/types/keyConstants'
 
 export const usePassesStore = defineStore('passesStore', () => {
@@ -47,17 +46,34 @@ export const usePassesStore = defineStore('passesStore', () => {
     return passes.value.find((action) => action.key === key)
   }
 
+  function getModifierByKey(key: string) {
+    return passesModifiers.value.find((action) => action.key === key)
+  }
+
+  function toggleModifierStatus(modifier: passModifier) {
+    modifier.isActive = !modifier.isActive
+  }
+
+  function setModifierStatus(modifier: passModifier, status) {
+    modifier.isActive = status
+  }
+
   // --- Return ---
   // Make state, getters, and actions available to components
   return {
     // State
     passes,
+    passesModifiers,
     // Getters
     activePass,
     getpassById,
     getActionByKey,
-    // Actions
+    // passes
     togglePasStatus,
     selectActivePass,
+    // Modifiers
+    toggleModifierStatus,
+    getModifierByKey,
+    setModifierStatus,
   }
 })

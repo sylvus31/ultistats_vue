@@ -23,9 +23,15 @@ players.value.forEach((p) => {
   }
 })
 
-function logPlayer(event: KeyboardEvent, activeModifiers: Set<string>) {
-  const player = teamStore.getPlayerByKeyCodeAndModifiers(event.code, activeModifiers)
-  teamStore.selectActivePlayer(player?.id)
+keyboardStore.addKeyBinding(componentId, 'NumpadEnter', 'modifier for players', noAction)
+
+function noAction(event: string, activeModifiers: Set<string>) {
+  console.log('no action', event, activeModifiers)
+}
+
+function logPlayer(eventCode: string, activeModifiers: Set<string>) {
+  const player = teamStore.getPlayerByKeyCodeAndModifiers(eventCode, activeModifiers)
+  if (player) teamStore.selectActivePlayer(player.id)
 }
 </script>
 

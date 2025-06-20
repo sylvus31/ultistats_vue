@@ -5,8 +5,9 @@ import { KeyboardConstants } from '@/types/keyConstants'
 
 export const useKeyboardStore = defineStore('keyboard', () => {
   const keyBindings = ref<Map<string, KeyBinding>>(new Map())
+  const keyBindingsUP = ref<Map<string, KeyBinding>>(new Map())
 
-  type keyBindingCallback = (event: KeyboardEvent, modifiers: Set<string>) => void
+  type keyBindingCallback = (eventCode: string, modifiers: Set<string>) => void
   class KeyBinding {
     msg: string
     callback: keyBindingCallback
@@ -32,12 +33,7 @@ export const useKeyboardStore = defineStore('keyboard', () => {
     updateFocus(defaultFocusCompId)
   }
 
-  function addKeyBinding(
-    comp: string,
-    keycode: string,
-    msg: string,
-    callback: (event: KeyboardEvent, modifiers: Set<string>) => void,
-  ) {
+  function addKeyBinding(comp: string, keycode: string, msg: string, callback: keyBindingCallback) {
     if (keyBindings.value.has(keycode)) {
       console.log(keycode + ' already present', keyBindings.value.get(keycode))
       return false
@@ -47,12 +43,31 @@ export const useKeyboardStore = defineStore('keyboard', () => {
     return true
   }
 
+  function addKeyBindingUP(
+    comp: string,
+    keycode: string,
+    msg: string,
+    callback: keyBindingCallback,
+  ) {
+    if (keyBindingsUP.value.has(keycode)) {
+      console.log(keycode + ' already present', keyBindings.value.get(keycode))
+      return false
+    }
+    console.log('setting: ', keycode)
+    keyBindingsUP.value.set(keycode, new KeyBinding(comp, msg, callback))
+    return true
+  }
+
   function removeKeyBinding(keyCode: string) {
     keyBindings.value.delete(keyCode)
   }
 
-  const modifierKeys: string[] = ['NumpadEnter'] //['ControlRight', 'ShiftRight', 'ShiftLeft'] // AltxxKey
-  const forbiddenKeys = ['MetaLeft', 'MetaRight', 'NumLock']
+  function removeKeyBindingUP(keyCode: string) {
+    keyBindingsUP.value.delete(keyCode)
+  }
+
+  const modifierKeys: string[] = ['NumpadEnter', KeyboardConstants.SHIFT, KeyboardConstants.CTRL] //['ControlRight', 'ShiftRight', 'ShiftLeft'] // AltxxKey
+  // const forbiddenKeys = ['MetaLeft', 'MetaRight', 'NumLock']
   const activeModifiers: Set<string> = new Set()
 
   const userSpecialModifiers = [KeyboardConstants.SHIFT, KeyboardConstants.CTRL]
@@ -62,26 +77,23 @@ export const useKeyboardStore = defineStore('keyboard', () => {
     if (event.repeat) {
       return
     }
-    console.log('onKeyStroke: event', event)
 
-    if (modifierKeys.includes(event.code)) {
-      activeModifiers.add(event.code)
-      return
-    }
-    //special keys
-    if (keyBindings.value.has(event.code)) {
+    console.log('onKeyStroke: event', event)
+    const code = transformCodeForSpecialKeys(event.code)
+
+    if (keyBindings.value.has(code)) {
       if (
         focusHolderid === defaultFocusCompId ||
         focusHolderid === keyBindings.value.get(event.code)!.component
       ) {
-        const specialModifiers = addModifiersForSpecialKeys(event)
-        const tmpModifiers = new Set([...activeModifiers, ...specialModifiers])
-        keyBindings.value.get(event.code)!.callback(event, tmpModifiers)
-        console.log('onKeyStroke: tmpModifiers', tmpModifiers)
+        event.preventDefault()
+        if (modifierKeys.includes(code)) {
+          activeModifiers.add(code)
+        }
+        keyBindings.value.get(code)!.callback(code, activeModifiers)
+        console.log('onKeyStroke: activeModifiers', activeModifiers)
       } else {
-        console.log(
-          keyBindings.value.get(event.code)!.component + ' does not match ' + focusHolderid,
-        )
+        console.log(keyBindings.value.get(code)!.component + ' does not match ' + focusHolderid)
       }
     } else {
       console.log('no binding for', event.code)
@@ -92,28 +104,32 @@ export const useKeyboardStore = defineStore('keyboard', () => {
     event.preventDefault()
 
     //no need to check if it a modifier or not
-    activeModifiers.delete(event.code)
+    const code = transformCodeForSpecialKeys(event.code)
+    activeModifiers.delete(code)
+    keyBindingsUP.value.get(code)?.callback(code, activeModifiers)
     console.log('up', activeModifiers)
   })
-  function addModifiersForSpecialKeys(event: KeyboardEvent): Set<string> {
-    const tmpModifiers = new Set<string>()
-    if (event.shiftKey && userSpecialModifiers.includes(KeyboardConstants.SHIFT)) {
-      tmpModifiers.add(KeyboardConstants.SHIFT)
+
+  function transformCodeForSpecialKeys(code: string): string {
+    if (code === 'ShiftLeft' || code === 'ShiftRight') {
+      return KeyboardConstants.SHIFT
     }
-    if (event.altKey && userSpecialModifiers.includes(KeyboardConstants.ALT)) {
-      tmpModifiers.add(KeyboardConstants.ALT)
+    if (code === 'AltLeft' || code === 'AltRight') {
+      return KeyboardConstants.ALT
     }
-    if (event.ctrlKey && userSpecialModifiers.includes(KeyboardConstants.CTRL)) {
-      tmpModifiers.add(KeyboardConstants.CTRL)
+    if (code === 'ControlLeft' || code === 'ControlRight') {
+      return KeyboardConstants.CTRL
     }
-    return tmpModifiers
+    return code
   }
 
   return {
     requestFocus,
     freeFocus,
     addKeyBinding,
+    addKeyBindingUP,
     removeKeyBinding,
+    removeKeyBindingUP,
     activeModifiers,
     userSpecialModifiers,
   }

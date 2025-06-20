@@ -6,7 +6,7 @@
       @click="clickAction(action)"
       :class="{ active: action.isActive }"
     >
-      <span class="player-name">{{ action.name }}</span>
+      <span class="pass-name">{{ action.name }}</span>
       <span v-if="action.legend"> [{{ action.legend }}]</span>
     </sl-button>
   </div>
@@ -30,9 +30,9 @@ const clickAction = (pass: Pass) => {
   passesStore.selectActivePass(pass.id)
 }
 
-const logAction = (event: KeyboardEvent, modifiers: Set<string>) => {
-  console.log(event, modifiers)
-  const action = passesStore.getActionByKey(event.code)
+const logAction = (eventCode: string, modifiers: Set<string>) => {
+  console.log(eventCode, modifiers)
+  const action = passesStore.getActionByKey(eventCode)
   if (action) passesStore.selectActivePass(action.id)
 }
 
@@ -45,7 +45,7 @@ passes.value.forEach((p) => {
 </script>
 
 <style scoped>
-.player-name {
+.pass-name {
   font-weight: bold;
   color: #00bcd4;
 }
