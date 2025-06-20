@@ -197,9 +197,8 @@ keyboardStore.addKeyBinding(componentId, 'ArrowRight', 'Seek forward', keyStroke
 keyboardStore.addKeyBinding(componentId, 'Space', 'Toggle play/pause', keyStrokeCallBack)
 
 // --- Keyboard Shortcuts ---
-function keyStrokeCallBack(event: KeyboardEvent) {
-  event.preventDefault()
-  switch (event.code) {
+function keyStrokeCallBack(event: string, activeModifiers: Set<string>) {
+  switch (event) {
     case 'ArrowUp':
       changeSpeed(true)
       break

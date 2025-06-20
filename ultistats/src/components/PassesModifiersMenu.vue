@@ -42,7 +42,7 @@ keyboardStore.addKeyBindingUP(
 <template>
   <button
     v-for="modifier in passesModifiers"
-    :key="modifier"
+    :key="modifier.id"
     @click="clickModifier(modifier)"
     class="pass-modifier-button"
     :class="{ active: modifier.isActive }"

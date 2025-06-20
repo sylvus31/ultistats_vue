@@ -54,7 +54,7 @@ export const usePassesStore = defineStore('passesStore', () => {
     modifier.isActive = !modifier.isActive
   }
 
-  function setModifierStatus(modifier: passModifier, status) {
+  function setModifierStatus(modifier: passModifier, status: boolean) {
     modifier.isActive = status
   }
 
