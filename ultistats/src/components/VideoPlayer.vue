@@ -76,6 +76,18 @@ const currentSpeed = ref<number | undefined>(1.0)
 const playerWrapper = ref<HTMLDivElement | null>(null)
 const elapsedTime = ref(0) // Add ref for elapsed time
 
+const isPlayingValue = computed(() => {
+  return isPlaying.value
+})
+
+const currentSpeedValue = computed(() => {
+  return currentSpeed.value
+})
+
+const elapsedTimeValue = computed(() => {
+  return elapsedTime.value
+})
+
 // --- Lifecycle Hooks ---
 onMounted(() => {
   if (videoNode.value) {
@@ -237,20 +249,22 @@ const formattedTime = computed(() => {
 
 export interface VideoPlayerInstance {
   playPause: () => void
-  isPlaying: typeof isPlaying
+  isPlayingValue: boolean
   seek: (seconds: number) => void
   changeSpeed: (up: boolean) => void
-  currentSpeed: typeof currentSpeed
+  currentSpeedValue: number
   loadVideo: (source: { src: string; type: string }) => void
+  elapsedTimeValue: number
 }
 
 defineExpose({
   playPause,
-  isPlaying,
+  isPlayingValue,
   seek,
   changeSpeed,
-  currentSpeed,
+  currentSpeedValue,
   loadVideo,
+  elapsedTimeValue,
 })
 </script>
 

@@ -4,12 +4,16 @@ import { storeToRefs } from 'pinia'
 import type { Player } from '@/types/Player'
 import '@shoelace-style/shoelace/dist/components/button/button.js'
 import { useKeyboardStore } from '../stores/keyboardStore'
+import { useJournalStore } from '@/stores/journal'
 
 const teamStore = useTeamStore()
 const { players } = storeToRefs(teamStore)
 
+const journalStore = useJournalStore()
+
 const selectPlayer = (player: Player) => {
   teamStore.selectActivePlayer(player.id)
+  journalStore.addPlayerEntry(player.name)
 }
 
 const keyboardStore = useKeyboardStore()
@@ -31,7 +35,10 @@ function noAction(event: string, activeModifiers: Set<string>) {
 
 function logPlayer(eventCode: string, activeModifiers: Set<string>) {
   const player = teamStore.getPlayerByKeyCodeAndModifiers(eventCode, activeModifiers)
-  if (player) teamStore.selectActivePlayer(player.id)
+  if (player) {
+    teamStore.selectActivePlayer(player.id)
+    journalStore.addPlayerEntry(player.name)
+  }
 }
 </script>
 

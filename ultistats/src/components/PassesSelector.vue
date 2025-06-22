@@ -18,22 +18,30 @@ import { storeToRefs } from 'pinia'
 import type { Pass } from '@/types/Passes'
 import '@shoelace-style/shoelace/dist/components/button/button.js'
 import { useKeyboardStore } from '../stores/keyboardStore'
+import { useJournalStore } from '@/stores/journal'
 
 const keyboardStore = useKeyboardStore()
-
 const passesStore = usePassesStore()
 const { passes } = storeToRefs(passesStore)
+const journalStore = useJournalStore()
+
 const componentId = 'PassesSelector'
 
 const clickAction = (pass: Pass) => {
   console.log(pass.name)
   passesStore.selectActivePass(pass.id)
+  const modifiers = passesStore.getActiveModifiers().map((m) => m.name)
+
+  journalStore.addPassEntry(pass.name, new Set(modifiers))
 }
 
-const logAction = (eventCode: string, modifiers: Set<string>) => {
-  console.log(eventCode, modifiers)
+const logAction = (eventCode: string, _modifiers: Set<string>) => {
   const action = passesStore.getActionByKey(eventCode)
-  if (action) passesStore.selectActivePass(action.id)
+  if (action) {
+    passesStore.selectActivePass(action.id)
+    const modifiers = passesStore.getActiveModifiers().map((m) => m.name)
+    journalStore.addPassEntry(action.name, new Set(modifiers))
+  }
 }
 
 passes.value.forEach((p) => {

@@ -12,10 +12,9 @@ import WindowHolder from './components/WindowHolder.vue'
 import YoutubeVideoSelector from './components/YoutubeVideoSelector.vue'
 import PassesSelector from './components/PassesSelector.vue'
 import PassesModifiersMenu from './components/PassesModifiersMenu.vue'
-
+import { useJournalStore } from './stores/journal'
 const videoPlayerRef = ref<VideoPlayerInstance | null>(null)
 const fileInputRef = ref<HTMLInputElement | null>(null) // Ref for the hidden file input
-
 // Method to trigger the hidden file input
 const openFileDialog = () => {
   fileInputRef.value?.click()
@@ -27,6 +26,7 @@ const handleFileChange = (event: Event) => {
   const file = target.files?.[0]
 
   if (file && videoPlayerRef.value) {
+    useJournalStore().setVideoPlayerRef(videoPlayerRef)
     // Create an object URL for the selected file
     const source = {
       src: URL.createObjectURL(file),

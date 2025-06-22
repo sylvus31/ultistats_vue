@@ -58,6 +58,10 @@ export const usePassesStore = defineStore('passesStore', () => {
     modifier.isActive = status
   }
 
+  function getActiveModifiers() {
+    return passesModifiers.value.filter((modifier) => modifier.isActive)
+  }
+
   // --- Return ---
   // Make state, getters, and actions available to components
   return {
@@ -75,5 +79,6 @@ export const usePassesStore = defineStore('passesStore', () => {
     toggleModifierStatus,
     getModifierByKey,
     setModifierStatus,
+    getActiveModifiers,
   }
 })
