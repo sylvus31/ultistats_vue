@@ -13,8 +13,11 @@ import YoutubeVideoSelector from './components/YoutubeVideoSelector.vue'
 import PassesSelector from './components/PassesSelector.vue'
 import PassesModifiersMenu from './components/PassesModifiersMenu.vue'
 import { useJournalStore } from './stores/journal'
+import JournalViewer from './components/JournalViewer.vue'
 const videoPlayerRef = ref<VideoPlayerInstance | null>(null)
 const fileInputRef = ref<HTMLInputElement | null>(null) // Ref for the hidden file input
+const journalViewerRef = ref<InstanceType<typeof JournalViewer> | null>(null)
+
 // Method to trigger the hidden file input
 const openFileDialog = () => {
   fileInputRef.value?.click()
@@ -27,6 +30,7 @@ const handleFileChange = (event: Event) => {
 
   if (file && videoPlayerRef.value) {
     useJournalStore().setVideoPlayerRef(videoPlayerRef)
+    journalViewerRef.value?.setVideoPlayerRef(videoPlayerRef)
     // Create an object URL for the selected file
     const source = {
       src: URL.createObjectURL(file),
@@ -81,8 +85,9 @@ const handleLoadYoutubeVideo = (source: { src: string; type: string }) => {
   <!-- prettier-ignore -->
   <sl-split-panel>
     <div slot="start" >
-      <!-- Make sure the ref is correctly assigned -->
       <VideoPlayer ref="videoPlayerRef" />
+      <JournalViewer ref="journalViewerRef"/>
+
     </div>
     <div slot="end">
       <WindowHolder title="Players">

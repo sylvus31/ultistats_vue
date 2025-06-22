@@ -247,6 +247,12 @@ const formattedTime = computed(() => {
     : `${paddedMinutes}:${paddedSeconds}`
 })
 
+const goTo = (seconds: number) => {
+  if (player.value) {
+    player.value.currentTime(seconds)
+  }
+}
+
 export interface VideoPlayerInstance {
   playPause: () => void
   isPlayingValue: boolean
@@ -255,6 +261,7 @@ export interface VideoPlayerInstance {
   currentSpeedValue: number
   loadVideo: (source: { src: string; type: string }) => void
   elapsedTimeValue: number
+  goTo: (seconds: number) => void
 }
 
 defineExpose({
@@ -265,6 +272,7 @@ defineExpose({
   currentSpeedValue,
   loadVideo,
   elapsedTimeValue,
+  goTo,
 })
 </script>
 

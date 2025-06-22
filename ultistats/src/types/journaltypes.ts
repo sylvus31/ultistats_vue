@@ -1,4 +1,9 @@
+export enum JournalEntryType {
+  PASS = 'pass',
+  PLAYER = 'player',
+}
 export interface journalPass {
+  type: JournalEntryType
   id: string
   ts: number
   name: string
@@ -6,6 +11,7 @@ export interface journalPass {
 }
 
 export interface journalPlayer {
+  type: JournalEntryType
   id: string
   ts: number
   name: string
