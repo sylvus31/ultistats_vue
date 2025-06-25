@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 import { ref, type Ref } from 'vue'
-import type { journalPass, journalPlayer } from '@/types/journaltypes'
+import type { journalPass, journalPlayer, journalAction } from '@/types/journaltypes'
 import { JournalEntryType as jet } from '@/types/journaltypes'
 import type { VideoPlayerInstance } from '@/components/VideoPlayer.vue'
 
@@ -44,6 +44,17 @@ export const useJournalStore = defineStore('journal', () => {
     records.value.push(entry)
   }
 
+  const addActionEntry = (name: string, terminal: boolean, positive: boolean) => {
+    const entry = {
+      id: 'a1',
+      name: name,
+      ts: getTs(),
+      terminal: terminal,
+      type: positive ? jet.POSITIVE_ACTION : jet.NEGATIVE_ACTION,
+    }
+    records.value.push(entry)
+  }
+
   const toggleModifier = (entry: JournalEntry, modifier: string) => {
     if (!entry.hasOwnProperty('modifiers')) return
     if (entry.modifiers.has(modifier)) {
@@ -60,5 +71,13 @@ export const useJournalStore = defineStore('journal', () => {
     }
   }
 
-  return { records, addPlayerEntry, addPassEntry, setVideoPlayerRef, toggleModifier, deleteRecord }
+  return {
+    records,
+    addPlayerEntry,
+    addPassEntry,
+    setVideoPlayerRef,
+    toggleModifier,
+    deleteRecord,
+    addActionEntry,
+  }
 })

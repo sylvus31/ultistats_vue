@@ -1,0 +1,18 @@
+[
+  {
+    "name": "pick up disc",
+    "terminal": false
+  },
+  {
+    "name": "intercept",
+    "terminal": true
+  },
+  {
+    "name": "block",
+    "terminal": true
+  },
+  {
+    "name": "score",
+    "terminal": true
+  }
+]

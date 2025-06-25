@@ -14,6 +14,7 @@ import PassesSelector from './components/PassesSelector.vue'
 import PassesModifiersMenu from './components/PassesModifiersMenu.vue'
 import { useJournalStore } from './stores/journal'
 import JournalViewer from './components/JournalViewer.vue'
+import ActionsSelector from './components/ActionsSelector.vue'
 const videoPlayerRef = ref<VideoPlayerInstance | null>(null)
 const fileInputRef = ref<HTMLInputElement | null>(null) // Ref for the hidden file input
 const journalViewerRef = ref<InstanceType<typeof JournalViewer> | null>(null)
@@ -97,7 +98,9 @@ const handleLoadYoutubeVideo = (source: { src: string; type: string }) => {
         <template v-slot:menu><PassesModifiersMenu/></template>
         <template v-slot:main><PassesSelector /></template>
       </WindowHolder>
-      <WindowHolder title="Stats"/>
+      <WindowHolder title="Actions">
+        <template v-slot:main><ActionsSelector/></template>
+        </WindowHolder>
     </div>
   </sl-split-panel>
 </template>
