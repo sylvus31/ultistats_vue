@@ -6,6 +6,12 @@ import type { VideoPlayerInstance } from '@/components/VideoPlayer.vue'
 
 export type JournalEntry = journalPass | journalPlayer
 
+let idIndex = 0
+
+const getNextIdIndex = () => {
+  return idIndex++
+}
+
 const videoPlayerRef = ref<VideoPlayerInstance | null>(null)
 const setVideoPlayerRef = (ref: Ref<VideoPlayerInstance | null>) => {
   videoPlayerRef.value = ref.value
@@ -21,32 +27,50 @@ function getTs() {
 
 export const useJournalStore = defineStore('journal', () => {
   const records = ref<JournalEntry[]>([
-    { id: '1', ts: 0, name: '1', type: jet.PASS, modifiers: new Set(['longue', 'break']) },
-    { id: '2', ts: 2, name: '2', type: jet.PASS, modifiers: new Set(['longue']) },
-    { id: '3', ts: 10, name: '10', type: jet.PASS, modifiers: new Set(['break']) },
-    { id: '4', ts: 11, name: '11', type: jet.PASS, modifiers: new Set() },
+    {
+      id: getNextIdIndex(),
+      ts: 0,
+      name: '1',
+      type: jet.PASS,
+      modifiers: new Set(['longue', 'break']),
+    },
+    { id: getNextIdIndex(), ts: 2, name: '2', type: jet.PASS, modifiers: new Set(['longue']) },
+    {
+      id: getNextIdIndex(),
+      ts: 10,
+      name: '10',
+      type: jet.PASS,
+      modifiers: new Set(['break']),
+    },
+    { id: getNextIdIndex(), ts: 11, name: '11', type: jet.PASS, modifiers: new Set() },
 
-    { id: '5', ts: 15, name: '15', type: jet.PLAYER },
-    { id: '6', ts: 18, name: '18', type: jet.PLAYER },
-    { id: '7', ts: 25, name: 'Joueur 2', type: jet.PLAYER },
-    { id: '8', ts: 29, name: 'Joueur 1', type: jet.PLAYER },
-    { id: '9', ts: 32, name: 'Joueur 4', type: jet.PLAYER },
-    { id: '10', ts: 35, name: 'Joueur 3', type: jet.PLAYER },
-    { id: '11', ts: 36, name: 'Joueur 2', type: jet.PLAYER },
+    { id: getNextIdIndex(), ts: 15, name: '15', type: jet.PLAYER },
+    { id: getNextIdIndex(), ts: 18, name: '18', type: jet.PLAYER },
+    { id: getNextIdIndex(), ts: 25, name: 'Joueur 2', type: jet.PLAYER },
+    { id: getNextIdIndex(), ts: 29, name: 'Joueur 1', type: jet.PLAYER },
+    { id: getNextIdIndex(), ts: 32, name: 'Joueur 4', type: jet.PLAYER },
+    { id: getNextIdIndex(), ts: 35, name: 'Joueur 3', type: jet.PLAYER },
+    { id: getNextIdIndex(), ts: 36, name: 'Joueur 2', type: jet.PLAYER },
   ])
   const addPlayerEntry = (name: string) => {
-    const entry = { id: 'p1', name: name, ts: getTs(), type: jet.PLAYER }
+    const entry = { id: getNextIdIndex(), name: name, ts: getTs(), type: jet.PLAYER }
     records.value.push(entry)
   }
 
   const addPassEntry = (name: string, modifiers: Set<string>) => {
-    const entry = { id: 'a1', name: name, ts: getTs(), modifiers: modifiers, type: jet.PASS }
+    const entry = {
+      id: getNextIdIndex(),
+      name: name,
+      ts: getTs(),
+      modifiers: modifiers,
+      type: jet.PASS,
+    }
     records.value.push(entry)
   }
 
   const addActionEntry = (name: string, terminal: boolean, positive: boolean) => {
     const entry = {
-      id: 'a1',
+      id: getNextIdIndex(),
       name: name,
       ts: getTs(),
       terminal: terminal,

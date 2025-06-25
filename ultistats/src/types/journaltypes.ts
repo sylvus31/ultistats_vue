@@ -6,7 +6,7 @@ export enum JournalEntryType {
 }
 export interface journalPass {
   type: JournalEntryType
-  id: string
+  id: number
   ts: number
   name: string
   modifiers: Set<string>
@@ -14,14 +14,14 @@ export interface journalPass {
 
 export interface journalPlayer {
   type: JournalEntryType
-  id: string
+  id: number
   ts: number
   name: string
 }
 
 export interface journalAction {
   type: JournalEntryType
-  id: string
+  id: number
   name: string
   terminal: boolean
 }

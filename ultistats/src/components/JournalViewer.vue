@@ -2,7 +2,7 @@
   <div class="journal-viewer">
     <div class="button-container" ref="buttonContainer">
       <sl-button
-        v-for="(record, index) in journalRecords"
+        v-for="(record, index) in journalRecords.sort((a, b) => a.ts - b.ts)"
         :key="index"
         :style="{ marginLeft: index === 0 ? 0 : '10px', whiteSpace: 'nowrap' }"
         :class="{ active: record.ts <= videoPlayerRef?.elapsedTimeValue }"
@@ -14,7 +14,7 @@
           @click.stop="onClickDelete(record)"
           style="display: none"
         ></span>
-        {{ record.ts }}
+        {{ record.name }}
         <span v-if="record.type === jet.PASS && 'modifiers' in record"
           ><button
             class="pass-button"
