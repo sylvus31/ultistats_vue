@@ -3,6 +3,7 @@ export enum JournalEntryType {
   PLAYER = 'player',
   POSITIVE_ACTION = 'positiveAction',
   NEGATIVE_ACTION = 'negativeAction',
+  EVENT = 'event',
 }
 export interface journalPass {
   type: JournalEntryType

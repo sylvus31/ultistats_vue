@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
-import type { Action } from '@/types/ActionsType'
+import type { Action, ActionData } from '@/types/ActionsType'
 import { ActionType } from '@/types/ActionsType'
 
 export const useActionsStore = defineStore('actionsStore', () => {
@@ -17,7 +17,7 @@ export const useActionsStore = defineStore('actionsStore', () => {
     .then((data) => {
       let nb = 1
       positiveActions.value = []
-      data.forEach((action) => {
+      data.forEach((action: ActionData) => {
         positiveActions.value?.push({
           id: 'pa' + nb,
           name: action.name,
@@ -32,7 +32,7 @@ export const useActionsStore = defineStore('actionsStore', () => {
     .then((data) => {
       let nb = 1
       negativeActions.value = []
-      data.forEach((action) => {
+      data.forEach((action: ActionData) => {
         negativeActions.value?.push({
           id: 'na' + nb,
           name: action.name,

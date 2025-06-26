@@ -10,3 +10,8 @@ export enum ActionType {
   POSITIVE = 'positive',
   NEGATIVE = 'negative',
 }
+
+export interface ActionData {
+  name: string
+  terminal: boolean
+}

@@ -88,6 +88,16 @@ export const useJournalStore = defineStore('journal', () => {
     }
   }
 
+  const addEventEntry = (name: string) => {
+    const entry = {
+      id: getNextIdIndex(),
+      name: name,
+      ts: getTs(),
+      type: jet.EVENT,
+    }
+    records.value.push(entry)
+  }
+
   const deleteRecord = (entry: JournalEntry) => {
     const index = records.value.indexOf(entry)
     if (index !== -1) {
@@ -103,5 +113,6 @@ export const useJournalStore = defineStore('journal', () => {
     toggleModifier,
     deleteRecord,
     addActionEntry,
+    addEventEntry,
   }
 })
