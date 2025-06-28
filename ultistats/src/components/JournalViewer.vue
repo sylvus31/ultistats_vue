@@ -5,7 +5,7 @@
         v-for="(record, index) in journalRecords.sort((a, b) => a.ts - b.ts)"
         :key="index"
         :style="{ marginLeft: index === 0 ? 0 : '10px', whiteSpace: 'nowrap' }"
-        :class="{ active: record.ts <= videoPlayerRef?.elapsedTimeValue }"
+        :class="{ active: record.ts <= (videoPlayerRef?.elapsedTimeValue ?? 0) }"
         @click="onClickButton(record)"
         @mouseleave="onHoverOut(record)"
         ><span
@@ -87,7 +87,7 @@ function scrollToLastActiveButtons() {
   const activeButtons = Array.from(buttonContainer.querySelectorAll('sl-button.active'))
   if (activeButtons.length > 0) {
     const lastTwoActiveButtons = activeButtons.slice(-2)
-    const button = lastTwoActiveButtons[0]
+    const button = lastTwoActiveButtons[0] as HTMLButtonElement
     const scrollLeft = button.offsetLeft
 
     buttonContainer.scrollTo({

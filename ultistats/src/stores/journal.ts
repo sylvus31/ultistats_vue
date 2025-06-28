@@ -80,11 +80,12 @@ export const useJournalStore = defineStore('journal', () => {
   }
 
   const toggleModifier = (entry: JournalEntry, modifier: string) => {
-    if (!entry.hasOwnProperty('modifiers')) return
-    if (entry.modifiers.has(modifier)) {
-      entry.modifiers.delete(modifier)
-    } else {
-      entry.modifiers.add(modifier)
+    if ('modifiers' in entry) {
+      if (entry.modifiers.has(modifier)) {
+        entry.modifiers.delete(modifier)
+      } else {
+        entry.modifiers.add(modifier)
+      }
     }
   }
 

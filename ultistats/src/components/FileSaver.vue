@@ -23,6 +23,8 @@ const saveFile = () => {
   const url = window.URL.createObjectURL(blob)
   const a = document.createElement('a')
   a.href = url
+  const teamName_A = document.getElementById('teamName_A') as HTMLInputElement
+  const teamName_B = document.getElementById('teamName_B') as HTMLInputElement
   a.download = teamName_A.value + '_vs_' + teamName_B.value + '.json'
   a.click()
   window.URL.revokeObjectURL(url)
