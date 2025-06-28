@@ -2,13 +2,13 @@
 import { useTeamStore } from '@/stores/Team'
 import LineSelector from './LineSelector.vue'
 
-const teamStore = useTeamStore()
 const setLine = () => {}
 </script>
 <template>
   <button @click="setLine()" class="pass-modifier-button">
     <span class="pass-modifier-name">Set line</span>
   </button>
+  <LineSelector />
 </template>
 
 <style scoped>
