@@ -87,7 +87,7 @@ const handleLosseFocus = () => {
   min-width: 100px; /* Match button min-width */
   width: 300px; /* Specific width */
   box-sizing: border-box; /* Include padding and border in the element's total width and height */
-  height: 50px; /* Explicit height to match button - Adjust if needed */
+  height: 38px; /* Explicit height to match button - Adjust if needed */
 }
 
 .styled-input:focus {

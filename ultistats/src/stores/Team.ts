@@ -16,7 +16,7 @@ export const useTeamStore = defineStore('team', () => {
       // number: 7,
       isActive: false,
       key_code: 'Numpad8',
-      modifiers: new Set(['NumpadEnter']),
+      // modifiers: new Set(['NumpadEnter']),
     },
     { id: 'p3', name: 'Clar', isActive: false, key_code: 'Numpad9' },
     { id: 'p4', name: 'Toto', isActive: false, key_code: 'Numpad4' },

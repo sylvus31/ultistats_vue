@@ -33,6 +33,7 @@ const clickAction = (pass: Pass) => {
   const modifiers = passesStore.getActiveModifiers().map((m) => m.name)
 
   journalStore.addPassEntry(pass.name, new Set(modifiers))
+  passesStore.resetModifiers()
 }
 
 const logAction = (eventCode: string, _modifiers: Set<string>) => {
