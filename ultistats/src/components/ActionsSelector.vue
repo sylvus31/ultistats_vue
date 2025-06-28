@@ -38,7 +38,7 @@ sl-button.positiveButton::part(base) {
 
 sl-button.negativeButton::part(base) {
   border: 2px solid #8b0a1a;
-  color: #ea2d2dac;
+  color: #b05959;
 }
 
 .buttons {

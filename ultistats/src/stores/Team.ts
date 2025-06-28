@@ -25,6 +25,7 @@ export const useTeamStore = defineStore('team', () => {
     { id: 'p7', name: 'Lucian', isActive: false, key_code: 'Numpad1' },
     { id: 'p8', name: 'Lyloo', isActive: false, key_code: 'NumpadDivide' },
     { id: 'p9', name: 'Salma', isActive: false, key_code: 'NumpadMultiply' },
+    { id: 'p10', name: 'ADVERSAIRE', isActive: false },
   ])
 
   // --- Getters ---

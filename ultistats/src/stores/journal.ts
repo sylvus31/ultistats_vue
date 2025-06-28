@@ -30,7 +30,7 @@ export const useJournalStore = defineStore('journal', () => {
     {
       id: getNextIdIndex(),
       ts: 0,
-      name: '1',
+      name: '0',
       type: jet.PASS,
       modifiers: new Set(['longue', 'break']),
     },

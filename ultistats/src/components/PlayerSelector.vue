@@ -53,7 +53,9 @@ function logPlayer(eventCode: string, activeModifiers: Set<string>) {
       <div class="player-button-content">
         <div>
           <span v-if="player.number">{{ player.number }} : </span>
-          <span class="player-name">{{ player.name }}</span>
+          <span :class="['player-name', { 'opponent-name': player.name === 'ADVERSAIRE' }]">{{
+            player.name
+          }}</span>
         </div>
         <div>
           <span class="player-key" v-if="player.modifiers">
@@ -70,6 +72,11 @@ function logPlayer(eventCode: string, activeModifiers: Set<string>) {
 .player-name {
   font-weight: bold;
   color: #00bcd4;
+}
+
+.opponent-name {
+  font-weight: bold;
+  color: #b05959;
 }
 .player-key {
   font-size: 0.8em;
