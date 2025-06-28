@@ -5,4 +5,5 @@ export interface Player {
   modifiers?: Set<string>
   key_code?: string
   number?: number
+  playing: boolean
 }

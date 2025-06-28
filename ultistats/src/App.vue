@@ -17,6 +17,7 @@ import JournalViewer from './components/JournalViewer.vue'
 import ActionsSelector from './components/ActionsSelector.vue'
 import EventsSelector from './components/EventsSelector.vue'
 import FileSaver from './components/FileSaver.vue'
+import SetLine from './components/SetLine.vue'
 const videoPlayerRef = ref<VideoPlayerInstance | null>(null)
 const fileInputRef = ref<HTMLInputElement | null>(null) // Ref for the hidden file input
 const journalViewerRef = ref<InstanceType<typeof JournalViewer> | null>(null)
@@ -94,6 +95,7 @@ const handleLoadYoutubeVideo = (source: { src: string; type: string }) => {
     </div>
     <div slot="end">
       <WindowHolder title="Players">
+        <template v-slot:menu><SetLine/></template>
         <template v-slot:main><PlayerSelector/></template>
       </WindowHolder>
       <WindowHolder title="Passes">
