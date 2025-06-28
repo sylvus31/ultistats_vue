@@ -2,6 +2,7 @@
 import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
 import type { Player } from '@/types/Player'
+import type { set } from 'video.js/dist/types/tech/middleware'
 
 // Define the store with the ID 'team'
 export const useTeamStore = defineStore('team', () => {
@@ -75,6 +76,13 @@ export const useTeamStore = defineStore('team', () => {
     players.value = players.value.filter((p) => p.id !== playerId)
   }
 
+  function setPlayingStatus(playerId: string, playing: boolean) {
+    const player = players.value.find((p) => p.id === playerId)
+    if (player) {
+      player.playing = playing
+    }
+  }
+
   // Action to update a player's details
   function updatePlayer(playerId: string, updatedInfo: Partial<Player>) {
     const playerIndex = players.value.findIndex((p) => p.id === playerId)
@@ -100,6 +108,7 @@ export const useTeamStore = defineStore('team', () => {
     activePlayers,
     getPlayerById,
     getPlayerByKeyCodeAndModifiers,
+    setPlayingStatus,
     // Actions
     addPlayer,
     removePlayer,

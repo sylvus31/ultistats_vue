@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import { computed } from 'vue'
-import { usePlayerStore } from '@/stores/playerStore'
+import { useTeamStore } from '../stores/Team'
 import { storeToRefs } from 'pinia'
 
-const playerStore = usePlayerStore()
+const playerStore = useTeamStore()
 const { players } = storeToRefs(playerStore)
 
 const playingPlayers = computed(() => players.value.filter((player) => player.playing))
