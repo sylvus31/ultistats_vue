@@ -1,14 +1,26 @@
 <script setup lang="ts">
-import { useTeamStore } from '@/stores/Team'
 import LineSelector from './LineSelector.vue'
+import { useJournalStore } from '../stores/journal'
+import { ref } from 'vue'
+import { useTeamStore } from '../stores/Team'
 
-const setLine = () => {}
+const teamStore = useTeamStore()
+
+const showLineSelector = ref(false)
+const journalStore = useJournalStore()
+const setLine = () => {
+  if (showLineSelector.value) {
+    // closing line selector => save line
+    journalStore.addLineEntry(new Set(teamStore.playingPlayers.map((p) => p.name)))
+  }
+  showLineSelector.value = !showLineSelector.value
+}
 </script>
 <template>
   <button @click="setLine()" class="pass-modifier-button">
     <span class="pass-modifier-name">Set line</span>
   </button>
-  <LineSelector />
+  <LineSelector v-show="showLineSelector" />
 </template>
 
 <style scoped>

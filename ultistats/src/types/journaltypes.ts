@@ -4,6 +4,15 @@ export enum JournalEntryType {
   POSITIVE_ACTION = 'positiveAction',
   NEGATIVE_ACTION = 'negativeAction',
   EVENT = 'event',
+  LINE = 'line',
+}
+
+export interface journalLine {
+  type: JournalEntryType
+  name: string
+  id: number
+  players: Set<string>
+  ts: number
 }
 export interface journalPass {
   type: JournalEntryType
@@ -25,4 +34,5 @@ export interface journalAction {
   id: number
   name: string
   terminal: boolean
+  ts: number
 }

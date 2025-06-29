@@ -5,9 +5,6 @@ import { storeToRefs } from 'pinia'
 
 const playerStore = useTeamStore()
 const { players } = storeToRefs(playerStore)
-
-const playingPlayers = computed(() => players.value.filter((player) => player.playing))
-const nonPlayingPlayers = computed(() => players.value.filter((player) => !player.playing))
 </script>
 
 <template>
@@ -16,7 +13,7 @@ const nonPlayingPlayers = computed(() => players.value.filter((player) => !playe
       <h3>Playing</h3>
       <ul>
         <li
-          v-for="player in playingPlayers"
+          v-for="player in playerStore.playingPlayers"
           :key="player.id"
           @click="playerStore.setPlayingStatus(player.id, false)"
         >
@@ -28,7 +25,7 @@ const nonPlayingPlayers = computed(() => players.value.filter((player) => !playe
       <h3>Not Playing</h3>
       <ul>
         <li
-          v-for="player in nonPlayingPlayers"
+          v-for="player in playerStore.nonPlayingPlayers"
           :key="player.id"
           @click="playerStore.setPlayingStatus(player.id, true)"
         >

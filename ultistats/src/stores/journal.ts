@@ -1,10 +1,10 @@
 import { defineStore } from 'pinia'
 import { ref, type Ref } from 'vue'
-import type { journalPass, journalPlayer, journalAction } from '@/types/journaltypes'
+import type { journalPass, journalPlayer, journalAction, journalLine } from '@/types/journaltypes'
 import { JournalEntryType as jet } from '@/types/journaltypes'
 import type { VideoPlayerInstance } from '@/components/VideoPlayer.vue'
 
-export type JournalEntry = journalPass | journalPlayer
+export type JournalEntry = journalPass | journalPlayer | journalAction | journalLine
 
 let idIndex = 0
 
@@ -89,6 +89,17 @@ export const useJournalStore = defineStore('journal', () => {
     }
   }
 
+  const addLineEntry = (players: Set<string>) => {
+    const entry = {
+      id: getNextIdIndex(),
+      name: 'Line',
+      ts: getTs(),
+      type: jet.LINE,
+      players: players,
+    }
+    records.value.push(entry)
+  }
+
   const addEventEntry = (name: string) => {
     const entry = {
       id: getNextIdIndex(),
@@ -115,5 +126,6 @@ export const useJournalStore = defineStore('journal', () => {
     deleteRecord,
     addActionEntry,
     addEventEntry,
+    addLineEntry,
   }
 })

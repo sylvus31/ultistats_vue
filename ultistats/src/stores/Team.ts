@@ -33,6 +33,8 @@ export const useTeamStore = defineStore('team', () => {
   // --- Getters ---
   // Example getter: Get only active players
   const activePlayers = computed(() => players.value.filter((p) => p.isActive))
+  const playingPlayers = computed(() => players.value.filter((player) => player.playing))
+  const nonPlayingPlayers = computed(() => players.value.filter((player) => !player.playing))
 
   // Example getter: Get a player by their ID
   const getPlayerById = computed(() => {
@@ -106,6 +108,8 @@ export const useTeamStore = defineStore('team', () => {
     players,
     // Getters
     activePlayers,
+    playingPlayers,
+    nonPlayingPlayers,
     getPlayerById,
     getPlayerByKeyCodeAndModifiers,
     setPlayingStatus,

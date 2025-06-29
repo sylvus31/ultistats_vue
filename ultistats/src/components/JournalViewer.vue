@@ -31,6 +31,12 @@
             B
           </button></span
         >
+        <span
+          v-if="record.type === jet.LINE && 'players' in record"
+          :title="Array.from(record.players).join(', ')"
+        >
+          ({{ record.players.size }})
+        </span>
       </sl-button>
     </div>
   </div>
@@ -42,6 +48,7 @@ import { JournalEntryType as jet } from '@/types/journaltypes'
 import type { JournalEntry } from '@/stores/journal'
 import { useJournalStore } from '@/stores/journal'
 import type { VideoPlayerInstance } from '@/components/VideoPlayer.vue'
+import { VTooltip } from 'v-tooltip'
 
 const videoPlayerRef = ref<VideoPlayerInstance | null>(null)
 const setVideoPlayerRef = (ref: Ref<VideoPlayerInstance | null>) => {
