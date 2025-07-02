@@ -14,7 +14,6 @@ export const usePassesStore = defineStore('passesStore', () => {
     { id: 'a2', name: 'Avant', isActive: false, key: 'KeyW', legend: 'Z' },
     { id: 'a5', name: 'Knife', isActive: false, key: 'KeyE', legend: 'E' },
     { id: 'a7', name: 'Skoober', isActive: false, key: 'KeyR', legend: 'R' },
-    { id: 'a1', name: 'Passe', isActive: false, key: 'KeyS', legend: 'S' },
     { id: 'a3', name: 'Dump', isActive: false, key: 'KeyD', legend: 'D' },
     { id: 'a4', name: 'Swing', isActive: false, key: 'KeyA', legend: 'Q' },
   ])

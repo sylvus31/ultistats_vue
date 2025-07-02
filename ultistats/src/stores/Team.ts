@@ -10,7 +10,7 @@ export const useTeamStore = defineStore('team', () => {
   // Use ref to hold the array of Player objects
   const players = ref<Player[]>([
     // You can initialize with some default players if needed
-    { id: 'p1', name: 'Thomas', isActive: false, key_code: 'Numpad7' },
+    { id: 'p1', name: 'Thomas', isActive: false, key_code: 'Numpad7', playing: false },
     {
       id: 'p2',
       name: 'Guimsou',
