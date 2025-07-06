@@ -142,7 +142,7 @@ export const useJournalStore = defineStore('journal', () => {
 
     // pass to pass
     if (lastMeaningFulEntry.type === jet.PASS && entry.type === jet.PASS) {
-      const lastPlayer = getPrecedentEntryByTypes(entry, jet.PLAYER)
+      const lastPlayer = getPrecedentEntryByTypes(entry, [jet.PLAYER])
       if (lastPlayer) {
         const name = lastPlayer.name == 'ADVERSAIRE' ? 'ADVERSAIRE' : 'BTR'
         const aiEntry = {
