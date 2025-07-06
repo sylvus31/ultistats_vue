@@ -122,9 +122,20 @@ export const useJournalStore = defineStore('journal', () => {
   }
 
   const addAiEntry = (entry: JournalEntry) => {
-    const lastMeaningFulEntry = getPrecedentEntryByTypes(entry, [jet.PLAYER, jet.PASS])
-    console.log(lastMeaningFulEntry)
+    const lastMeaningFulEntry = getPrecedentEntryByTypes(entry, [jet.PLAYER, jet.PASS, jet.EVENT])
+    console.log('last mean entry', lastMeaningFulEntry)
     if (!lastMeaningFulEntry || ai) return
+
+    const intervalEntries = records.value
+      .filter((e) => e.ts > lastMeaningFulEntry.ts)
+      .filter((e) => e.ts < entry.ts)
+    let isBlocker = false
+    intervalEntries.forEach((e) => {
+      if (e.type === jet.EVENT || ['score'].includes(e.name)) {
+        isBlocker = true
+      }
+    })
+    if (isBlocker) return
 
     const ts = (entry.ts + lastMeaningFulEntry.ts) / 2
     // player to player
@@ -134,7 +145,7 @@ export const useJournalStore = defineStore('journal', () => {
         name: 'Passe',
         ts: ts,
         modifiers: new Set([]),
-        type: jet.PLAYER,
+        type: jet.PASS,
         source: src.AI,
       }
       records.value.push(aiEntry)
