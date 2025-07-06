@@ -2,6 +2,7 @@ import { defineStore } from 'pinia'
 import { ref, type Ref } from 'vue'
 import type { journalPass, journalPlayer, journalAction, journalLine } from '@/types/journaltypes'
 import { JournalEntryType as jet } from '@/types/journaltypes'
+import { JournalEntrySource as src } from '@/types/journaltypes'
 import type { VideoPlayerInstance } from '@/components/VideoPlayer.vue'
 
 export type JournalEntry = journalPass | journalPlayer | journalAction | journalLine
@@ -33,28 +34,52 @@ export const useJournalStore = defineStore('journal', () => {
       name: '0',
       type: jet.PASS,
       modifiers: new Set(['longue', 'break']),
+      source: src.USER,
     },
-    { id: getNextIdIndex(), ts: 2, name: '2', type: jet.PASS, modifiers: new Set(['longue']) },
+    {
+      id: getNextIdIndex(),
+      ts: 2,
+      name: '2',
+      type: jet.PASS,
+      modifiers: new Set(['longue']),
+      source: src.AI,
+    },
     {
       id: getNextIdIndex(),
       ts: 10,
       name: '10',
       type: jet.PASS,
       modifiers: new Set(['break']),
+      source: src.USER,
     },
-    { id: getNextIdIndex(), ts: 11, name: '11', type: jet.PASS, modifiers: new Set() },
+    {
+      id: getNextIdIndex(),
+      ts: 11,
+      name: '11',
+      type: jet.PASS,
+      modifiers: new Set(),
+      source: src.USER,
+    },
 
-    { id: getNextIdIndex(), ts: 15, name: '15', type: jet.PLAYER },
-    { id: getNextIdIndex(), ts: 18, name: '18', type: jet.PLAYER },
-    { id: getNextIdIndex(), ts: 25, name: 'Joueur 2', type: jet.PLAYER },
-    { id: getNextIdIndex(), ts: 29, name: 'Joueur 1', type: jet.PLAYER },
-    { id: getNextIdIndex(), ts: 32, name: 'Joueur 4', type: jet.PLAYER },
-    { id: getNextIdIndex(), ts: 35, name: 'Joueur 3', type: jet.PLAYER },
-    { id: getNextIdIndex(), ts: 36, name: 'Joueur 2', type: jet.PLAYER },
+    { id: getNextIdIndex(), ts: 15, name: '15', type: jet.PLAYER, source: src.AI },
+    { id: getNextIdIndex(), ts: 18, name: '18', type: jet.PLAYER, source: src.USER },
+    { id: getNextIdIndex(), ts: 25, name: 'Joueur 2', type: jet.PLAYER, source: src.USER },
+    { id: getNextIdIndex(), ts: 29, name: 'Joueur 1', type: jet.PLAYER, source: src.USER },
+    { id: getNextIdIndex(), ts: 32, name: 'Joueur 4', type: jet.PLAYER, source: src.USER },
+    { id: getNextIdIndex(), ts: 35, name: 'Joueur 3', type: jet.PLAYER, source: src.USER },
+    { id: getNextIdIndex(), ts: 36, name: 'Joueur 2', type: jet.PLAYER, source: src.USER },
   ])
+
+  records.value = []
   const addPlayerEntry = (name: string) => {
-    const entry = { id: getNextIdIndex(), name: name, ts: getTs(), type: jet.PLAYER }
-    records.value.push(entry)
+    const entry = {
+      id: getNextIdIndex(),
+      name: name,
+      ts: getTs(),
+      type: jet.PLAYER,
+      source: src.USER,
+    }
+    addEntry(entry)
   }
 
   const addPassEntry = (name: string, modifiers: Set<string>) => {
@@ -64,8 +89,9 @@ export const useJournalStore = defineStore('journal', () => {
       ts: getTs(),
       modifiers: modifiers,
       type: jet.PASS,
+      source: src.USER,
     }
-    records.value.push(entry)
+    addEntry(entry)
   }
 
   const addActionEntry = (name: string, terminal: boolean, positive: boolean) => {
@@ -75,7 +101,64 @@ export const useJournalStore = defineStore('journal', () => {
       ts: getTs(),
       terminal: terminal,
       type: positive ? jet.POSITIVE_ACTION : jet.NEGATIVE_ACTION,
+      source: src.USER,
     }
+    addEntry(entry)
+  }
+  const urlParams = new URLSearchParams(window.location.search)
+  const ai = urlParams.get('ai')
+
+  const getPrecedentEntryByTypes = (
+    entry: JournalEntry,
+    types: Array<jet>,
+  ): JournalEntry | null => {
+    const precedentEntries = records.value
+      .filter((e) => e.ts <= entry.ts)
+      .filter((e) => types.includes(e.type))
+      .sort((a, b) => (a.ts === b.ts ? a.id - b.id : a.ts - b.ts))
+    const precedentEntry = precedentEntries[precedentEntries.length - 1] || null
+    if (precedentEntry == entry) return null
+    return precedentEntry
+  }
+
+  const addAiEntry = (entry: JournalEntry) => {
+    const lastMeaningFulEntry = getPrecedentEntryByTypes(entry, [jet.PLAYER, jet.PASS])
+    console.log(lastMeaningFulEntry)
+    if (!lastMeaningFulEntry || ai) return
+
+    const ts = (entry.ts + lastMeaningFulEntry.ts) / 2
+    // player to player
+    if (lastMeaningFulEntry.type === jet.PLAYER && entry.type === jet.PLAYER) {
+      const aiEntry = {
+        id: getNextIdIndex(),
+        name: 'Passe',
+        ts: ts,
+        modifiers: new Set([]),
+        type: jet.PLAYER,
+        source: src.AI,
+      }
+      records.value.push(aiEntry)
+    }
+
+    // pass to pass
+    if (lastMeaningFulEntry.type === jet.PASS && entry.type === jet.PASS) {
+      const lastPlayer = getPrecedentEntryByTypes(entry, jet.PLAYER)
+      if (lastPlayer) {
+        const name = lastPlayer.name == 'ADVERSAIRE' ? 'ADVERSAIRE' : 'BTR'
+        const aiEntry = {
+          id: getNextIdIndex(),
+          name: name,
+          ts: ts,
+          type: jet.PLAYER,
+          source: src.AI,
+        }
+        records.value.push(aiEntry)
+      }
+    }
+  }
+
+  const addEntry = (entry: JournalEntry) => {
+    addAiEntry(entry)
     records.value.push(entry)
   }
 
@@ -96,8 +179,9 @@ export const useJournalStore = defineStore('journal', () => {
       ts: getTs(),
       type: jet.LINE,
       players: players,
+      source: src.USER,
     }
-    records.value.push(entry)
+    addEntry(entry)
   }
 
   const addEventEntry = (name: string) => {
@@ -106,8 +190,9 @@ export const useJournalStore = defineStore('journal', () => {
       name: name,
       ts: getTs(),
       type: jet.EVENT,
+      source: src.USER,
     }
-    records.value.push(entry)
+    addEntry(entry)
   }
 
   const deleteRecord = (entry: JournalEntry) => {

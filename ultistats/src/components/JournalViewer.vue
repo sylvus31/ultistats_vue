@@ -5,10 +5,14 @@
         v-for="(record, index) in journalRecords.sort((a, b) => a.ts - b.ts)"
         :key="index"
         :style="{ marginLeft: index === 0 ? 0 : '10px', whiteSpace: 'nowrap' }"
-        :class="{ active: record.ts <= (videoPlayerRef?.elapsedTimeValue ?? 0) }"
+        :class="{
+          active: record.ts <= (videoPlayerRef?.elapsedTimeValue ?? 0),
+          ai: record.source === src.AI,
+        }"
         @click="onClickButton(record)"
         @mouseleave="onHoverOut(record)"
-        ><span
+      >
+        <span
           :id="`delete-button-${record.id}`"
           class="mdi mdi-delete-outline"
           @click.stop="onClickDelete(record)"
@@ -37,6 +41,11 @@
         >
           ({{ record.players.size }})
         </span>
+        <span
+          v-if="record.source === src.AI"
+          class="mdi mdi-robot-outline"
+          @click="onClickAi(record)"
+        ></span>
       </sl-button>
     </div>
   </div>
@@ -44,11 +53,10 @@
 <script setup lang="ts">
 import { onUpdated, ref, type Ref } from 'vue'
 
-import { JournalEntryType as jet } from '@/types/journaltypes'
+import { JournalEntryType as jet, JournalEntrySource as src } from '@/types/journaltypes'
 import type { JournalEntry } from '@/stores/journal'
 import { useJournalStore } from '@/stores/journal'
 import type { VideoPlayerInstance } from '@/components/VideoPlayer.vue'
-import { VTooltip } from 'v-tooltip'
 
 const videoPlayerRef = ref<VideoPlayerInstance | null>(null)
 const setVideoPlayerRef = (ref: Ref<VideoPlayerInstance | null>) => {
@@ -85,6 +93,10 @@ function onClickBreak(record: JournalEntry) {
 
 function onClickDelete(record: JournalEntry) {
   journalStore.deleteRecord(record)
+}
+
+function onClickAi(record: JournalEntry) {
+  record.source = src.USER
 }
 
 function scrollToLastActiveButtons() {
@@ -127,6 +139,11 @@ defineExpose({
   flex-wrap: nowrap;
   overflow-x: auto;
   padding: 10px;
+}
+
+sl-button.ai::part(base) {
+  background-color: #686b54;
+  color: #fff; /* White text for active */
 }
 
 .slider-container {

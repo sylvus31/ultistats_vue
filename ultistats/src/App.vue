@@ -140,7 +140,7 @@ sl-split-panel::part(divider):hover {
 
 sl-button.active::part(base) {
   border: 2px solid #00bcd4; /* Techy teal accent for active */
-  background-color: #2a4a52; /* Darker teal background for active */
+  /*background-color: #2a4a52; /* Darker teal background for active */
   color: #fff; /* White text for active */
 }
 

@@ -7,12 +7,18 @@ export enum JournalEntryType {
   LINE = 'line',
 }
 
+export enum JournalEntrySource {
+  USER = 'user',
+  AI = 'ai',
+}
+
 export interface journalLine {
   type: JournalEntryType
   name: string
   id: number
   players: Set<string>
   ts: number
+  source: JournalEntrySource
 }
 export interface journalPass {
   type: JournalEntryType
@@ -20,6 +26,7 @@ export interface journalPass {
   ts: number
   name: string
   modifiers: Set<string>
+  source: JournalEntrySource
 }
 
 export interface journalPlayer {
@@ -27,6 +34,7 @@ export interface journalPlayer {
   id: number
   ts: number
   name: string
+  source: JournalEntrySource
 }
 
 export interface journalAction {
@@ -35,4 +43,5 @@ export interface journalAction {
   name: string
   terminal: boolean
   ts: number
+  source: JournalEntrySource
 }
