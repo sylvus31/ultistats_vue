@@ -113,7 +113,7 @@ export const useJournalStore = defineStore('journal', () => {
     types: Array<jet>,
   ): JournalEntry | null => {
     const precedentEntries = records.value
-      .filter((e) => e.ts <= entry.ts)
+      .filter((e) => e.ts < entry.ts)
       .filter((e) => types.includes(e.type))
       .sort((a, b) => (a.ts === b.ts ? a.id - b.id : a.ts - b.ts))
     const precedentEntry = precedentEntries[precedentEntries.length - 1] || null
@@ -137,7 +137,7 @@ export const useJournalStore = defineStore('journal', () => {
     })
     if (isBlocker) return
 
-    const ts = (entry.ts + lastMeaningFulEntry.ts) / 2
+    const ts = (entry.ts + getPrecedentEntryByTypes(entry, Object.values(jet))!.ts) / 2
     // player to player
     if (lastMeaningFulEntry.type === jet.PLAYER && entry.type === jet.PLAYER) {
       const aiEntry = {
