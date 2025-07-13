@@ -19,17 +19,20 @@
       </button>
       <span>Speed: {{ currentSpeed?.toFixed(2) }}x</span>
       <span>Time: {{ formattedTime }}</span>
+      <ScoreEvolution ref="scoreEvolutionRef" />
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, onBeforeUnmount, computed } from 'vue'
+import { ref, onMounted, onBeforeUnmount, computed, type Ref } from 'vue'
 import 'videojs-youtube'
 import videojs from 'video.js'
 import type Player from 'video.js/dist/types/player'
 import 'video.js/dist/video-js.css'
 import { useKeyboardStore } from '../stores/keyboardStore'
+import ScoreEvolution from './ScoreEvolution.vue'
+const scoreEvolutionRef = ref<InstanceType<typeof ScoreEvolution> | null>(null)
 
 const keyboardStore = useKeyboardStore()
 const componentId = 'VideoPlayer'
@@ -197,6 +200,7 @@ const loadVideo = (source: { src: string; type: string }) => {
   if (player.value) {
     console.log('Loading new video source:', source)
     player.value.src(source)
+    scoreEvolutionRef.value?.setVideoPlayerRef(player as Ref<Player>)
   } else {
     console.error('Video player not available to load new source.')
   }

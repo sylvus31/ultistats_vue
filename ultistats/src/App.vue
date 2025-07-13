@@ -36,6 +36,7 @@ const handleFileChange = (event: Event) => {
   if (file && videoPlayerRef.value) {
     useJournalStore().setVideoPlayerRef(videoPlayerRef)
     journalViewerRef.value?.setVideoPlayerRef(videoPlayerRef)
+
     // Create an object URL for the selected file
     const source = {
       src: URL.createObjectURL(file),

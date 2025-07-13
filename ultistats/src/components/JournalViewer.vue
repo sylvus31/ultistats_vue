@@ -2,7 +2,7 @@
   <div class="journal-viewer">
     <div class="button-container" ref="buttonContainer">
       <sl-button
-        v-for="(record, index) in journalRecords.sort((a, b) => a.ts - b.ts)"
+        v-for="(record, index) in journalEventsToShow"
         :key="index"
         :style="{ marginLeft: index === 0 ? 0 : '10px', whiteSpace: 'nowrap' }"
         :class="{
@@ -51,7 +51,7 @@
   </div>
 </template>
 <script setup lang="ts">
-import { onUpdated, ref, type Ref } from 'vue'
+import { computed, onUpdated, ref, type Ref } from 'vue'
 
 import { JournalEntryType as jet, JournalEntrySource as src } from '@/types/journaltypes'
 import type { JournalEntry } from '@/stores/journal'
@@ -64,7 +64,20 @@ const setVideoPlayerRef = (ref: Ref<VideoPlayerInstance | null>) => {
 }
 const journalStore = useJournalStore()
 const journalRecords = journalStore.records
+const journalEventsToShow = computed(() => {
+  if (!videoPlayerRef.value) return []
+  const ts = videoPlayerRef.value.elapsedTimeValue
 
+  const events = [...journalRecords].sort((a, b) => a.ts - b.ts)
+  const start = Math.max(
+    ...journalRecords.filter((p) => p.ts < ts && p.name === 'score').map((p) => p.ts),
+  )
+  const end = Math.min(
+    ...journalRecords.filter((p) => p.ts >= ts && p.name === 'score').map((p) => p.ts),
+  )
+
+  return events.filter((p) => p.ts > start && p.ts <= end)
+})
 function onHoverOut(record: JournalEntry) {
   const deleteButton = document.getElementById(`delete-button-${record.id}`)
   if (deleteButton) {
