@@ -34,7 +34,7 @@ journalStore.$subscribe((mutation, state) => {
     if (r.name === 'pull') {
       const newPoint = {
         pullTime: r.ts,
-        endTime: null,
+        endTime: Number.MAX_SAFE_INTEGER,
         currentScore: [currentScore[0], currentScore[1]] as [number, number],
         scoringTeam: -1,
       }
