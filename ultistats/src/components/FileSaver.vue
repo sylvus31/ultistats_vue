@@ -42,7 +42,12 @@ const loadFile = () => {
         const data = JSON.parse(reader.result as string)
         data.forEach((record: any) => {
           console.log(record)
-          record.modifiers = new Set(record.modifiers)
+          if (record.modifiers) {
+            record.modifiers = new Set(record.modifiers)
+          }
+          if (record.players) {
+            record.players = new Set(record.players)
+          }
           journalStore.records.push(record)
         })
       }
