@@ -10,10 +10,11 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
-import RevoGrid from '@revolist/vue3-datagrid'
+import RevoGrid, { VGridVueTemplate } from '@revolist/vue3-datagrid'
 import { useTeamStore } from '@/stores/Team'
 import { useJournalStore } from '@/stores/journal'
 import { JournalEntryType as jet } from '@/types/journaltypes'
+import PlayedTimeCell from './stats/PlayedTimeCell.vue'
 const teamStore = useTeamStore()
 const journalStore = useJournalStore()
 const columns = ref([
@@ -25,7 +26,7 @@ const columns = ref([
   { prop: 'points', name: 'Points' },
   { prop: 'defenses', name: 'Défenses' },
   { prop: 'played_points', name: 'Nb points' },
-  { prop: 'played_time', name: 'Temps' },
+  { prop: 'played_time', name: 'Temps', cellTemplate: VGridVueTemplate(PlayedTimeCell) },
 ])
 
 interface Row {
@@ -73,11 +74,9 @@ journalStore.$subscribe((mutation, state) => {
   rows.value.forEach((r) => {
     updatedRows.set(r.player, initRow(r.player))
   })
-  console.log('before', updatedRows.get('ADVERSAIRE')?.passes_success)
 
   records.forEach((r, i) => {
     if (r.type === jet.PLAYER) {
-      console.log('player', r.name, i)
       for (let j = i + 1; j < records.length; j++) {
         if (records[j].type === jet.PLAYER) {
           updatedRows.get(records[i].name)!.passes_total += 1
@@ -103,6 +102,7 @@ journalStore.$subscribe((mutation, state) => {
       }
     } else if (r.name === 'score') {
       // get scorer
+      console.log('score', r.ts)
       for (let j = i - 1; j >= 0; j--) {
         if (records[j].type === jet.PLAYER) {
           updatedRows.get(records[j].name)!.points += 1
@@ -120,14 +120,17 @@ journalStore.$subscribe((mutation, state) => {
       for (let j = i - 1; j >= 0; j--) {
         const line = records[j]
         if (line.type === jet.LINE && 'players' in line) {
-          let pullTime = line.ts
+          let pullTime = line.ts // if no pull recorded
+          console.log('line', pullTime, line)
           for (let k = j + 1; k < records.length; k++) {
             if (records[k].name === 'pull') {
               pullTime = records[k].ts
+              console.log('pull', pullTime)
               break
             }
           }
-          const time = records[i].ts - pullTime // not correct, must look for pull
+          const time = records[i].ts - pullTime
+          console.log('time', time)
           line.players.forEach((p) => {
             updatedRows.get(p)!.played_points += 1
             updatedRows.get(p)!.played_time += time
@@ -140,6 +143,7 @@ journalStore.$subscribe((mutation, state) => {
         console.log('looking for interceptor')
         if (records[j].type === jet.PLAYER) {
           updatedRows.get(records[j].name)!.defenses += 1
+          console.log('interceptor', records[j].name)
           break
         }
       }
