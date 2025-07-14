@@ -213,6 +213,10 @@ export const useJournalStore = defineStore('journal', () => {
     }
   }
 
+  const updateTime = (entry: JournalEntry) => {
+    entry.ts = getTs()
+  }
+
   return {
     records,
     addPlayerEntry,
@@ -223,5 +227,6 @@ export const useJournalStore = defineStore('journal', () => {
     addActionEntry,
     addEventEntry,
     addLineEntry,
+    updateTime,
   }
 })

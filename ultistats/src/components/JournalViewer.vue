@@ -11,6 +11,7 @@
         }"
         @click="onClickButton(record)"
         @mouseleave="onHoverOut(record)"
+        title="Revoir l'action. Cliquer pour la modifier."
       >
         <span
           :id="`delete-button-${record.id}`"
@@ -46,6 +47,12 @@
           class="mdi mdi-robot-outline"
           @click="onClickAi(record)"
         ></span>
+        <span
+          class="mdi mdi-timer-outline"
+          :id="`timer-button-${record.id}`"
+          @click.stop="onClickTimer(record)"
+          title="Change le moment de l'action"
+        ></span>
       </sl-button>
     </div>
   </div>
@@ -79,10 +86,7 @@ const journalEventsToShow = computed(() => {
   return events.filter((p) => p.ts > start && p.ts <= end)
 })
 function onHoverOut(record: JournalEntry) {
-  const deleteButton = document.getElementById(`delete-button-${record.id}`)
-  if (deleteButton) {
-    deleteButton.style.display = 'none'
-  }
+  displayButtonStyle(`delete-button-${record.id}`, 'none')
 }
 
 function onClickButton(record: JournalEntry) {
@@ -90,10 +94,15 @@ function onClickButton(record: JournalEntry) {
     videoPlayerRef.value.goTo(record.ts - 2)
   }
 
-  const deleteButton = document.getElementById(`delete-button-${record.id}`)
-  if (deleteButton) {
-    deleteButton.style.display = 'inline-block'
-  }
+  displayButtonStyle(`delete-button-${record.id}`, 'inline-block')
+}
+function onClickTimer(record: JournalEntry) {
+  journalStore.updateTime(record)
+}
+
+const displayButtonStyle = (buttonId: string, displayStyle: string) => {
+  const button = document.getElementById(buttonId)
+  if (button) button.style.display = displayStyle
 }
 
 function onClickLongue(record: JournalEntry) {
