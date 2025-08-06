@@ -74,7 +74,6 @@ const journalRecords = journalStore.records
 const journalEventsToShow = computed(() => {
   if (!videoPlayerRef.value) return []
   const ts = videoPlayerRef.value.elapsedTimeValue
-
   const events = [...journalRecords].sort((a, b) => a.ts - b.ts)
   const start = Math.max(
     ...journalRecords.filter((p) => p.ts < ts && p.name === 'score').map((p) => p.ts),
@@ -85,6 +84,7 @@ const journalEventsToShow = computed(() => {
 
   return events.filter((p) => p.ts > start && p.ts <= end)
 })
+
 function onHoverOut(record: JournalEntry) {
   displayButtonStyle(`delete-button-${record.id}`, 'none')
 }

@@ -41,7 +41,6 @@ const loadFile = () => {
       reader.onload = () => {
         const data = JSON.parse(reader.result as string)
         data.forEach((record: any) => {
-          console.log(record)
           if (record.modifiers) {
             record.modifiers = new Set(record.modifiers)
           }

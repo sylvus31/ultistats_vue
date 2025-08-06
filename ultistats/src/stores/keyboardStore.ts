@@ -38,7 +38,6 @@ export const useKeyboardStore = defineStore('keyboard', () => {
       console.log(keycode + ' already present', keyBindings.value.get(keycode))
       return false
     }
-    console.log('setting: ', keycode)
     keyBindings.value.set(keycode, new KeyBinding(comp, msg, callback))
     return true
   }
@@ -53,7 +52,6 @@ export const useKeyboardStore = defineStore('keyboard', () => {
       console.log(keycode + ' already present', keyBindings.value.get(keycode))
       return false
     }
-    console.log('setting: ', keycode)
     keyBindingsUP.value.set(keycode, new KeyBinding(comp, msg, callback))
     return true
   }

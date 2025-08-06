@@ -47,7 +47,6 @@ const logAction = (eventCode: string, _modifiers: Set<string>) => {
 
 passes.value.forEach((p) => {
   if (p.key) {
-    console.log('binding', p.name, p.key)
     keyboardStore.addKeyBinding(componentId, p.key, 'action: ' + p.name, logAction)
   }
 })

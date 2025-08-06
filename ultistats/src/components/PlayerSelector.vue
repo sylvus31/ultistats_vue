@@ -21,8 +21,6 @@ const componentId = 'PlayerSelector'
 
 players.value.forEach((p) => {
   if (p.key_code) {
-    console.log('binding', p.name, p.key_code)
-
     keyboardStore.addKeyBinding(componentId, p.key_code, 'player: ' + p.name, logPlayer)
   }
 })

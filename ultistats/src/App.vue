@@ -6,7 +6,7 @@ import '@shoelace-style/shoelace/dist/themes/dark.css'
 
 import '@shoelace-style/shoelace/dist/components/details/details.js'
 import VideoPlayer, { type VideoPlayerInstance } from './components/VideoPlayer.vue'
-import { ref } from 'vue'
+import { ref, provide } from 'vue'
 import PlayerSelector from './components/PlayerSelector.vue'
 import WindowHolder from './components/WindowHolder.vue'
 import YoutubeVideoSelector from './components/YoutubeVideoSelector.vue'
@@ -69,6 +69,8 @@ const handleLoadYoutubeVideo = (source: { src: string; type: string }) => {
     console.error('Video player ref not available when trying to load YouTube video.')
   }
 }
+
+provide('videoPlayerRef', videoPlayerRef)
 </script>
 
 <template class="sl-theme-dark">
