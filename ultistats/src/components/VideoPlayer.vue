@@ -200,7 +200,6 @@ const loadVideo = (source: { src: string; type: string }) => {
   if (player.value) {
     console.log('Loading new video source:', source)
     player.value.src(source)
-    scoreEvolutionRef.value?.setVideoPlayerRef(player as Ref<Player>)
   } else {
     console.error('Video player not available to load new source.')
   }

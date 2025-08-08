@@ -67,7 +67,6 @@ const initRow = (name: string) => {
 initStats(rows.value)
 
 journalStore.$subscribe((mutation, state) => {
-  console.log('Journal store updated:', journalStore.records.length)
   const records = journalStore.records.sort((a, b) => (a.ts === b.ts ? a.id - b.id : a.ts - b.ts))
   const updatedRows = new Map<string, Row>()
 
@@ -102,7 +101,6 @@ journalStore.$subscribe((mutation, state) => {
       }
     } else if (r.name === 'score') {
       // get scorer
-      console.log('score', r.ts)
       for (let j = i - 1; j >= 0; j--) {
         if (records[j].type === jet.PLAYER) {
           updatedRows.get(records[j].name)!.points += 1
@@ -121,16 +119,13 @@ journalStore.$subscribe((mutation, state) => {
         const line = records[j]
         if (line.type === jet.LINE && 'players' in line) {
           let pullTime = line.ts // if no pull recorded
-          console.log('line', pullTime, line)
           for (let k = j + 1; k < records.length; k++) {
             if (records[k].name === 'pull') {
               pullTime = records[k].ts
-              console.log('pull', pullTime)
               break
             }
           }
           const time = records[i].ts - pullTime
-          console.log('time', time)
           line.players.forEach((p) => {
             updatedRows.get(p)!.played_points += 1
             updatedRows.get(p)!.played_time += time
@@ -140,10 +135,8 @@ journalStore.$subscribe((mutation, state) => {
       }
     } else if (['block', 'intercept'].includes(r.name)) {
       for (let j = i - 1; j >= 0; j--) {
-        console.log('looking for interceptor')
         if (records[j].type === jet.PLAYER) {
           updatedRows.get(records[j].name)!.defenses += 1
-          console.log('interceptor', records[j].name)
           break
         }
       }
@@ -151,8 +144,6 @@ journalStore.$subscribe((mutation, state) => {
   })
 
   rows.value = rows.value.map((r) => updatedRows.get(r.player)!)
-
-  console.log('after', updatedRows.get('ADVERSAIRE')?.passes_success)
 
   const grid = document.querySelector('revo-grid')
   if (grid) {
