@@ -97,6 +97,7 @@ defineExpose({
 </script>
 <template>
   <div>BTR: {{ score[0] }} - {{ score[1] }} ADV</div>
+  <div>&nbsp;&nbsp;&nbsp;</div>
   <div v-for="(score, index) in scoreEvolution" :key="index">
     <div
       class="score-circle"
