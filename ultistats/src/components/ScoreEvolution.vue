@@ -23,7 +23,6 @@ const init = () => {
 const scoreEvolution = ref<point[]>([])
 journalStore.$subscribe((mutation, state) => {
   const records = journalStore.records.sort((a, b) => (a.ts === b.ts ? a.id - b.id : a.ts - b.ts))
-  console.log('records', records[records.length - 1].name)
   init()
   const points: point[] = []
 
