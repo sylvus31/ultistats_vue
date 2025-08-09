@@ -39,16 +39,59 @@ const loadFile = () => {
     if (file) {
       const reader = new FileReader()
       reader.onload = () => {
-        const data = JSON.parse(reader.result as string)
-        data.forEach((record: any) => {
-          if (record.modifiers) {
-            record.modifiers = new Set(record.modifiers)
-          }
-          if (record.players) {
-            record.players = new Set(record.players)
-          }
-          journalStore.records.push(record)
-        })
+        if (journalStore.records.length > 0) {
+          const confirmDialog = document.createElement('dialog')
+          confirmDialog.style.position = 'absolute'
+          confirmDialog.innerHTML = `
+  <form method="dialog">
+    <h2>Records already exist</h2>
+    <p>Do you want to overwrite the existing records or add new ones?</p>
+    <menu>
+      <button value="overwrite">Overwrite</button>
+      <button value="add">Add</button>
+      <button value="cancel">Cancel</button>
+    </menu>
+  </form>
+`
+          document.body.appendChild(confirmDialog)
+          confirmDialog.showModal()
+          confirmDialog.addEventListener('close', () => {
+            let timOffset = 0
+            if (confirmDialog.returnValue === 'cancel') {
+              return
+            }
+            if (confirmDialog.returnValue === 'overwrite') {
+              journalStore.records = []
+            }
+            if (confirmDialog.returnValue === 'add') {
+              timOffset = Math.max(...journalStore.records.map((p) => p.ts)) + 3600
+            }
+            const data = JSON.parse(reader.result as string)
+            data.forEach((record: any) => {
+              //special treatment for sets stored as array in json
+              if (record.modifiers) {
+                record.modifiers = new Set(record.modifiers)
+              }
+              if (record.players) {
+                record.players = new Set(record.players)
+              }
+              record.ts += timOffset
+              journalStore.records.push(record)
+            })
+          })
+        } else {
+          const data = JSON.parse(reader.result as string)
+          data.forEach((record: any) => {
+            //special treatment for sets stored as array in json
+            if (record.modifiers) {
+              record.modifiers = new Set(record.modifiers)
+            }
+            if (record.players) {
+              record.players = new Set(record.players)
+            }
+            journalStore.records.push(record)
+          })
+        }
       }
       reader.readAsText(file)
     }
