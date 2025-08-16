@@ -40,15 +40,14 @@ class StringNumberMap extends Map<string, number> {
     super(iterable)
   }
 
-  get(key: string) {
-    return super.get(key) || 0
+  getOrDefault(key: string, bckpValue = 0): number {
+    return super.get(key) ?? bckpValue
   }
 
   increment(key: string) {
-    this.set(key, this.get(key) + 1)
+    this.set(key, this.getOrDefault(key) + 1)
   }
 }
-
 interface Row {
   player: string
   passes_total: number
@@ -210,13 +209,13 @@ journalStore.$subscribe((mutation, state) => {
       btrStats.played_points += r.played_points
 
       r.targets.forEach((v, k) => {
-        btrStats.targets.set(k, (btrStats.targets.get(k) || 0) + v)
+        btrStats.targets.set(k, btrStats.targets.getOrDefault(k) + v)
       })
       r.providers.forEach((v, k) => {
-        btrStats.providers.set(k, (btrStats.providers.get(k) || 0) + v)
+        btrStats.providers.set(k, btrStats.providers.getOrDefault(k) + v)
       })
       r.passesType.forEach((v, k) => {
-        btrStats.passesType.set(k, (btrStats.passesType.get(k) || 0) + v)
+        btrStats.passesType.set(k, btrStats.passesType.getOrDefault(k) + v)
       })
     }
   })
