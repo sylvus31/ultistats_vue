@@ -12,7 +12,7 @@
 import { ref } from 'vue'
 import RevoGrid, { VGridVueTemplate } from '@revolist/vue3-datagrid'
 import { useTeamStore } from '@/stores/Team'
-import { useJournalStore } from '@/stores/journal'
+import { useJournalStore, type JournalEntry } from '@/stores/journal'
 import { points } from '@/stores/pointsStore'
 import { JournalEntryType as jet, type journalPass } from '@/types/journaltypes'
 import PlayedTimeCell from './stats/PlayedTimeCell.vue'
@@ -99,18 +99,19 @@ const initRow = (name: string) => {
 }
 
 initStats(rows.value)
-
-journalStore.$subscribe((mutation, state) => {
-  const records = journalStore.records.sort((a, b) => (a.ts === b.ts ? a.id - b.id : a.ts - b.ts))
-  const recordAsPoints = points(journalStore.records)
-  console.log('recordAsPoints', recordAsPoints)
-  const updatedRows = new Map<string, Row>()
-
-  rows.value.forEach((r) => {
-    updatedRows.set(r.player, initRow(r.player))
+const initMap = () => {
+  const emptyMap = new Map<string, Row>()
+  const players = teamStore.players.map((p) => p.name)
+  players.push('BTR')
+  players.forEach((p) => {
+    emptyMap.set(p, initRow(p))
   })
 
-  recordAsPoints[1].records.forEach((r, i) => {
+  return emptyMap
+}
+
+const getStatsForOnePoint = (records: JournalEntry[], baseValues: Map<string, Row>) => {
+  records.forEach((r, i) => {
     if (r.type === jet.PLAYER) {
       const thrower = r.name
       for (let j = i + 1; j < records.length; j++) {
@@ -121,37 +122,37 @@ journalStore.$subscribe((mutation, state) => {
           for (let k = i + 1; k < j; k++) {
             if (records[k].type === jet.PASS) {
               const pass = records[k] as journalPass
-              updatedRows.get(thrower)!.passes_total += 1
-              updatedRows.get(thrower)!.passesType.increment(pass.name)
+              baseValues.get(thrower)!.passes_total += 1
+              baseValues.get(thrower)!.passesType.increment(pass.name)
               const isLong = pass.modifiers.has('long')
               const success =
                 (thrower === 'ADVERSAIRE' && receiver === 'ADVERSAIRE') ||
                 (thrower !== 'ADVERSAIRE' && receiver !== 'ADVERSAIRE')
 
               if (success) {
-                updatedRows.get(thrower)!.passes_success += 1
+                baseValues.get(thrower)!.passes_success += 1
                 if (isLong) {
-                  updatedRows.get(thrower)!.longue_success += 1
+                  baseValues.get(thrower)!.longue_success += 1
                 }
               } else {
-                updatedRows.get(thrower)!.passes_fail += 1
+                baseValues.get(thrower)!.passes_fail += 1
                 if (isLong) {
-                  updatedRows.get(thrower)!.long_fail += 1
+                  baseValues.get(thrower)!.long_fail += 1
                 }
               }
               //count receivers
-              updatedRows.get(thrower)!.targets.increment(receiver)
+              baseValues.get(thrower)!.targets.increment(receiver)
               //count providers
-              updatedRows.get(receiver)!.providers.increment(thrower)
+              baseValues.get(receiver)!.providers.increment(thrower)
               break
             }
           }
           break
         } else if (records[j].name === 'pull') {
-          updatedRows.get(thrower)!.pulls += 1
+          baseValues.get(thrower)!.pulls += 1
           break
         } else if (records[j].name === 'pick up disc') {
-          updatedRows.get(thrower)!.pickUps += 1
+          baseValues.get(thrower)!.pickUps += 1
           // no break needed, same player has disc
         }
       }
@@ -159,11 +160,11 @@ journalStore.$subscribe((mutation, state) => {
       // get scorer
       for (let j = i - 1; j >= 0; j--) {
         if (records[j].type === jet.PLAYER) {
-          updatedRows.get(records[j].name)!.points += 1
+          baseValues.get(records[j].name)!.points += 1
           // get passe D
           for (let k = j - 1; k >= 0; k--) {
             if (records[k].type === jet.PLAYER) {
-              updatedRows.get(records[k].name)!.passes_D += 1
+              baseValues.get(records[k].name)!.passes_D += 1
               break
             }
           }
@@ -183,8 +184,8 @@ journalStore.$subscribe((mutation, state) => {
           }
           const time = records[i].ts - pullTime
           line.players.forEach((p) => {
-            updatedRows.get(p)!.played_points += 1
-            updatedRows.get(p)!.played_time += time
+            baseValues.get(p)!.played_points += 1
+            baseValues.get(p)!.played_time += time
           })
           break
         }
@@ -192,7 +193,7 @@ journalStore.$subscribe((mutation, state) => {
     } else if (['block', 'intercept'].includes(r.name)) {
       for (let j = i - 1; j >= 0; j--) {
         if (records[j].type === jet.PLAYER) {
-          updatedRows.get(records[j].name)!.defenses += 1
+          baseValues.get(records[j].name)!.defenses += 1
           break
         }
       }
@@ -201,7 +202,7 @@ journalStore.$subscribe((mutation, state) => {
 
   //add BTR line
   const btrStats = initRow('BTR')
-  updatedRows.forEach((r) => {
+  baseValues.forEach((r) => {
     if (r.player !== 'ADVERSAIRE') {
       btrStats.passes_total += r.passes_total
       btrStats.passes_success += r.passes_success
@@ -222,11 +223,30 @@ journalStore.$subscribe((mutation, state) => {
       })
     }
   })
-  btrStats.played_time += updatedRows.get('ADVERSAIRE')!.played_time
-  updatedRows.set('BTR', btrStats)
+  btrStats.played_time += baseValues.get('ADVERSAIRE')!.played_time
+  baseValues.set('BTR', btrStats)
+
+  console.log('baseValues', baseValues)
+  return baseValues
+}
+
+journalStore.$subscribe((mutation, state) => {
+  // const records = journalStore.records.sort((a, b) => (a.ts === b.ts ? a.id - b.id : a.ts - b.ts))
+  const recordAsPoints = points(journalStore.records)
+  console.log('recordAsPoints', recordAsPoints)
+  const updatedRows = new Map<string, Row>()
+
+  rows.value.forEach((r) => {
+    updatedRows.set(r.player, initRow(r.player))
+  })
+
+  let statsMap = initMap()
+  recordAsPoints.forEach((p) => {
+    statsMap = getStatsForOnePoint(p.records, statsMap)
+  })
 
   // update the grid
-  rows.value = rows.value.map((r) => updatedRows.get(r.player)!)
+  rows.value = rows.value.map((r) => statsMap.get(r.player)!)
   const grid = document.querySelector('revo-grid')
   if (grid) {
     grid.refresh()
