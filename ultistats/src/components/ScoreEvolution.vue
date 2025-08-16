@@ -3,8 +3,11 @@ import { useJournalStore } from '@/stores/journal'
 import { computed, inject, ref, type Ref } from 'vue'
 import { JournalEntryType as jet } from '@/types/journaltypes'
 import type { VideoPlayerInstance } from '@/components/VideoPlayer.vue'
+import { useStateStore } from '@/stores/StateStore'
 
 const videoPlayerRef = inject<Ref<VideoPlayerInstance | null>>('videoPlayerRef')
+
+const stateStore = useStateStore()
 
 const journalStore = useJournalStore()
 interface point {
@@ -64,12 +67,13 @@ journalStore.$subscribe((mutation, state) => {
   })
   scoreEvolution.value = points.slice(0, points.length)
 })
-const setVideoToBeginningOfPoint = (point: point) => {
+const setVideoToBeginningOfPoint = (point: point, index: number) => {
   if (videoPlayerRef?.value) {
     console.log('setVideoToBeginningOfPoint', point)
 
     videoPlayerRef.value.goTo(point.pullTime - 2)
   }
+  stateStore.pointIndex = index
 }
 function getPointTimeFrame(ts: number) {
   const start = Math.max(
@@ -104,7 +108,7 @@ defineExpose({
         'background-color':
           score.scoringTeam === 0 ? '#035812ac' : score.scoringTeam === 1 ? '#8b0a1a' : 'white',
       }"
-      @click="setVideoToBeginningOfPoint(score)"
+      @click="setVideoToBeginningOfPoint(score, index)"
     >
       <!-- <div class="red-possession-circle"></div> -->
       <div

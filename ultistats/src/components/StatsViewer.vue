@@ -9,16 +9,24 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, type Ref } from 'vue'
 import RevoGrid, { VGridVueTemplate } from '@revolist/vue3-datagrid'
 import { useTeamStore } from '@/stores/Team'
 import { useJournalStore, type JournalEntry } from '@/stores/journal'
-import { points } from '@/stores/pointsStore'
+import { useStateStore } from '@/stores/StateStore'
+import { points, Point } from '@/stores/pointsStore'
 import { JournalEntryType as jet, type journalPass } from '@/types/journaltypes'
 import PlayedTimeCell from './stats/PlayedTimeCell.vue'
 import TargetsCell from './stats/TargetsCell.vue'
+import type { VideoPlayerInstance } from '@/components/VideoPlayer.vue'
+
+const videoPlayerRef = ref<VideoPlayerInstance | null>(null)
+const setVideoPlayerRef = (ref: Ref<VideoPlayerInstance | null>) => {
+  videoPlayerRef.value = ref.value
+}
 const teamStore = useTeamStore()
 const journalStore = useJournalStore()
+const stateStore = useStateStore()
 const columns = ref([
   { prop: 'player', name: 'Player' },
   { prop: 'passes_total', name: 'P total' },
@@ -203,14 +211,13 @@ const getStatsForOnePoint = (records: JournalEntry[], baseValues: Map<string, Ro
   //add BTR line
   const btrStats = initRow('BTR')
   baseValues.forEach((r) => {
-    if (r.player !== 'ADVERSAIRE') {
+    if (r.player !== 'ADVERSAIRE' && r.player !== 'BTR') {
       btrStats.passes_total += r.passes_total
       btrStats.passes_success += r.passes_success
       btrStats.passes_fail += r.passes_fail
       btrStats.passes_D += r.passes_D
       btrStats.points += r.points
       btrStats.defenses += r.defenses
-      btrStats.played_points += r.played_points
 
       r.targets.forEach((v, k) => {
         btrStats.targets.set(k, btrStats.targets.getOrDefault(k) + v)
@@ -223,22 +230,36 @@ const getStatsForOnePoint = (records: JournalEntry[], baseValues: Map<string, Ro
       })
     }
   })
-  btrStats.played_time += baseValues.get('ADVERSAIRE')!.played_time
+  btrStats.played_time = baseValues.get('ADVERSAIRE')!.played_time
+  btrStats.played_points = baseValues.get('ADVERSAIRE')!.played_points
   baseValues.set('BTR', btrStats)
 
   console.log('baseValues', baseValues)
   return baseValues
 }
 
-journalStore.$subscribe((mutation, state) => {
-  // const records = journalStore.records.sort((a, b) => (a.ts === b.ts ? a.id - b.id : a.ts - b.ts))
-  const recordAsPoints = points(journalStore.records)
-  console.log('recordAsPoints', recordAsPoints)
-  const updatedRows = new Map<string, Row>()
+const getPointsForStats = (points: Point[]) => {
+  const p = new Array<Point>()
+  if (stateStore.statsScope === 0) {
+    p.push(points[stateStore.pointIndex])
+  } else if (stateStore.statsScope === 1) {
+    for (let i = 0; i <= stateStore.pointIndex; i++) {
+      p.push(points[i])
+    }
+  } else if (stateStore.statsScope === 2) {
+    for (let i = 0; i < points.length; i++) {
+      p.push(points[i])
+    }
+  }
+  return p
+}
 
-  rows.value.forEach((r) => {
-    updatedRows.set(r.player, initRow(r.player))
-  })
+stateStore.$subscribe((mutation, state) => {
+  updateStatGrid()
+})
+
+const updateStatGrid = () => {
+  const recordAsPoints = getPointsForStats(points(journalStore.records))
 
   let statsMap = initMap()
   recordAsPoints.forEach((p) => {
@@ -251,5 +272,13 @@ journalStore.$subscribe((mutation, state) => {
   if (grid) {
     grid.refresh()
   }
+}
+
+journalStore.$subscribe((mutation, state) => {
+  updateStatGrid()
+})
+
+defineExpose({
+  setVideoPlayerRef,
 })
 </script>

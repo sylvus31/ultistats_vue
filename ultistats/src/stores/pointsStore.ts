@@ -1,7 +1,7 @@
 import { computed } from 'vue'
 import type { JournalEntry } from '@/stores/journal'
 
-class Point {
+export class Point {
   startTime: number
   endTime = computed(() =>
     Number(this.records[this.records.length - 1].name == 'score')
