@@ -13,6 +13,7 @@ import { ref } from 'vue'
 import RevoGrid, { VGridVueTemplate } from '@revolist/vue3-datagrid'
 import { useTeamStore } from '@/stores/Team'
 import { useJournalStore } from '@/stores/journal'
+import { points } from '@/stores/pointsStore'
 import { JournalEntryType as jet, type journalPass } from '@/types/journaltypes'
 import PlayedTimeCell from './stats/PlayedTimeCell.vue'
 import TargetsCell from './stats/TargetsCell.vue'
@@ -101,13 +102,15 @@ initStats(rows.value)
 
 journalStore.$subscribe((mutation, state) => {
   const records = journalStore.records.sort((a, b) => (a.ts === b.ts ? a.id - b.id : a.ts - b.ts))
+  const recordAsPoints = points(journalStore.records)
+  console.log('recordAsPoints', recordAsPoints)
   const updatedRows = new Map<string, Row>()
 
   rows.value.forEach((r) => {
     updatedRows.set(r.player, initRow(r.player))
   })
 
-  records.forEach((r, i) => {
+  recordAsPoints[1].records.forEach((r, i) => {
     if (r.type === jet.PLAYER) {
       const thrower = r.name
       for (let j = i + 1; j < records.length; j++) {
@@ -221,8 +224,9 @@ journalStore.$subscribe((mutation, state) => {
   })
   btrStats.played_time += updatedRows.get('ADVERSAIRE')!.played_time
   updatedRows.set('BTR', btrStats)
-  rows.value = rows.value.map((r) => updatedRows.get(r.player)!)
 
+  // update the grid
+  rows.value = rows.value.map((r) => updatedRows.get(r.player)!)
   const grid = document.querySelector('revo-grid')
   if (grid) {
     grid.refresh()

@@ -27,50 +27,8 @@ function getTs() {
 }
 
 export const useJournalStore = defineStore('journal', () => {
-  const records = ref<JournalEntry[]>([
-    {
-      id: getNextIdIndex(),
-      ts: 0,
-      name: '0',
-      type: jet.PASS,
-      modifiers: new Set(['longue', 'break']),
-      source: src.USER,
-    },
-    {
-      id: getNextIdIndex(),
-      ts: 2,
-      name: '2',
-      type: jet.PASS,
-      modifiers: new Set(['longue']),
-      source: src.AI,
-    },
-    {
-      id: getNextIdIndex(),
-      ts: 10,
-      name: '10',
-      type: jet.PASS,
-      modifiers: new Set(['break']),
-      source: src.USER,
-    },
-    {
-      id: getNextIdIndex(),
-      ts: 11,
-      name: '11',
-      type: jet.PASS,
-      modifiers: new Set(),
-      source: src.USER,
-    },
+  const records = ref<JournalEntry[]>([])
 
-    { id: getNextIdIndex(), ts: 15, name: '15', type: jet.PLAYER, source: src.AI },
-    { id: getNextIdIndex(), ts: 18, name: '18', type: jet.PLAYER, source: src.USER },
-    { id: getNextIdIndex(), ts: 25, name: 'Joueur 2', type: jet.PLAYER, source: src.USER },
-    { id: getNextIdIndex(), ts: 29, name: 'Joueur 1', type: jet.PLAYER, source: src.USER },
-    { id: getNextIdIndex(), ts: 32, name: 'Joueur 4', type: jet.PLAYER, source: src.USER },
-    { id: getNextIdIndex(), ts: 35, name: 'Joueur 3', type: jet.PLAYER, source: src.USER },
-    { id: getNextIdIndex(), ts: 36, name: 'Joueur 2', type: jet.PLAYER, source: src.USER },
-  ])
-
-  records.value = []
   const addPlayerEntry = (name: string) => {
     const entry = {
       id: getNextIdIndex(),
