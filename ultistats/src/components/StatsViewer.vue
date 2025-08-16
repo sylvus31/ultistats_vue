@@ -31,7 +31,23 @@ const columns = ref([
   { prop: 'targets', name: 'Cibles', cellTemplate: VGridVueTemplate(TargetsCell) },
   { prop: 'providers', name: 'Lanceurs', cellTemplate: VGridVueTemplate(TargetsCell) },
   { prop: 'passesType', name: 'Type de passes', cellTemplate: VGridVueTemplate(TargetsCell) },
+  { prop: 'pulls', name: 'Pulls' },
+  { prop: 'pickUps', name: 'PickUps' },
 ])
+
+class StringNumberMap extends Map<string, number> {
+  constructor(iterable: Iterable<[string, number]> = []) {
+    super(iterable)
+  }
+
+  get(key: string) {
+    return super.get(key) || 0
+  }
+
+  increment(key: string) {
+    this.set(key, this.get(key) + 1)
+  }
+}
 
 interface Row {
   player: string
@@ -43,11 +59,13 @@ interface Row {
   defenses: number
   played_points: number
   played_time: number
-  targets: Map<string, number>
-  providers: Map<string, number>
-  passesType: Map<string, number>
+  targets: StringNumberMap
+  providers: StringNumberMap
+  passesType: StringNumberMap
   longue_success: number
   long_fail: number
+  pulls: number
+  pickUps: number
 }
 
 const rows = ref<Row[]>([])
@@ -70,11 +88,13 @@ const initRow = (name: string) => {
     defenses: 0,
     played_points: 0,
     played_time: 0,
-    targets: new Map<string, number>(),
-    providers: new Map<string, number>(),
-    passesType: new Map<string, number>(),
+    targets: new StringNumberMap(),
+    providers: new StringNumberMap(),
+    passesType: new StringNumberMap(),
     longue_success: 0,
     long_fail: 0,
+    pulls: 0,
+    pickUps: 0,
   }
 }
 
@@ -95,49 +115,42 @@ journalStore.$subscribe((mutation, state) => {
         if (records[j].type === jet.PLAYER) {
           // TODO: pull are contount as passes
           const receiver = records[j].name
-          updatedRows.get(thrower)!.passes_total += 1
           //get type of pass
-          let long = false
           for (let k = i + 1; k < j; k++) {
             if (records[k].type === jet.PASS) {
               const pass = records[k] as journalPass
-              updatedRows
-                .get(thrower)!
-                .passesType.set(
-                  pass.name,
-                  (updatedRows.get(thrower)!.passesType.get(pass.name) || 0) + 1,
-                )
-              long = pass.modifiers.has('long')
+              updatedRows.get(thrower)!.passes_total += 1
+              updatedRows.get(thrower)!.passesType.increment(pass.name)
+              const isLong = pass.modifiers.has('long')
+              const success =
+                (thrower === 'ADVERSAIRE' && receiver === 'ADVERSAIRE') ||
+                (thrower !== 'ADVERSAIRE' && receiver !== 'ADVERSAIRE')
+
+              if (success) {
+                updatedRows.get(thrower)!.passes_success += 1
+                if (isLong) {
+                  updatedRows.get(thrower)!.longue_success += 1
+                }
+              } else {
+                updatedRows.get(thrower)!.passes_fail += 1
+                if (isLong) {
+                  updatedRows.get(thrower)!.long_fail += 1
+                }
+              }
+              //count receivers
+              updatedRows.get(thrower)!.targets.increment(receiver)
+              //count providers
+              updatedRows.get(receiver)!.providers.increment(thrower)
               break
             }
           }
-
-          const success =
-            (thrower === 'ADVERSAIRE' && receiver === 'ADVERSAIRE') ||
-            (thrower !== 'ADVERSAIRE' && receiver !== 'ADVERSAIRE')
-
-          if (success) {
-            updatedRows.get(thrower)!.passes_success += 1
-            if (long) {
-              updatedRows.get(thrower)!.longue_success += 1
-            }
-          } else {
-            updatedRows.get(thrower)!.passes_fail += 1
-            if (long) {
-              updatedRows.get(thrower)!.long_fail += 1
-            }
-          }
-          //count receivers
-          updatedRows
-            .get(thrower)!
-            .targets.set(receiver, (updatedRows.get(thrower)!.targets.get(receiver) || 0) + 1)
-          //count providers
-          updatedRows
-            .get(receiver)!
-            .providers.set(thrower, (updatedRows.get(receiver)!.providers.get(thrower) || 0) + 1)
           break
-        } else if (records[j].type === jet.EVENT || ['score'].includes(records[j].name)) {
+        } else if (records[j].name === 'pull') {
+          updatedRows.get(thrower)!.pulls += 1
           break
+        } else if (records[j].name === 'pick up disc') {
+          updatedRows.get(thrower)!.pickUps += 1
+          // no break needed, same player has disc
         }
       }
     } else if (r.name === 'score') {
