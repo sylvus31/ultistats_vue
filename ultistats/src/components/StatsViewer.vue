@@ -1,5 +1,6 @@
 <template>
   <RevoGrid
+    class="select-full-height"
     id="revo-grid"
     hide-attribution
     :columns="columns"
@@ -7,6 +8,12 @@
     :theme="'darkCompact'"
   />
 </template>
+
+<style scoped>
+.select-full-height {
+  height: 90vh;
+}
+</style>
 
 <script setup lang="ts">
 import { ref, type Ref } from 'vue'
@@ -74,16 +81,20 @@ interface Row {
   long_fail: number
   pulls: number
   pickUps: number
+  offensives_points: [number, number]
+  defensives_points: [number, number]
 }
 
 const rows = ref<Row[]>([])
 const initStats = (r: Row[]) => {
   r.splice(0, r.length)
+  r.push(initRow('ADVERSAIRE'))
+  r.push(initRow('BTR'))
 
   teamStore.players.forEach((p) => {
+    if (p.name === 'ADVERSAIRE') return
     r.push(initRow(p.name))
   })
-  r.push(initRow('BTR'))
 }
 const initRow = (name: string) => {
   return {
@@ -103,6 +114,8 @@ const initRow = (name: string) => {
     long_fail: 0,
     pulls: 0,
     pickUps: 0,
+    offensives_points: [0, 0] as [number, number],
+    defensives_points: [0, 0] as [number, number],
   }
 }
 
@@ -218,6 +231,8 @@ const getStatsForOnePoint = (records: JournalEntry[], baseValues: Map<string, Ro
       btrStats.passes_D += r.passes_D
       btrStats.points += r.points
       btrStats.defenses += r.defenses
+      btrStats.pulls += r.pulls
+      btrStats.pickUps += r.pickUps
 
       r.targets.forEach((v, k) => {
         btrStats.targets.set(k, btrStats.targets.getOrDefault(k) + v)
@@ -259,9 +274,10 @@ stateStore.$subscribe((mutation, state) => {
 })
 
 const updateStatGrid = () => {
-  const recordAsPoints = getPointsForStats(points(journalStore.records))
-
   let statsMap = initMap()
+
+  const recordAsPoints = getPointsForStats(points(journalStore.records))
+  if (recordAsPoints?.length < 2) return
   recordAsPoints.forEach((p) => {
     statsMap = getStatsForOnePoint(p.records, statsMap)
   })

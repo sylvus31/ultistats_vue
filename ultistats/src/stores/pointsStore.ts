@@ -1,5 +1,6 @@
 import { computed } from 'vue'
 import type { JournalEntry } from '@/stores/journal'
+import { JournalEntryType as jet } from '@/types/journaltypes'
 
 export class Point {
   startTime: number
@@ -23,12 +24,33 @@ export class Point {
 
 export const points = (records: JournalEntry[]) => {
   const tmp_points: Point[] = []
-  const firstPoint = new Point(records[0].ts)
+  const firstPoint = new Point(0)
   tmp_points.push(firstPoint)
 
-  records.forEach((record) => {
+  records.forEach((record, i) => {
     tmp_points[tmp_points.length - 1].addRecord(record)
-    if (record.name == 'score') {
+    if (record.name === 'pull') {
+      for (let j = i; j < records.length; j++) {
+        if (records[j].type == jet.PLAYER) {
+          if (records[j].name == 'ADVERSAIRE') {
+            tmp_points[tmp_points.length - 1].attackingTeam = 0
+          } else {
+            tmp_points[tmp_points.length - 1].attackingTeam = 1
+          }
+          break
+        }
+      }
+    } else if (record.name === 'score') {
+      for (let j = i - 1; j > 0; j--) {
+        if (records[j].type == jet.PLAYER) {
+          if (records[j].name == 'ADVERSAIRE') {
+            tmp_points[tmp_points.length - 1].scoringTeam = 1
+          } else {
+            tmp_points[tmp_points.length - 1].scoringTeam = 0
+          }
+          break
+        }
+      }
       tmp_points.push(new Point(record.ts + 1))
     }
   })
