@@ -1,9 +1,10 @@
 import { defineStore } from 'pinia'
-import { ref, type Ref } from 'vue'
+import { computed, ref, type Ref } from 'vue'
 import type { journalPass, journalPlayer, journalAction, journalLine } from '@/types/journaltypes'
 import { JournalEntryType as jet } from '@/types/journaltypes'
 import { JournalEntrySource as src } from '@/types/journaltypes'
 import type { VideoPlayerInstance } from '@/components/VideoPlayer.vue'
+import { separateRecordsInPoints } from './pointsStore'
 
 export type JournalEntry = journalPass | journalPlayer | journalAction | journalLine
 
@@ -28,6 +29,10 @@ function getTs() {
 
 export const useJournalStore = defineStore('journal', () => {
   const records = ref<JournalEntry[]>([])
+  const sortedRecords = computed(() => records.value.sort((a, b) => a.ts - b.ts))
+  const recordsAsPoints = computed(() => {
+    return separateRecordsInPoints(sortedRecords.value)
+  })
 
   const addPlayerEntry = (name: string) => {
     const entry = {
@@ -171,12 +176,24 @@ export const useJournalStore = defineStore('journal', () => {
     }
   }
 
+  const deleteAllRecords = () => {
+    records.value = []
+  }
+
   const updateTime = (entry: JournalEntry) => {
     entry.ts = getTs()
   }
 
+  const addRecord = (record: JournalEntry) => {
+    records.value.push(record)
+  }
+
   return {
-    records,
+    records, //don't use directly, find a way to not export it
+    sortedRecords,
+    recordsAsPoints,
+    deleteAllRecords,
+    addRecord,
     addPlayerEntry,
     addPassEntry,
     setVideoPlayerRef,

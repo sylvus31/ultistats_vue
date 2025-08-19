@@ -22,7 +22,7 @@ export class Point {
   }
 }
 
-export const points = (records: JournalEntry[]) => {
+export const separateRecordsInPoints = (records: JournalEntry[]) => {
   const tmp_points: Point[] = []
   const firstPoint = new Point(0)
   tmp_points.push(firstPoint)

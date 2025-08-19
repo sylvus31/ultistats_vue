@@ -16,7 +16,7 @@ const handleLosseFocus = () => {
 }
 
 const saveFile = () => {
-  const data = JSON.stringify(journalStore.records, (_key, value) =>
+  const data = JSON.stringify(journalStore.sortedRecords, (_key, value) =>
     value instanceof Set ? [...value] : value,
   )
   const blob = new Blob([data], { type: 'application/json' })
@@ -39,7 +39,7 @@ const loadFile = () => {
     if (file) {
       const reader = new FileReader()
       reader.onload = () => {
-        if (journalStore.records.length > 0) {
+        if (journalStore.sortedRecords.length > 0) {
           const confirmDialog = document.createElement('dialog')
           confirmDialog.style.position = 'absolute'
           confirmDialog.innerHTML = `
@@ -61,10 +61,10 @@ const loadFile = () => {
               return
             }
             if (confirmDialog.returnValue === 'overwrite') {
-              journalStore.records = []
+              journalStore.deleteAllRecords()
             }
             if (confirmDialog.returnValue === 'add') {
-              timOffset = Math.max(...journalStore.records.map((p) => p.ts)) + 3600
+              timOffset = Math.max(...journalStore.sortedRecords.map((p) => p.ts)) + 3600
             }
             const data = JSON.parse(reader.result as string)
             data.forEach((record: any) => {
@@ -76,7 +76,7 @@ const loadFile = () => {
                 record.players = new Set(record.players)
               }
               record.ts += timOffset
-              journalStore.records.push(record)
+              journalStore.addRecord(record)
             })
           })
         } else {
@@ -89,7 +89,7 @@ const loadFile = () => {
             if (record.players) {
               record.players = new Set(record.players)
             }
-            journalStore.records.push(record)
+            journalStore.addRecord(record)
           })
         }
       }

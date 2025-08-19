@@ -21,7 +21,7 @@ import RevoGrid, { VGridVueTemplate } from '@revolist/vue3-datagrid'
 import { useTeamStore } from '@/stores/Team'
 import { useJournalStore, type JournalEntry } from '@/stores/journal'
 import { useStateStore } from '@/stores/StateStore'
-import { points, Point } from '@/stores/pointsStore'
+import type { Point } from '@/stores/pointsStore'
 import { JournalEntryType as jet, type journalPass } from '@/types/journaltypes'
 import PlayedTimeCell from './stats/PlayedTimeCell.vue'
 import TargetsCell from './stats/TargetsCell.vue'
@@ -276,9 +276,9 @@ stateStore.$subscribe((mutation, state) => {
 const updateStatGrid = () => {
   let statsMap = initMap()
 
-  const recordAsPoints = getPointsForStats(points(journalStore.records))
-  if (recordAsPoints?.length < 2) return
-  recordAsPoints.forEach((p) => {
+  const pointsForStats = getPointsForStats(journalStore.recordsAsPoints)
+  if (pointsForStats?.length < 2) return
+  pointsForStats.forEach((p) => {
     statsMap = getStatsForOnePoint(p.records, statsMap)
   })
 
