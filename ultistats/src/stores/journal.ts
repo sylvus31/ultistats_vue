@@ -189,7 +189,6 @@ export const useJournalStore = defineStore('journal', () => {
   }
 
   return {
-    records, //don't use directly, find a way to not export it
     sortedRecords,
     recordsAsPoints,
     deleteAllRecords,

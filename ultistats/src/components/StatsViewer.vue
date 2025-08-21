@@ -272,6 +272,7 @@ const getPointsForStats = (points: Point[]) => {
 stateStore.$subscribe((mutation, state) => {
   updateStatGrid()
 })
+//TODO update real time, not wait for score
 
 const updateStatGrid = () => {
   let statsMap = initMap()

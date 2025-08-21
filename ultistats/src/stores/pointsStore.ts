@@ -4,8 +4,9 @@ import { JournalEntryType as jet } from '@/types/journaltypes'
 
 export class Point {
   startTime: number
+  pullTime: number
   endTime = computed(() =>
-    Number(this.records[this.records.length - 1].name == 'score')
+    this.records[this.records.length - 1]?.name == 'score'
       ? this.records[this.records.length - 1].ts
       : Number.MAX_SAFE_INTEGER,
   )
@@ -13,9 +14,10 @@ export class Point {
   isFinished = computed(() => Boolean(this.records[this.records.length - 1].name == 'score'))
   attackingTeam: number = -1
   scoringTeam: number = -1
-
+  hasPull = false
   constructor(startTime: number) {
     this.startTime = startTime
+    this.pullTime = startTime
   }
   addRecord(record: JournalEntry) {
     this.records.push(record)
@@ -30,12 +32,14 @@ export const separateRecordsInPoints = (records: JournalEntry[]) => {
   records.forEach((record, i) => {
     tmp_points[tmp_points.length - 1].addRecord(record)
     if (record.name === 'pull') {
+      tmp_points[tmp_points.length - 1].pullTime = record.ts
+      tmp_points[tmp_points.length - 1].hasPull = true
       for (let j = i; j < records.length; j++) {
         if (records[j].type == jet.PLAYER) {
           if (records[j].name == 'ADVERSAIRE') {
-            tmp_points[tmp_points.length - 1].attackingTeam = 0
-          } else {
             tmp_points[tmp_points.length - 1].attackingTeam = 1
+          } else {
+            tmp_points[tmp_points.length - 1].attackingTeam = 0
           }
           break
         }

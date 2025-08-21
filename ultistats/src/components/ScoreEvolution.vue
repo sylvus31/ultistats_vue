@@ -1,73 +1,35 @@
 <script setup lang="ts">
 import { useJournalStore } from '@/stores/journal'
-import { computed, inject, ref, type Ref } from 'vue'
-import { JournalEntryType as jet } from '@/types/journaltypes'
+import { watch, computed, inject, ref, type Ref } from 'vue'
 import type { VideoPlayerInstance } from '@/components/VideoPlayer.vue'
 import { useStateStore } from '@/stores/StateStore'
+import { Point } from '@/stores/pointsStore'
 
 const videoPlayerRef = inject<Ref<VideoPlayerInstance | null>>('videoPlayerRef')
 
 const stateStore = useStateStore()
 
 const journalStore = useJournalStore()
-interface point {
-  pullTime: number
-  endTime: number
-  currentScore: [number, number]
-  scoringTeam: number
-  attackingTeam: number
-}
 
 const totalScore: [number, number] = [0, 0]
-const init = () => {
+const updateTotalScore = (points: Point[] = journalStore.recordsAsPoints) => {
   totalScore[0] = 0
   totalScore[1] = 0
-}
-const scoreEvolution = ref<point[]>([])
-journalStore.$subscribe((mutation, state) => {
-  const records = journalStore.sortedRecords
-  init()
-  const points: point[] = []
-
-  records.forEach((r, i) => {
-    if (r.name === 'pull') {
-      //find pulling team
-      let attackingTeam = 1
-      for (let j = i - 1; j >= 0; j--) {
-        if (records[j].type === jet.PLAYER) {
-          if (records[j].name === 'ADVERSAIRE') {
-            attackingTeam = 0
-          }
-          break
-        }
-      }
-      const newPoint = {
-        pullTime: r.ts,
-        endTime: Number.MAX_SAFE_INTEGER,
-        currentScore: [totalScore[0], totalScore[1]] as [number, number],
-        scoringTeam: -1,
-        attackingTeam: attackingTeam,
-      }
-      points.push(newPoint)
-    }
-    if (r.name === 'score') {
-      let scoringTeam = 0
-      for (let j = i - 1; j >= 0; j--) {
-        if (records[j].type === jet.PLAYER) {
-          if (records[j].name === 'ADVERSAIRE') {
-            scoringTeam = 1
-          }
-          break
-        }
-      }
-      totalScore[scoringTeam] += 1
-      points[points.length - 1].endTime = r.ts
-      points[points.length - 1].scoringTeam = scoringTeam
+  points.forEach((p) => {
+    if (p.scoringTeam === 0 || p.scoringTeam === 1) {
+      totalScore[p.scoringTeam] += 1
     }
   })
-  scoreEvolution.value = points.slice(0, points.length)
+  console.log('totalScore', totalScore)
+}
+const scoreEvolution = ref<Point[]>([])
+watch(journalStore.sortedRecords, () => {
+  console.log('journalStore.recordsAsPoints', journalStore.recordsAsPoints)
+  scoreEvolution.value = []
+  scoreEvolution.value = journalStore.recordsAsPoints.filter((p) => p.hasPull)
+  updateTotalScore()
 })
-const setVideoToBeginningOfPoint = (point: point, index: number) => {
+const setVideoToBeginningOfPoint = (point: { pullTime: number }, index: number) => {
   if (videoPlayerRef?.value) {
     console.log('setVideoToBeginningOfPoint', point)
 
@@ -85,13 +47,7 @@ function getPointTimeFrame(ts: number) {
 }
 
 const score = computed(() => {
-  if (!videoPlayerRef?.value) return [0, 0]
-  const ts = videoPlayerRef.value.elapsedTimeValue
-
-  if (scoreEvolution.value.length === 0) return [0, 0]
-  if (scoreEvolution.value[scoreEvolution.value.length - 1].endTime < ts) return totalScore
-  const currentPoint = scoreEvolution.value.filter((p) => p.endTime > ts)[0]
-  return currentPoint ? currentPoint.currentScore : [0, 0]
+  return totalScore
 })
 
 defineExpose({
