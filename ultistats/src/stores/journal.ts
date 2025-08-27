@@ -1,9 +1,10 @@
 import { defineStore } from 'pinia'
-import { ref, type Ref } from 'vue'
+import { computed, ref, type Ref } from 'vue'
 import type { journalPass, journalPlayer, journalAction, journalLine } from '@/types/journaltypes'
 import { JournalEntryType as jet } from '@/types/journaltypes'
 import { JournalEntrySource as src } from '@/types/journaltypes'
 import type { VideoPlayerInstance } from '@/components/VideoPlayer.vue'
+import { separateRecordsInPoints } from './pointsStore'
 
 export type JournalEntry = journalPass | journalPlayer | journalAction | journalLine
 
@@ -27,50 +28,12 @@ function getTs() {
 }
 
 export const useJournalStore = defineStore('journal', () => {
-  const records = ref<JournalEntry[]>([
-    {
-      id: getNextIdIndex(),
-      ts: 0,
-      name: '0',
-      type: jet.PASS,
-      modifiers: new Set(['longue', 'break']),
-      source: src.USER,
-    },
-    {
-      id: getNextIdIndex(),
-      ts: 2,
-      name: '2',
-      type: jet.PASS,
-      modifiers: new Set(['longue']),
-      source: src.AI,
-    },
-    {
-      id: getNextIdIndex(),
-      ts: 10,
-      name: '10',
-      type: jet.PASS,
-      modifiers: new Set(['break']),
-      source: src.USER,
-    },
-    {
-      id: getNextIdIndex(),
-      ts: 11,
-      name: '11',
-      type: jet.PASS,
-      modifiers: new Set(),
-      source: src.USER,
-    },
+  const records = ref<JournalEntry[]>([])
+  const sortedRecords = computed(() => records.value.sort((a, b) => a.ts - b.ts))
+  const recordsAsPoints = computed(() => {
+    return separateRecordsInPoints(sortedRecords.value)
+  })
 
-    { id: getNextIdIndex(), ts: 15, name: '15', type: jet.PLAYER, source: src.AI },
-    { id: getNextIdIndex(), ts: 18, name: '18', type: jet.PLAYER, source: src.USER },
-    { id: getNextIdIndex(), ts: 25, name: 'Joueur 2', type: jet.PLAYER, source: src.USER },
-    { id: getNextIdIndex(), ts: 29, name: 'Joueur 1', type: jet.PLAYER, source: src.USER },
-    { id: getNextIdIndex(), ts: 32, name: 'Joueur 4', type: jet.PLAYER, source: src.USER },
-    { id: getNextIdIndex(), ts: 35, name: 'Joueur 3', type: jet.PLAYER, source: src.USER },
-    { id: getNextIdIndex(), ts: 36, name: 'Joueur 2', type: jet.PLAYER, source: src.USER },
-  ])
-
-  records.value = []
   const addPlayerEntry = (name: string) => {
     const entry = {
       id: getNextIdIndex(),
@@ -213,12 +176,23 @@ export const useJournalStore = defineStore('journal', () => {
     }
   }
 
+  const deleteAllRecords = () => {
+    records.value = []
+  }
+
   const updateTime = (entry: JournalEntry) => {
     entry.ts = getTs()
   }
 
+  const addRecord = (record: JournalEntry) => {
+    records.value.push(record)
+  }
+
   return {
-    records,
+    sortedRecords,
+    recordsAsPoints,
+    deleteAllRecords,
+    addRecord,
     addPlayerEntry,
     addPassEntry,
     setVideoPlayerRef,

@@ -19,9 +19,11 @@ import EventsSelector from './components/EventsSelector.vue'
 import FileSaver from './components/FileSaver.vue'
 import SetLine from './components/SetLine.vue'
 import StatsViewer from './components/StatsViewer.vue'
+import StatViewerMenu from './components/StatViewerMenu.vue'
 const videoPlayerRef = ref<VideoPlayerInstance | null>(null)
 const fileInputRef = ref<HTMLInputElement | null>(null) // Ref for the hidden file input
 const journalViewerRef = ref<InstanceType<typeof JournalViewer> | null>(null)
+const statsViewerRef = ref<InstanceType<typeof StatsViewer> | null>(null)
 
 // Method to trigger the hidden file input
 const openFileDialog = () => {
@@ -36,6 +38,7 @@ const handleFileChange = (event: Event) => {
   if (file && videoPlayerRef.value) {
     useJournalStore().setVideoPlayerRef(videoPlayerRef)
     journalViewerRef.value?.setVideoPlayerRef(videoPlayerRef)
+    statsViewerRef.value?.setVideoPlayerRef(videoPlayerRef)
 
     // Create an object URL for the selected file
     const source = {
@@ -95,7 +98,10 @@ provide('videoPlayerRef', videoPlayerRef)
     <div slot="start" >
       <VideoPlayer ref="videoPlayerRef" />
       <JournalViewer ref="journalViewerRef"/>
-      <StatsViewer />
+      <WindowHolder title="Stats">
+        <template v-slot:menu><StatViewerMenu/></template>
+        <template v-slot:main><StatsViewer ref="statsViewerRef"/></template>
+      </WindowHolder>
     </div>
     <div slot="end">
       <WindowHolder title="Players">
