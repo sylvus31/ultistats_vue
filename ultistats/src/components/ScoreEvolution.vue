@@ -37,22 +37,12 @@ const setVideoToBeginningOfPoint = (point: { pullTime: number }, index: number) 
   }
   stateStore.pointIndex = index
 }
-function getPointTimeFrame(ts: number) {
-  const start = Math.max(
-    ...scoreEvolution.value.filter((p) => p.endTime < ts).map((p) => p.endTime),
-  )
-  const end = Math.min(...scoreEvolution.value.filter((p) => p.endTime > ts).map((p) => p.endTime))
-  console.log('getPointTimeFrame', start, end)
-  return [start, end]
-}
 
 const score = computed(() => {
   return totalScore
 })
 
-defineExpose({
-  getPointTimeFrame,
-})
+defineExpose({})
 </script>
 <template>
   <div>BTR: {{ score[0] }} - {{ score[1] }} ADV</div>

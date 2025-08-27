@@ -16,7 +16,7 @@
 </style>
 
 <script setup lang="ts">
-import { ref, type Ref } from 'vue'
+import { ref, watch, type Ref } from 'vue'
 import RevoGrid, { VGridVueTemplate } from '@revolist/vue3-datagrid'
 import { useTeamStore } from '@/stores/Team'
 import { useJournalStore, type JournalEntry } from '@/stores/journal'
@@ -137,37 +137,40 @@ const getStatsForOnePoint = (records: JournalEntry[], baseValues: Map<string, Ro
       const thrower = r.name
       for (let j = i + 1; j < records.length; j++) {
         if (records[j].type === jet.PLAYER) {
-          // TODO: pull are contount as passes
           const receiver = records[j].name
+          let passType = 'pass'
+          let passModifiers = new Set<string>()
           //get type of pass
           for (let k = i + 1; k < j; k++) {
             if (records[k].type === jet.PASS) {
               const pass = records[k] as journalPass
-              baseValues.get(thrower)!.passes_total += 1
-              baseValues.get(thrower)!.passesType.increment(pass.name)
-              const isLong = pass.modifiers.has('long')
-              const success =
-                (thrower === 'ADVERSAIRE' && receiver === 'ADVERSAIRE') ||
-                (thrower !== 'ADVERSAIRE' && receiver !== 'ADVERSAIRE')
-
-              if (success) {
-                baseValues.get(thrower)!.passes_success += 1
-                if (isLong) {
-                  baseValues.get(thrower)!.longue_success += 1
-                }
-              } else {
-                baseValues.get(thrower)!.passes_fail += 1
-                if (isLong) {
-                  baseValues.get(thrower)!.long_fail += 1
-                }
-              }
-              //count receivers
-              baseValues.get(thrower)!.targets.increment(receiver)
-              //count providers
-              baseValues.get(receiver)!.providers.increment(thrower)
+              passType = pass.name
+              passModifiers = pass.modifiers
               break
             }
           }
+          baseValues.get(thrower)!.passes_total += 1
+          baseValues.get(thrower)!.passesType.increment(passType)
+          const isLong = passModifiers.has('long')
+          const success =
+            (thrower === 'ADVERSAIRE' && receiver === 'ADVERSAIRE') ||
+            (thrower !== 'ADVERSAIRE' && receiver !== 'ADVERSAIRE')
+
+          if (success) {
+            baseValues.get(thrower)!.passes_success += 1
+            if (isLong) {
+              baseValues.get(thrower)!.longue_success += 1
+            }
+          } else {
+            baseValues.get(thrower)!.passes_fail += 1
+            if (isLong) {
+              baseValues.get(thrower)!.long_fail += 1
+            }
+          }
+          //count receivers
+          baseValues.get(thrower)!.targets.increment(receiver)
+          //count providers
+          baseValues.get(receiver)!.providers.increment(thrower)
           break
         } else if (records[j].name === 'pull') {
           baseValues.get(thrower)!.pulls += 1
@@ -185,6 +188,7 @@ const getStatsForOnePoint = (records: JournalEntry[], baseValues: Map<string, Ro
           // get passe D
           for (let k = j - 1; k >= 0; k--) {
             if (records[k].type === jet.PLAYER) {
+              // calahan is cunted as a pass D
               baseValues.get(records[k].name)!.passes_D += 1
               break
             }
@@ -270,15 +274,15 @@ const getPointsForStats = (points: Point[]) => {
 }
 
 stateStore.$subscribe((mutation, state) => {
+  console.log(' watch stateStore', state.statsScope, state.pointIndex)
   updateStatGrid()
 })
 //TODO update real time, not wait for score
 
 const updateStatGrid = () => {
   let statsMap = initMap()
-
+  if (journalStore.recordsAsPoints.length === 0) return
   const pointsForStats = getPointsForStats(journalStore.recordsAsPoints)
-  if (pointsForStats?.length < 2) return
   pointsForStats.forEach((p) => {
     statsMap = getStatsForOnePoint(p.records, statsMap)
   })
@@ -291,7 +295,8 @@ const updateStatGrid = () => {
   }
 }
 
-journalStore.$subscribe((mutation, state) => {
+watch(journalStore.sortedRecords, () => {
+  console.log('watch journalStore.sortedRecords')
   updateStatGrid()
 })
 
