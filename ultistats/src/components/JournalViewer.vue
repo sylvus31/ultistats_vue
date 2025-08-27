@@ -18,24 +18,18 @@ const videoPlayerRef = ref<VideoPlayerInstance | null>(null)
 const setVideoPlayerRef = (ref: Ref<VideoPlayerInstance | null>) => {
   videoPlayerRef.value = ref.value
 }
+
 const journalStore = useJournalStore()
-const journalRecords = journalStore.records
+const sortedJournalRecords = journalStore.sortedRecords
 const teamStore = useTeamStore()
 const actionsStore = useActionsStore()
 const passesStore = usePassesStore()
 const eventsStore = useEventsStore()
 const journalEventsToShow = computed(() => {
-  if (!videoPlayerRef.value) return journalRecords
+  if (!videoPlayerRef.value) return sortedJournalRecords
   const ts = videoPlayerRef.value.elapsedTimeValue
-  const events = [...journalRecords].sort((a, b) => a.ts - b.ts)
-  const start = Math.max(
-    ...journalRecords.filter((p) => p.ts < ts && p.name === 'score').map((p) => p.ts),
-  )
-  const end = Math.min(
-    ...journalRecords.filter((p) => p.ts >= ts && p.name === 'score').map((p) => p.ts),
-  )
-
-  return events.filter((p) => p.ts > start && p.ts <= end)
+  return journalStore.recordsAsPoints.find((p) => p.startTime <= ts && p.endTime.value >= ts)
+    ?.records
 })
 
 function onHoverOut(record: JournalEntry) {
