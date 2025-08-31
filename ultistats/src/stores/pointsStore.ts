@@ -1,6 +1,7 @@
 import { computed } from 'vue'
 import type { JournalEntry } from '@/stores/journal'
 import { JournalEntryType as jet } from '@/types/journaltypes'
+import { useTeamStore } from './Team'
 
 export class Point {
   startTime: number
@@ -36,22 +37,20 @@ export const separateRecordsInPoints = (records: JournalEntry[]) => {
       tmp_points[tmp_points.length - 1].hasPull = true
       for (let j = i; j < records.length; j++) {
         if (records[j].type == jet.PLAYER) {
-          if (records[j].name == 'ADVERSAIRE') {
-            tmp_points[tmp_points.length - 1].attackingTeam = 1
-          } else {
-            tmp_points[tmp_points.length - 1].attackingTeam = 0
-          }
+          const teamStore = useTeamStore()
+          tmp_points[tmp_points.length - 1].attackingTeam = teamStore.getPlayerTeam(
+            teamStore.getPlayerByName(records[j].name)!,
+          )
           break
         }
       }
     } else if (record.name === 'score') {
       for (let j = i - 1; j > 0; j--) {
         if (records[j].type == jet.PLAYER) {
-          if (records[j].name == 'ADVERSAIRE') {
-            tmp_points[tmp_points.length - 1].scoringTeam = 1
-          } else {
-            tmp_points[tmp_points.length - 1].scoringTeam = 0
-          }
+          const teamStore = useTeamStore()
+          tmp_points[tmp_points.length - 1].scoringTeam = teamStore.getPlayerTeam(
+            teamStore.getPlayerByName(records[j].name)!,
+          )
           break
         }
       }

@@ -54,7 +54,7 @@ function logPlayer(eventCode: string, activeModifiers: Set<string>) {
           <span
             :class="[
               { 'player-name-playing': player.playing },
-              { 'opponent-name': player.name === 'ADVERSAIRE' },
+              { 'opponent-name': teamStore.getPlayerTeam(player) == 1 },
             ]"
             >{{ player.name }}</span
           >

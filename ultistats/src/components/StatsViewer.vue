@@ -88,11 +88,13 @@ interface Row {
 const rows = ref<Row[]>([])
 const initStats = (r: Row[]) => {
   r.splice(0, r.length)
-  r.push(initRow('ADVERSAIRE'))
-  r.push(initRow('BTR'))
+  const teamNames = teamStore.teams.map((t) => t.name)
+  teamNames.forEach((t) => {
+    r.push(initRow(t))
+  })
 
   teamStore.players.forEach((p) => {
-    if (p.name === 'ADVERSAIRE') return
+    if (teamNames.includes(p.name)) return
     r.push(initRow(p.name))
   })
 }
@@ -123,7 +125,6 @@ initStats(rows.value)
 const initMap = () => {
   const emptyMap = new Map<string, Row>()
   const players = teamStore.players.map((p) => p.name)
-  players.push('BTR')
   players.forEach((p) => {
     emptyMap.set(p, initRow(p))
   })
@@ -131,13 +132,14 @@ const initMap = () => {
   return emptyMap
 }
 
-const getStatsForOnePoint = (records: JournalEntry[], baseValues: Map<string, Row>) => {
+const getStatsForOnePoint = (records: JournalEntry[]) => {
+  const baseValues = initMap()
   records.forEach((r, i) => {
     if (r.type === jet.PLAYER) {
-      const thrower = r.name
+      const thrower = teamStore.getPlayerByName(r.name)!
       for (let j = i + 1; j < records.length; j++) {
         if (records[j].type === jet.PLAYER) {
-          const receiver = records[j].name
+          const receiver = teamStore.getPlayerByName(records[j].name)!
           let passType = 'pass'
           let passModifiers = new Set<string>()
           //get type of pass
@@ -149,34 +151,32 @@ const getStatsForOnePoint = (records: JournalEntry[], baseValues: Map<string, Ro
               break
             }
           }
-          baseValues.get(thrower)!.passes_total += 1
-          baseValues.get(thrower)!.passesType.increment(passType)
+          baseValues.get(thrower.name)!.passes_total += 1
+          baseValues.get(thrower.name)!.passesType.increment(passType)
           const isLong = passModifiers.has('long')
-          const success =
-            (thrower === 'ADVERSAIRE' && receiver === 'ADVERSAIRE') ||
-            (thrower !== 'ADVERSAIRE' && receiver !== 'ADVERSAIRE')
+          const success = teamStore.getPlayerTeam(thrower) === teamStore.getPlayerTeam(receiver)
 
           if (success) {
-            baseValues.get(thrower)!.passes_success += 1
+            baseValues.get(thrower.name)!.passes_success += 1
             if (isLong) {
-              baseValues.get(thrower)!.longue_success += 1
+              baseValues.get(thrower.name)!.longue_success += 1
             }
           } else {
-            baseValues.get(thrower)!.passes_fail += 1
+            baseValues.get(thrower.name)!.passes_fail += 1
             if (isLong) {
-              baseValues.get(thrower)!.long_fail += 1
+              baseValues.get(thrower.name)!.long_fail += 1
             }
           }
           //count receivers
-          baseValues.get(thrower)!.targets.increment(receiver)
+          baseValues.get(thrower.name)!.targets.increment(receiver.name)
           //count providers
-          baseValues.get(receiver)!.providers.increment(thrower)
+          baseValues.get(receiver.name)!.providers.increment(thrower.name)
           break
         } else if (records[j].name === 'pull') {
-          baseValues.get(thrower)!.pulls += 1
+          baseValues.get(thrower.name)!.pulls += 1
           break
         } else if (records[j].name === 'pick up disc') {
-          baseValues.get(thrower)!.pickUps += 1
+          baseValues.get(thrower.name)!.pickUps += 1
           // no break needed, same player has disc
         }
       }
@@ -226,34 +226,34 @@ const getStatsForOnePoint = (records: JournalEntry[], baseValues: Map<string, Ro
   })
 
   //add BTR line
-  const btrStats = initRow('BTR')
+  const team_0_stats = baseValues.get(teamStore.teams[0].name)!
+  const teamNames = teamStore.teams.map((t) => t.name)
   baseValues.forEach((r) => {
-    if (r.player !== 'ADVERSAIRE' && r.player !== 'BTR') {
-      btrStats.passes_total += r.passes_total
-      btrStats.passes_success += r.passes_success
-      btrStats.passes_fail += r.passes_fail
-      btrStats.passes_D += r.passes_D
-      btrStats.points += r.points
-      btrStats.defenses += r.defenses
-      btrStats.pulls += r.pulls
-      btrStats.pickUps += r.pickUps
+    if (!teamNames.includes(r.player)) {
+      console.log('r', r)
+      team_0_stats.passes_total += r.passes_total
+      team_0_stats.passes_success += r.passes_success
+      team_0_stats.passes_fail += r.passes_fail
+      team_0_stats.passes_D += r.passes_D
+      team_0_stats.points += r.points
+      team_0_stats.defenses += r.defenses
+      team_0_stats.pulls += r.pulls
+      team_0_stats.pickUps += r.pickUps
 
       r.targets.forEach((v, k) => {
-        btrStats.targets.set(k, btrStats.targets.getOrDefault(k) + v)
+        team_0_stats.targets.set(k, team_0_stats.targets.getOrDefault(k) + v)
       })
       r.providers.forEach((v, k) => {
-        btrStats.providers.set(k, btrStats.providers.getOrDefault(k) + v)
+        team_0_stats.providers.set(k, team_0_stats.providers.getOrDefault(k) + v)
       })
       r.passesType.forEach((v, k) => {
-        btrStats.passesType.set(k, btrStats.passesType.getOrDefault(k) + v)
+        team_0_stats.passesType.set(k, team_0_stats.passesType.getOrDefault(k) + v)
       })
     }
   })
-  btrStats.played_time = baseValues.get('ADVERSAIRE')!.played_time
-  btrStats.played_points = baseValues.get('ADVERSAIRE')!.played_points
-  baseValues.set('BTR', btrStats)
+  team_0_stats.played_time = baseValues.get(teamStore.teams[1].name)!.played_time
+  team_0_stats.played_points = baseValues.get(teamStore.teams[1].name)!.played_points
 
-  console.log('baseValues', baseValues)
   return baseValues
 }
 
@@ -280,11 +280,35 @@ stateStore.$subscribe((mutation, state) => {
 //TODO update real time, not wait for score
 
 const updateStatGrid = () => {
-  let statsMap = initMap()
+  const statsMap = initMap()
   if (journalStore.recordsAsPoints.length === 0) return
   const pointsForStats = getPointsForStats(journalStore.recordsAsPoints)
   pointsForStats.forEach((p) => {
-    statsMap = getStatsForOnePoint(p.records, statsMap)
+    const pointStats = getStatsForOnePoint(p.records)
+    pointStats.forEach((r) => {
+      const playerTotalStats = statsMap.get(r.player)!
+      playerTotalStats.passes_total += r.passes_total
+      playerTotalStats.passes_success += r.passes_success
+      playerTotalStats.passes_fail += r.passes_fail
+      playerTotalStats.passes_D += r.passes_D
+      playerTotalStats.points += r.points
+      playerTotalStats.defenses += r.defenses
+      playerTotalStats.pulls += r.pulls
+      playerTotalStats.pickUps += r.pickUps
+      playerTotalStats.played_points += r.played_points
+      playerTotalStats.played_time += r.played_time
+      playerTotalStats.longue_success += r.longue_success
+      playerTotalStats.long_fail += r.long_fail
+      r.targets.forEach((v, k) => {
+        playerTotalStats.targets.set(k, playerTotalStats.targets.getOrDefault(k) + v)
+      })
+      r.providers.forEach((v, k) => {
+        playerTotalStats.providers.set(k, playerTotalStats.providers.getOrDefault(k) + v)
+      })
+      r.passesType.forEach((v, k) => {
+        playerTotalStats.passesType.set(k, playerTotalStats.passesType.getOrDefault(k) + v)
+      })
+    })
   })
 
   // update the grid
