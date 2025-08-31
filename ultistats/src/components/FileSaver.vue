@@ -1,9 +1,11 @@
 <script lang="ts" setup>
 import { useKeyboardStore } from '../stores/keyboardStore'
 import { useJournalStore } from '@/stores/journal'
+import { useTeamStore } from '@/stores/Team'
 
 const journalStore = useJournalStore()
 const keyboardStore = useKeyboardStore()
+const teamStore = useTeamStore()
 
 const componentId = 'FileSaver'
 
@@ -108,7 +110,7 @@ const loadFile = () => {
     @focusin="handleGetFocus"
     @focusout="handleLosseFocus"
     class="styled-input"
-    value="BTR"
+    :value="teamStore.teams[0].name"
   />
   VS
   <input
@@ -117,7 +119,7 @@ const loadFile = () => {
     @focusin="handleGetFocus"
     @focusout="handleLosseFocus"
     class="styled-input"
-    value="xxx"
+    :value="teamStore.teams[1].name"
   />
   <sl-button @click="loadFile">Load File</sl-button>
 </template>

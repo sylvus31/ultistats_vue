@@ -5,6 +5,7 @@ import { JournalEntryType as jet } from '@/types/journaltypes'
 import { JournalEntrySource as src } from '@/types/journaltypes'
 import type { VideoPlayerInstance } from '@/components/VideoPlayer.vue'
 import { separateRecordsInPoints } from './pointsStore'
+import { useTeamStore } from './Team'
 
 export type JournalEntry = journalPass | journalPlayer | journalAction | journalLine
 
@@ -118,7 +119,12 @@ export const useJournalStore = defineStore('journal', () => {
     if (lastMeaningFulEntry.type === jet.PASS && entry.type === jet.PASS) {
       const lastPlayer = getPrecedentEntryByTypes(entry, [jet.PLAYER])
       if (lastPlayer) {
-        const name = lastPlayer.name == 'ADVERSAIRE' ? 'ADVERSAIRE' : 'BTR'
+        // if called at top, generate error because pinia is not initialised yet
+        const teamStore = useTeamStore()
+
+        const player = teamStore.getPlayerByName(lastPlayer.name)!
+        const teamIndex = teamStore.getPlayerTeam(player)
+        const name = teamStore.teams[teamIndex].name
         const aiEntry = {
           id: getNextIdIndex(),
           name: name,
