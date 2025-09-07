@@ -23,6 +23,7 @@
     "@vueuse/core": "^13.1.0",
     "grid-layout-plus": "^1.0.6",
     "pinia": "^3.0.1",
+    "primevue": "^4.3.9",
     "usemodal-vue3": "^0.3.7",
     "video.js": "^8.22.0",
     "videojs-youtube": "^3.0.1",

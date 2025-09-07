@@ -65,10 +65,11 @@ export const useTeamStore = defineStore('team', () => {
   }
 
   function getPlayerTeam(player: Player) {
-    console.log('teams', teams.value)
     let index = -1
+    console.log('player', player.name)
     teams.value.forEach((team, i) => {
-      if (team.name === player.name || team.players.find((p) => p.id === player.id)) {
+      console.log('team', team.name)
+      if (team.name === player.name || team.players?.find((p) => p.id === player.id)) {
         index = i
       }
     })
