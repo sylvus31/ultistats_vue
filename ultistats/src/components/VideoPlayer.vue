@@ -2,7 +2,14 @@
   <!-- Add a ref to the root div -->
   <div ref="playerWrapper" tabindex="0">
     <!-- Video Element -->
-    <video ref="videoNode" class="video-js vjs-default-skin"></video>
+    <div class="video-container">
+      <video
+        ref="videoNode"
+        class="video-js vjs-default-skin"
+        @timeupdate="handleTimeUpdate"
+      ></video>
+      <div class="overlay"><TimerOverlay ref="timerOverlay" /></div>
+    </div>
 
     <!-- Custom Controls -->
     <div class="custom-controls">
@@ -32,6 +39,7 @@ import type Player from 'video.js/dist/types/player'
 import 'video.js/dist/video-js.css'
 import { useKeyboardStore } from '../stores/keyboardStore'
 import ScoreEvolution from './ScoreEvolution.vue'
+import TimerOverlay from './TimerOverlay.vue'
 const scoreEvolutionRef = ref<InstanceType<typeof ScoreEvolution> | null>(null)
 
 const keyboardStore = useKeyboardStore()
@@ -73,12 +81,16 @@ const props = withDefaults(defineProps<Props>(), {
 
 // --- Refs ---
 const videoNode = ref<HTMLVideoElement | null>(null)
+const timerOverlay = ref<typeof TimerOverlay | null>(null)
 const player = ref<Player | null>(null)
 const isPlaying = ref(false)
 const currentSpeed = ref<number | undefined>(1.0)
 const playerWrapper = ref<HTMLDivElement | null>(null)
 const elapsedTime = ref(0) // Add ref for elapsed time
 
+const handleTimeUpdate = () => {
+  timerOverlay.value?.setVideoTime(player.value?.currentTime() || 0)
+}
 const isPlayingValue = computed(() => {
   return isPlaying.value
 })
@@ -146,8 +158,6 @@ onBeforeUnmount(() => {
   }
 })
 
-// --- Control Methods ---
-// playPause, seek, changeSpeed remain the same...
 const playPause = () => {
   if (!player.value) return
   if (player.value.paused()) {
@@ -305,5 +315,14 @@ defineExpose({
   font-size: 0.9em;
   margin-left: 5px;
   margin-right: 10px; /* Add some space after the time */
+}
+.video-container {
+  position: relative;
+}
+.video-container .timerOverlay {
+  position: absolute;
+  bottom: 35px;
+  left: 10px;
+  z-index: 1; /* Make sure it's on top of the video */
 }
 </style>

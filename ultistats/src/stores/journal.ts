@@ -194,6 +194,19 @@ export const useJournalStore = defineStore('journal', () => {
     records.value.push(record)
   }
 
+  const getLastEntryBeforeTs = (ts: number) => {
+    const i =
+      sortedRecords.value.findIndex((record: JournalEntry) => {
+        return record.ts > ts
+      }) - 1
+    if (i >= 0) {
+      return sortedRecords.value[i]
+    } else {
+      // handle the case where no matching record is found
+      return null // or some other default value
+    }
+  }
+
   return {
     sortedRecords,
     recordsAsPoints,
@@ -208,5 +221,6 @@ export const useJournalStore = defineStore('journal', () => {
     addEventEntry,
     addLineEntry,
     updateTime,
+    getLastEntryBeforeTs,
   }
 })
