@@ -1,8 +1,7 @@
 <script setup lang="ts">
 import { defineProps } from 'vue'
-import type { ColumnDataSchemaModel } from '@revolist/vue3-datagrid'
 
-const props = defineProps<ColumnDataSchemaModel>()
+const props = defineProps<{ value: Map<string, number> }>()
 function showTargets(targets: Map<string, number>) {
   let str = ''
   const sortedTargets = new Map([...targets.entries()].sort((a, b) => b[1] - a[1]))

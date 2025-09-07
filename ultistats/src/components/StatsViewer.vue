@@ -1,23 +1,59 @@
 <template>
-  <RevoGrid
-    class="select-full-height"
-    id="revo-grid"
-    hide-attribution
-    :columns="columns"
-    :source="rows"
-    :theme="'darkCompact'"
-  />
+  <DataTable
+    :value="rows"
+    :reorderableColumns="true"
+    class="stat_viewer"
+    tableStyle="min-width: 100rem"
+  >
+    <Column field="player" header="Player" :sortable="true" frozen></Column>
+    <Column field="passes_total" header="P total" :sortable="true"></Column>
+    <Column field="passes_success" header="P success" :sortable="true"></Column>
+    <Column field="passes_fail" header="P fail" :sortable="true"></Column>
+    <Column field="long_success" header="L success" :sortable="true"></Column>
+    <Column field="long_fail" header="L fail" :sortable="true"></Column>
+    <Column field="passes_D" header="P D" :sortable="true"></Column>
+    <Column field="points" header="Points" :sortable="true"></Column>
+    <Column field="defenses" header="Defenses" :sortable="true"></Column>
+    <Column field="played_points" header="Played Points" :sortable="true"></Column>
+    <Column field="played_time" header="Played Time" :sortable="true">
+      <template #body="slotProps">
+        <PlayedTimeCell :value="slotProps.data.played_time" />
+      </template>
+    </Column>
+    <Column field="targets" header="Targets">
+      <template #body="slotProps">
+        <TargetsCell :value="slotProps.data.targets" />
+      </template>
+    </Column>
+    <Column field="providers" header="Providers">
+      <template #body="slotProps">
+        <TargetsCell :value="slotProps.data.providers" />
+      </template>
+    </Column>
+    <Column field="passesType" header="Passes Type">
+      <template #body="slotProps">
+        <TargetsCell :value="slotProps.data.passesType" />
+      </template>
+    </Column>
+    <Column field="pulls" header="Pulls" :sortable="true"></Column>
+    <Column field="pickUps" header="Pick Ups" :sortable="true"></Column>
+  </DataTable>
 </template>
 
 <style scoped>
 .select-full-height {
   height: 90vh;
 }
+
+.stat_viewer :deep(td),
+.stat_viewer :deep(th) {
+  padding: 10px;
+}
 </style>
 
 <script setup lang="ts">
+import { DataTable, Column, Row } from 'primevue'
 import { ref, watch, type Ref } from 'vue'
-import RevoGrid, { VGridVueTemplate } from '@revolist/vue3-datagrid'
 import { useTeamStore } from '@/stores/Team'
 import { useJournalStore, type JournalEntry } from '@/stores/journal'
 import { useStateStore } from '@/stores/StateStore'
@@ -26,7 +62,6 @@ import { JournalEntryType as jet, type journalPass } from '@/types/journaltypes'
 import PlayedTimeCell from './stats/PlayedTimeCell.vue'
 import TargetsCell from './stats/TargetsCell.vue'
 import type { VideoPlayerInstance } from '@/components/VideoPlayer.vue'
-
 const videoPlayerRef = ref<VideoPlayerInstance | null>(null)
 const setVideoPlayerRef = (ref: Ref<VideoPlayerInstance | null>) => {
   videoPlayerRef.value = ref.value
@@ -34,22 +69,6 @@ const setVideoPlayerRef = (ref: Ref<VideoPlayerInstance | null>) => {
 const teamStore = useTeamStore()
 const journalStore = useJournalStore()
 const stateStore = useStateStore()
-const columns = ref([
-  { prop: 'player', name: 'Player' },
-  { prop: 'passes_total', name: 'P total' },
-  { prop: 'passes_success', name: 'P réussies' },
-  { prop: 'passes_fail', name: 'P ratées' },
-  { prop: 'passes_D', name: 'P décisives' },
-  { prop: 'points', name: 'Points' },
-  { prop: 'defenses', name: 'Défenses' },
-  { prop: 'played_points', name: 'Nb joués' },
-  { prop: 'played_time', name: 'Temps', cellTemplate: VGridVueTemplate(PlayedTimeCell) },
-  { prop: 'targets', name: 'Cibles', cellTemplate: VGridVueTemplate(TargetsCell) },
-  { prop: 'providers', name: 'Lanceurs', cellTemplate: VGridVueTemplate(TargetsCell) },
-  { prop: 'passesType', name: 'Type de passes', cellTemplate: VGridVueTemplate(TargetsCell) },
-  { prop: 'pulls', name: 'Pulls' },
-  { prop: 'pickUps', name: 'PickUps' },
-])
 
 class StringNumberMap extends Map<string, number> {
   constructor(iterable: Iterable<[string, number]> = []) {
@@ -77,7 +96,7 @@ interface Row {
   targets: StringNumberMap
   providers: StringNumberMap
   passesType: StringNumberMap
-  longue_success: number
+  long_success: number
   long_fail: number
   pulls: number
   pickUps: number
@@ -112,7 +131,7 @@ const initRow = (name: string) => {
     targets: new StringNumberMap(),
     providers: new StringNumberMap(),
     passesType: new StringNumberMap(),
-    longue_success: 0,
+    long_success: 0,
     long_fail: 0,
     pulls: 0,
     pickUps: 0,
@@ -153,13 +172,13 @@ const getStatsForOnePoint = (records: JournalEntry[]) => {
           }
           baseValues.get(thrower.name)!.passes_total += 1
           baseValues.get(thrower.name)!.passesType.increment(passType)
-          const isLong = passModifiers.has('long')
+          const isLong = passModifiers.has('longue')
           const success = teamStore.getPlayerTeam(thrower) === teamStore.getPlayerTeam(receiver)
 
           if (success) {
             baseValues.get(thrower.name)!.passes_success += 1
             if (isLong) {
-              baseValues.get(thrower.name)!.longue_success += 1
+              baseValues.get(thrower.name)!.long_success += 1
             }
           } else {
             baseValues.get(thrower.name)!.passes_fail += 1
@@ -281,7 +300,7 @@ stateStore.$subscribe((mutation, state) => {
 
 const updateStatGrid = () => {
   const statsMap = initMap()
-  if (journalStore.recordsAsPoints.length === 0) return
+  if (journalStore.recordsAsPoints?.length === 0) return
   const pointsForStats = getPointsForStats(journalStore.recordsAsPoints)
   pointsForStats.forEach((p) => {
     const pointStats = getStatsForOnePoint(p.records)
@@ -297,7 +316,7 @@ const updateStatGrid = () => {
       playerTotalStats.pickUps += r.pickUps
       playerTotalStats.played_points += r.played_points
       playerTotalStats.played_time += r.played_time
-      playerTotalStats.longue_success += r.longue_success
+      playerTotalStats.long_success += r.long_success
       playerTotalStats.long_fail += r.long_fail
       r.targets.forEach((v, k) => {
         playerTotalStats.targets.set(k, playerTotalStats.targets.getOrDefault(k) + v)
@@ -313,10 +332,7 @@ const updateStatGrid = () => {
 
   // update the grid
   rows.value = rows.value.map((r) => statsMap.get(r.player)!)
-  const grid = document.querySelector('revo-grid')
-  if (grid) {
-    grid.refresh()
-  }
+  console.log('updateStatGrid', rows.value)
 }
 
 watch(journalStore.sortedRecords, () => {
