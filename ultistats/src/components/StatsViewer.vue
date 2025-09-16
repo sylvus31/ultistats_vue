@@ -2,16 +2,37 @@
   <DataTable
     :value="rows"
     :reorderableColumns="true"
+    scrollable
     class="stat_viewer"
     tableStyle="min-width: 100rem"
   >
-    <Column field="player" header="Player" :sortable="true" frozen></Column>
+    <Column
+      field="player"
+      header="Player"
+      :sortable="true"
+      :frozen="true"
+      style="background-color: #1a1a1a; font-weight: bold"
+    ></Column>
     <Column field="passes_total" header="P total" :sortable="true"></Column>
     <Column field="passes_success" header="P success" :sortable="true"></Column>
     <Column field="passes_fail" header="P fail" :sortable="true"></Column>
     <Column field="long_success" header="L success" :sortable="true"></Column>
     <Column field="long_fail" header="L fail" :sortable="true"></Column>
-    <Column field="passes_D" header="P D" :sortable="true"></Column>
+    <Column field="passes_D" header="P D" :sortable="true">
+      <template #body="slotProps">
+        {{ slotProps.data.passes_D[0] }}
+      </template>
+    </Column>
+    <Column field="passes_D" header="P D -1" :sortable="true">
+      <template #body="slotProps">
+        {{ slotProps.data.passes_D[1] }}
+      </template>
+    </Column>
+    <Column field="passes_D" header="P D -2" :sortable="true">
+      <template #body="slotProps">
+        {{ slotProps.data.passes_D[2] }}
+      </template>
+    </Column>
     <Column field="points" header="Points" :sortable="true"></Column>
     <Column field="defenses" header="Defenses" :sortable="true"></Column>
     <Column field="played_points" header="Played Points" :sortable="true"></Column>
@@ -88,7 +109,7 @@ interface Row {
   passes_total: number
   passes_success: number
   passes_fail: number
-  passes_D: number
+  passes_D: [number, number, number]
   points: number
   defenses: number
   played_points: number
@@ -123,7 +144,7 @@ const initRow = (name: string) => {
     passes_total: 0,
     passes_success: 0,
     passes_fail: 0,
-    passes_D: 0,
+    passes_D: [0, 0, 0] as [number, number, number],
     points: 0,
     defenses: 0,
     played_points: 0,
@@ -204,12 +225,23 @@ const getStatsForOnePoint = (records: JournalEntry[]) => {
       for (let j = i - 1; j >= 0; j--) {
         if (records[j].type === jet.PLAYER) {
           baseValues.get(records[j].name)!.points += 1
+          const scoreTeam = teamStore.getPlayerTeam(teamStore.getPlayerByName(records[j].name)!)
           // get passe D
+          let pass_D_level = 0
           for (let k = j - 1; k >= 0; k--) {
             if (records[k].type === jet.PLAYER) {
-              // calahan is cunted as a pass D
-              baseValues.get(records[k].name)!.passes_D += 1
-              break
+              // calahan is counted as a pass D
+              const passerTeam = teamStore.getPlayerTeam(
+                teamStore.getPlayerByName(records[k].name)!,
+              )
+              if (passerTeam != scoreTeam) {
+                break
+              }
+              baseValues.get(records[k].name)!.passes_D[pass_D_level] += 1
+              pass_D_level += 1
+              if (pass_D_level > 3) {
+                break
+              }
             }
           }
           break
@@ -253,11 +285,15 @@ const getStatsForOnePoint = (records: JournalEntry[]) => {
       team_0_stats.passes_total += r.passes_total
       team_0_stats.passes_success += r.passes_success
       team_0_stats.passes_fail += r.passes_fail
-      team_0_stats.passes_D += r.passes_D
+      for (let i = 0; i < r.passes_D.length; i++) {
+        team_0_stats.passes_D[i] += r.passes_D[i]
+      }
       team_0_stats.points += r.points
       team_0_stats.defenses += r.defenses
       team_0_stats.pulls += r.pulls
       team_0_stats.pickUps += r.pickUps
+      team_0_stats.long_success += r.long_success
+      team_0_stats.long_fail += r.long_fail
 
       r.targets.forEach((v, k) => {
         team_0_stats.targets.set(k, team_0_stats.targets.getOrDefault(k) + v)
@@ -309,7 +345,9 @@ const updateStatGrid = () => {
       playerTotalStats.passes_total += r.passes_total
       playerTotalStats.passes_success += r.passes_success
       playerTotalStats.passes_fail += r.passes_fail
-      playerTotalStats.passes_D += r.passes_D
+      for (let i = 0; i < r.passes_D.length; i++) {
+        playerTotalStats.passes_D[i] += r.passes_D[i]
+      }
       playerTotalStats.points += r.points
       playerTotalStats.defenses += r.defenses
       playerTotalStats.pulls += r.pulls
