@@ -16,11 +16,13 @@ const storyLine = computed(() => {
 </script>
 <template>
   <table>
+    <tbody>
     <tr>
       <td v-for="(char, index) in storyLine[0]" :key="index" style="color: green">{{ char }}</td>
     </tr>
     <tr>
       <td v-for="(char, index) in storyLine[1]" :key="index" style="color: red">{{ char }}</td>
     </tr>
+    </tbody>
   </table>
 </template>
