@@ -20,10 +20,12 @@ import FileSaver from './components/FileSaver.vue'
 import SetLine from './components/SetLine.vue'
 import StatsViewer from './components/StatsViewer.vue'
 import StatViewerMenu from './components/StatViewerMenu.vue'
+import StatsViewerTeam from './components/StatsViewerTeam.vue'
 const videoPlayerRef = ref<VideoPlayerInstance | null>(null)
 const fileInputRef = ref<HTMLInputElement | null>(null) // Ref for the hidden file input
 const journalViewerRef = ref<InstanceType<typeof JournalViewer> | null>(null)
 const statsViewerRef = ref<InstanceType<typeof StatsViewer> | null>(null)
+const statsViewerTeamRef = ref<InstanceType<typeof StatsViewerTeam> | null>(null)
 
 // Method to trigger the hidden file input
 const openFileDialog = () => {
@@ -98,7 +100,11 @@ provide('videoPlayerRef', videoPlayerRef)
     <div slot="start" >
       <VideoPlayer ref="videoPlayerRef" />
       <JournalViewer ref="journalViewerRef"/>
-      <WindowHolder title="Stats">
+      <WindowHolder title="Stats team">
+        <template v-slot:menu><StatViewerMenu/></template>
+        <template v-slot:main><StatsViewerTeam ref="statsViewerTeamRef"/></template>
+      </WindowHolder>
+      <WindowHolder title="Stats players">
         <template v-slot:menu><StatViewerMenu/></template>
         <template v-slot:main><StatsViewer ref="statsViewerRef"/></template>
       </WindowHolder>
