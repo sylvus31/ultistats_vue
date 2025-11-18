@@ -1,7 +1,8 @@
 <template>
   <div class="free-comment">
     <div class="button-container">
-      <v-text-field label="title" variant="outlined" v-model="title"
+      <v-text-field label="title" variant="outlined"
+      clearable
       @focusin="handleGetFocus"
       @focusout="handleLosseFocus"/>
       <sl-button @click="addComment">Add</sl-button>
