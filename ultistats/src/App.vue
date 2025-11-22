@@ -21,6 +21,7 @@ import SetLine from './components/SetLine.vue'
 import StatsViewer from './components/StatsViewer.vue'
 import StatViewerMenu from './components/StatViewerMenu.vue'
 import StatsViewerTeam from './components/StatsViewerTeam.vue'
+import FreeComment from './components/FreeComment.vue'
 const videoPlayerRef = ref<VideoPlayerInstance | null>(null)
 const fileInputRef = ref<HTMLInputElement | null>(null) // Ref for the hidden file input
 const journalViewerRef = ref<InstanceType<typeof JournalViewer> | null>(null)
@@ -123,6 +124,9 @@ provide('videoPlayerRef', videoPlayerRef)
       </WindowHolder>
       <WindowHolder title="Events">
         <template v-slot:main><EventsSelector/></template>
+      </WindowHolder>
+      <WindowHolder title="Free comment">
+        <template v-slot:main><FreeComment/></template>
       </WindowHolder>
     </div>
   </sl-split-panel>
