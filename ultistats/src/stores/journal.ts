@@ -69,6 +69,18 @@ export const useJournalStore = defineStore('journal', () => {
     }
     addEntry(entry)
   }
+
+  const addCommentEntry = (title: string, details: string) => {
+    const entry = {
+      id: getNextIdIndex(),
+      name: title,
+      ts: getTs(),
+      type: jet.COMMENT,
+      source: src.USER,
+      details: details,
+    }
+    addEntry(entry)
+  }
   const urlParams = new URLSearchParams(window.location.search)
   const ai = urlParams.get('ai')
 
@@ -220,6 +232,7 @@ export const useJournalStore = defineStore('journal', () => {
     addActionEntry,
     addEventEntry,
     addLineEntry,
+    addCommentEntry,
     updateTime,
     getLastEntryBeforeTs,
   }

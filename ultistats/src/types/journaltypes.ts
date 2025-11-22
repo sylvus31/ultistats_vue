@@ -5,6 +5,7 @@ export enum JournalEntryType {
   NEGATIVE_ACTION = 'negativeAction',
   EVENT = 'event',
   LINE = 'line',
+  COMMENT = 'comment',
 }
 
 export enum JournalEntrySource {
@@ -44,4 +45,13 @@ export interface journalAction {
   terminal: boolean
   ts: number
   source: JournalEntrySource
+}
+
+export interface journalComment {
+  type: JournalEntryType
+  id: number
+  name: string
+  ts: number
+  source: JournalEntrySource
+  details: string
 }
