@@ -71,6 +71,7 @@ const handleLoadYoutubeVideo = (source: { src: string; type: string }) => {
   console.log('App.vue received load-video event:', source)
   if (videoPlayerRef.value) {
     videoPlayerRef.value.loadVideo(source)
+    useJournalStore().setVideoPlayerRef(videoPlayerRef)
   } else {
     console.error('Video player ref not available when trying to load YouTube video.')
   }
