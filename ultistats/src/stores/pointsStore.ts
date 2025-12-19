@@ -37,7 +37,6 @@ export const separateRecordsInPoints = (records: JournalEntry[]) => {
       tmp_points[tmp_points.length - 1].hasPull = true
       for (let j = i; j < records.length; j++) {
         if (records[j].type == jet.PLAYER) {
-          console.log('puller', records[j])
           const teamStore = useTeamStore()
           tmp_points[tmp_points.length - 1].attackingTeam = teamStore.getPlayerTeam(
             teamStore.getPlayerByName(records[j].name)!,

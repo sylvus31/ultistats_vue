@@ -94,15 +94,15 @@ const importData = (data: string) => {
         journalStore.deleteAllRecords()
       }
       if (confirmDialog.returnValue === 'add') {
-        console.log('xxxxxxxxAdding to existing records')
+        console.log('xxxxxAdding to existing records')
         timOffset = Math.max(...journalStore.sortedRecords.map((p) => p.ts)) + 3600
       }
-      console.log('xxxxxxxxImporting data with time offset:', timOffset)
+      console.log('xxxxxImporting data with time offset:', timOffset)
       addRecords(jsonData, timOffset)
     })
   }
   else {
-    console.log('xxxxxxxxxxNo existing records, adding new ones')
+    console.log('xxxxxxNo existing records, adding new ones')
     addRecords(jsonData, 0)
   }
 }

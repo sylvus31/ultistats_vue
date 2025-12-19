@@ -66,14 +66,11 @@ export const useTeamStore = defineStore('team', () => {
 
   function getPlayerTeam(player: Player) {
     let index = -1
-    console.log('player', player.name)
     teams.value.forEach((team, i) => {
-      console.log('team', team.name)
       if (team.name === player.name || team.players?.find((p) => p.id === player.id)) {
         index = i
       }
     })
-    console.log('index', index)
     return index
   }
 
@@ -82,7 +79,6 @@ export const useTeamStore = defineStore('team', () => {
   }
 
   function getPlayerByKeyCodeAndModifiers(keycode: string, modifiers: Set<string>) {
-    console.log('getPlayerByKeyCodeAndModifiers ', modifiers)
     return players.value.find(
       (p) =>
         p.key_code === keycode && haveSameElements(p.modifiers || new Set<string>(), modifiers),
