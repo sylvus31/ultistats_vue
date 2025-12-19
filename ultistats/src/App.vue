@@ -72,6 +72,8 @@ const handleLoadYoutubeVideo = (source: { src: string; type: string }) => {
   if (videoPlayerRef.value) {
     videoPlayerRef.value.loadVideo(source)
     useJournalStore().setVideoPlayerRef(videoPlayerRef)
+    journalViewerRef.value?.setVideoPlayerRef(videoPlayerRef)
+    statsViewerRef.value?.setVideoPlayerRef(videoPlayerRef)
   } else {
     console.error('Video player ref not available when trying to load YouTube video.')
   }
