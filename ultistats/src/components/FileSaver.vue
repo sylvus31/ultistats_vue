@@ -2,6 +2,7 @@
 import { useKeyboardStore } from '../stores/keyboardStore'
 import { useJournalStore } from '@/stores/journal'
 import { useTeamStore } from '@/stores/Team'
+import { onMounted } from 'vue'
 
 const journalStore = useJournalStore()
 const keyboardStore = useKeyboardStore()
@@ -41,10 +42,35 @@ const loadFile = () => {
     if (file) {
       const reader = new FileReader()
       reader.onload = () => {
-        if (journalStore.sortedRecords.length > 0) {
-          const confirmDialog = document.createElement('dialog')
-          confirmDialog.style.position = 'absolute'
-          confirmDialog.innerHTML = `
+        importData(reader.result as string)
+      }
+      reader.readAsText(file)
+    }
+  }
+  input.click()
+}
+
+const addRecords = (jsonData: any, timOffset: number) => {
+  jsonData.forEach((record: any) => {
+    //special treatment for sets stored as array in json
+    if (record.modifiers) {
+      record.modifiers = new Set(record.modifiers)
+    }
+    if (record.players) {
+      record.players = new Set(record.players)
+    }
+    record.ts += timOffset
+    journalStore.addRecord(record)
+  })
+}
+
+const importData = (data: string) => {
+  const jsonData=JSON.parse(data)
+
+  if (journalStore.sortedRecords.length > 0) {
+    const confirmDialog = document.createElement('dialog')
+    confirmDialog.style.position = 'absolute'
+    confirmDialog.innerHTML = `
   <form method="dialog">
     <h2>Records already exist</h2>
     <p>Do you want to overwrite the existing records or add new ones?</p>
@@ -55,51 +81,58 @@ const loadFile = () => {
     </menu>
   </form>
 `
-          document.body.appendChild(confirmDialog)
-          confirmDialog.showModal()
-          confirmDialog.addEventListener('close', () => {
-            let timOffset = 0
-            if (confirmDialog.returnValue === 'cancel') {
-              return
-            }
-            if (confirmDialog.returnValue === 'overwrite') {
-              journalStore.deleteAllRecords()
-            }
-            if (confirmDialog.returnValue === 'add') {
-              timOffset = Math.max(...journalStore.sortedRecords.map((p) => p.ts)) + 3600
-            }
-            const data = JSON.parse(reader.result as string)
-            data.forEach((record: any) => {
-              //special treatment for sets stored as array in json
-              if (record.modifiers) {
-                record.modifiers = new Set(record.modifiers)
-              }
-              if (record.players) {
-                record.players = new Set(record.players)
-              }
-              record.ts += timOffset
-              journalStore.addRecord(record)
-            })
-          })
-        } else {
-          const data = JSON.parse(reader.result as string)
-          data.forEach((record: any) => {
-            //special treatment for sets stored as array in json
-            if (record.modifiers) {
-              record.modifiers = new Set(record.modifiers)
-            }
-            if (record.players) {
-              record.players = new Set(record.players)
-            }
-            journalStore.addRecord(record)
-          })
-        }
+    document.body.appendChild(confirmDialog)
+    confirmDialog.showModal()
+    confirmDialog.addEventListener('close', () => {
+      let timOffset = 0
+      console.log('xxxxxxxxxxUser selected:', confirmDialog.returnValue)
+      if (confirmDialog.returnValue === 'cancel') {
+        return
       }
-      reader.readAsText(file)
-    }
+      if (confirmDialog.returnValue === 'overwrite') {
+        console.log('xxxxxOverwriting existing records')
+        journalStore.deleteAllRecords()
+      }
+      if (confirmDialog.returnValue === 'add') {
+        console.log('xxxxxxxxAdding to existing records')
+        timOffset = Math.max(...journalStore.sortedRecords.map((p) => p.ts)) + 3600
+      }
+      console.log('xxxxxxxxImporting data with time offset:', timOffset)
+      addRecords(jsonData, timOffset)
+    })
   }
-  input.click()
+  else {
+    console.log('xxxxxxxxxxNo existing records, adding new ones')
+    addRecords(jsonData, 0)
+  }
 }
+
+onMounted(() => {
+  const params = new URLSearchParams(window.location.search);
+  params.forEach((value, key) => {
+    console.log(`URL Parameter: ${key} = ${value}`);
+  })
+  if(params.has('file')) {
+    const fileName = params.get('file')
+    fetch(`${window.location.origin}/save/${fileName}`)
+      .then(response => response.json())
+      .then(data => {
+        data.forEach((record: any) => {
+          //special treatment for sets stored as array in json
+          if (record.modifiers) {
+            record.modifiers = new Set(record.modifiers)
+          }
+          if (record.players) {
+            record.players = new Set(record.players)
+          }
+          journalStore.addRecord(record)
+        })
+      })
+      .catch(error => {
+        console.error('Error loading file from URL parameter:', error)
+      });
+  }
+})
 </script>
 
 <template>
