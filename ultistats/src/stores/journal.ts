@@ -195,7 +195,7 @@ export const useJournalStore = defineStore('journal', () => {
   }
 
   const deleteAllRecords = () => {
-    records.value = []
+    records.value.splice(0)
   }
 
   const updateTime = (entry: JournalEntry) => {

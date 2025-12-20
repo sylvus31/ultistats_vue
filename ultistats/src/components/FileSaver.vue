@@ -2,7 +2,8 @@
 import { useKeyboardStore } from '../stores/keyboardStore'
 import { useJournalStore } from '@/stores/journal'
 import { useTeamStore } from '@/stores/Team'
-import { onMounted } from 'vue'
+import { onMounted, ref, watch } from 'vue'
+import { useInitStore } from '@/stores/init'
 
 const journalStore = useJournalStore()
 const keyboardStore = useKeyboardStore()
@@ -51,7 +52,17 @@ const loadFile = () => {
 }
 
 const addRecords = (jsonData: any, timOffset: number) => {
-  jsonData.forEach((record: any) => {
+  let records = []
+  const jsonDataIsObject = typeof jsonData === 'object' && jsonData !== null
+  const hasVersionProperty = jsonDataIsObject && 'version' in jsonData
+
+  if (hasVersionProperty) {
+    console.log('Detected full save file format, extracting records only')
+    records = jsonData.records
+  } else {
+    records = jsonData
+  }
+  records.forEach((record: any) => {
     //special treatment for sets stored as array in json
     if (record.modifiers) {
       record.modifiers = new Set(record.modifiers)
@@ -65,7 +76,7 @@ const addRecords = (jsonData: any, timOffset: number) => {
 }
 
 const importData = (data: string) => {
-  const jsonData=JSON.parse(data)
+  const jsonData = JSON.parse(data)
 
   if (journalStore.sortedRecords.length > 0) {
     const confirmDialog = document.createElement('dialog')
@@ -85,53 +96,42 @@ const importData = (data: string) => {
     confirmDialog.showModal()
     confirmDialog.addEventListener('close', () => {
       let timOffset = 0
-      console.log('xxxxxxxxxxUser selected:', confirmDialog.returnValue)
       if (confirmDialog.returnValue === 'cancel') {
         return
       }
       if (confirmDialog.returnValue === 'overwrite') {
-        console.log('xxxxxOverwriting existing records')
         journalStore.deleteAllRecords()
       }
       if (confirmDialog.returnValue === 'add') {
-        console.log('xxxxxAdding to existing records')
         timOffset = Math.max(...journalStore.sortedRecords.map((p) => p.ts)) + 3600
       }
-      console.log('xxxxxImporting data with time offset:', timOffset)
       addRecords(jsonData, timOffset)
     })
-  }
-  else {
-    console.log('xxxxxxNo existing records, adding new ones')
+  } else {
     addRecords(jsonData, 0)
   }
 }
 
 onMounted(() => {
-  const params = new URLSearchParams(window.location.search);
-  params.forEach((value, key) => {
-    console.log(`URL Parameter: ${key} = ${value}`);
+  const initStore = useInitStore()
+  const initReady = ref(initStore.isReady())
+  watch(initReady, () => {})
+})
+
+onMounted(() => {
+  const initStore = useInitStore()
+  const initReady = ref(initStore.isReady())
+  watch(initReady, () => {
+    if (initStore.hasRecords()) {
+      journalStore.deleteAllRecords()
+      addRecords(initStore.getRecords(), 0)
+    }
+    if(initStore.getTeams()) {
+      const teams = initStore.getTeams()
+      teamStore.teams[0].name = teams[0].name
+      teamStore.teams[1].name = teams[1].name
+    }
   })
-  if(params.has('file')) {
-    const fileName = params.get('file')
-    fetch(`${window.location.origin}/save/${fileName}`)
-      .then(response => response.json())
-      .then(data => {
-        data.forEach((record: any) => {
-          //special treatment for sets stored as array in json
-          if (record.modifiers) {
-            record.modifiers = new Set(record.modifiers)
-          }
-          if (record.players) {
-            record.players = new Set(record.players)
-          }
-          journalStore.addRecord(record)
-        })
-      })
-      .catch(error => {
-        console.error('Error loading file from URL parameter:', error)
-      });
-  }
 })
 </script>
 
