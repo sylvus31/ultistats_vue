@@ -2,12 +2,12 @@ import { defineStore } from 'pinia'
 import { computed, ref } from 'vue'
 
 export const useInitStore = defineStore('init', () => {
-  let records = []
+  let records:Array<any> = []
   let videoSrc = {
     type: '',
     uri: '',
   }
-  let teams = []
+  let teams:Array<any> = []
 
   const ready = ref(false)
 
