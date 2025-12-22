@@ -126,7 +126,7 @@ onMounted(() => {
       journalStore.deleteAllRecords()
       addRecords(initStore.getRecords(), 0)
     }
-    if(initStore.getTeams()) {
+    if (initStore.getTeams()) {
       const teams = initStore.getTeams()
       teamStore.teams[0].name = teams[0].name
       teamStore.teams[1].name = teams[1].name
