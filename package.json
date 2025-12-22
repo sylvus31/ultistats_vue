@@ -2602,6 +2602,7 @@
     }
   },
   "dependencies": {
-    "build": "^0.1.4"
+    "build": "^0.1.4",
+    "vue-router": "^4.6.4"
   }
 }

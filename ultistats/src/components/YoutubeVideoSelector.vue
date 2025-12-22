@@ -20,8 +20,9 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue' // Import ref
+import { onMounted, ref, watch } from 'vue' // Import ref
 import { useKeyboardStore } from '../stores/keyboardStore'
+import { useInitStore } from '@/stores/init'
 const componentId = 'YTvideoSelector'
 
 const keyboardStore = useKeyboardStore()
@@ -36,7 +37,6 @@ const sources = new Map<string, string>()
 sources.set('Finale Indoor', 'https://www.youtube.com/watch?v=uPnYUndwops')
 sources.set('Demi finale indoor', 'https://www.youtube.com/watch?v=rpxHv1Nf8aY')
 
-// Renamed function to be more descriptive
 const triggerLoadVideo = () => {
   const inputVal = youtubeInputRef.value?.value // Get value using ref
   if (inputVal) {
@@ -70,6 +70,19 @@ const handleGetFocus = () => {
 const handleLosseFocus = () => {
   keyboardStore.freeFocus()
 }
+
+onMounted(() => {
+  const initStore = useInitStore()
+  const initReady = ref(initStore.isReady())
+  watch(initReady, () => {
+    if (initStore.isYoutubeVideo()) {
+      if (youtubeInputRef.value) {
+        youtubeInputRef.value.value = initStore.getVideoUri()
+      }
+      triggerLoadVideo()
+    }
+  })
+})
 </script>
 
 <style scoped>

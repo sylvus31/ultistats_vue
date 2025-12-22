@@ -281,7 +281,6 @@ const getStatsForOnePoint = (records: JournalEntry[]) => {
   const teamNames = teamStore.teams.map((t) => t.name)
   baseValues.forEach((r) => {
     if (!teamNames.includes(r.player)) {
-      console.log('r', r)
       team_0_stats.passes_total += r.passes_total
       team_0_stats.passes_success += r.passes_success
       team_0_stats.passes_fail += r.passes_fail
@@ -370,7 +369,7 @@ const updateStatGrid = () => {
 
   // update the grid
   rows.value = rows.value.map((r) => statsMap.get(r.player)!)
-  console.log('updateStatGrid', rows.value)
+  console.log('updateStatGrid')
 }
 
 watch(journalStore.sortedRecords, () => {

@@ -2,6 +2,8 @@
 import { useKeyboardStore } from '../stores/keyboardStore'
 import { useJournalStore } from '@/stores/journal'
 import { useTeamStore } from '@/stores/Team'
+import { onMounted, ref, watch } from 'vue'
+import { useInitStore } from '@/stores/init'
 
 const journalStore = useJournalStore()
 const keyboardStore = useKeyboardStore()
@@ -41,10 +43,45 @@ const loadFile = () => {
     if (file) {
       const reader = new FileReader()
       reader.onload = () => {
-        if (journalStore.sortedRecords.length > 0) {
-          const confirmDialog = document.createElement('dialog')
-          confirmDialog.style.position = 'absolute'
-          confirmDialog.innerHTML = `
+        importData(reader.result as string)
+      }
+      reader.readAsText(file)
+    }
+  }
+  input.click()
+}
+
+const addRecords = (jsonData: any, timOffset: number) => {
+  let records = []
+  const jsonDataIsObject = typeof jsonData === 'object' && jsonData !== null
+  const hasVersionProperty = jsonDataIsObject && 'version' in jsonData
+
+  if (hasVersionProperty) {
+    console.log('Detected full save file format, extracting records only')
+    records = jsonData.records
+  } else {
+    records = jsonData
+  }
+  records.forEach((record: any) => {
+    //special treatment for sets stored as array in json
+    if (record.modifiers) {
+      record.modifiers = new Set(record.modifiers)
+    }
+    if (record.players) {
+      record.players = new Set(record.players)
+    }
+    record.ts += timOffset
+    journalStore.addRecord(record)
+  })
+}
+
+const importData = (data: string) => {
+  const jsonData = JSON.parse(data)
+
+  if (journalStore.sortedRecords.length > 0) {
+    const confirmDialog = document.createElement('dialog')
+    confirmDialog.style.position = 'absolute'
+    confirmDialog.innerHTML = `
   <form method="dialog">
     <h2>Records already exist</h2>
     <p>Do you want to overwrite the existing records or add new ones?</p>
@@ -55,51 +92,47 @@ const loadFile = () => {
     </menu>
   </form>
 `
-          document.body.appendChild(confirmDialog)
-          confirmDialog.showModal()
-          confirmDialog.addEventListener('close', () => {
-            let timOffset = 0
-            if (confirmDialog.returnValue === 'cancel') {
-              return
-            }
-            if (confirmDialog.returnValue === 'overwrite') {
-              journalStore.deleteAllRecords()
-            }
-            if (confirmDialog.returnValue === 'add') {
-              timOffset = Math.max(...journalStore.sortedRecords.map((p) => p.ts)) + 3600
-            }
-            const data = JSON.parse(reader.result as string)
-            data.forEach((record: any) => {
-              //special treatment for sets stored as array in json
-              if (record.modifiers) {
-                record.modifiers = new Set(record.modifiers)
-              }
-              if (record.players) {
-                record.players = new Set(record.players)
-              }
-              record.ts += timOffset
-              journalStore.addRecord(record)
-            })
-          })
-        } else {
-          const data = JSON.parse(reader.result as string)
-          data.forEach((record: any) => {
-            //special treatment for sets stored as array in json
-            if (record.modifiers) {
-              record.modifiers = new Set(record.modifiers)
-            }
-            if (record.players) {
-              record.players = new Set(record.players)
-            }
-            journalStore.addRecord(record)
-          })
-        }
+    document.body.appendChild(confirmDialog)
+    confirmDialog.showModal()
+    confirmDialog.addEventListener('close', () => {
+      let timOffset = 0
+      if (confirmDialog.returnValue === 'cancel') {
+        return
       }
-      reader.readAsText(file)
-    }
+      if (confirmDialog.returnValue === 'overwrite') {
+        journalStore.deleteAllRecords()
+      }
+      if (confirmDialog.returnValue === 'add') {
+        timOffset = Math.max(...journalStore.sortedRecords.map((p) => p.ts)) + 3600
+      }
+      addRecords(jsonData, timOffset)
+    })
+  } else {
+    addRecords(jsonData, 0)
   }
-  input.click()
 }
+
+onMounted(() => {
+  const initStore = useInitStore()
+  const initReady = ref(initStore.isReady())
+  watch(initReady, () => {})
+})
+
+onMounted(() => {
+  const initStore = useInitStore()
+  const initReady = ref(initStore.isReady())
+  watch(initReady, () => {
+    if (initStore.hasRecords()) {
+      journalStore.deleteAllRecords()
+      addRecords(initStore.getRecords(), 0)
+    }
+    if (initStore.getTeams()) {
+      const teams = initStore.getTeams()
+      teamStore.teams[0].name = teams[0].name
+      teamStore.teams[1].name = teams[1].name
+    }
+  })
+})
 </script>
 
 <template>

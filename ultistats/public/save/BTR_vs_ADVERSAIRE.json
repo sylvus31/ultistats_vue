@@ -1,0 +1,32 @@
+[
+  { "id": 0, "name": "Thomas", "ts": 0, "type": "player", "source": "user" },
+  {
+    "id": 1,
+    "name": "Swing",
+    "ts": 0,
+    "modifiers": [],
+    "type": "pass",
+    "source": "user"
+  },
+  { "id": 2, "name": "Guimsou", "ts": 0, "type": "player", "source": "user" },
+  {
+    "id": 3,
+    "name": "Dump",
+    "ts": 0,
+    "modifiers": [],
+    "type": "pass",
+    "source": "user"
+  },
+  { "id": 4, "name": "Clar", "ts": 0, "type": "player", "source": "user" },
+  {
+    "id": 5,
+    "name": "Knife",
+    "ts": 0,
+    "modifiers": [],
+    "type": "pass",
+    "source": "user"
+  },
+  { "id": 6, "name": "Yann", "ts": 0, "type": "player", "source": "user" },
+  { "id": 7, "name": "Thomas", "ts": 0, "type": "player", "source": "user" },
+  { "id": 8, "name": "Guimsou", "ts": 0, "type": "player", "source": "user" }
+]
