@@ -210,6 +210,7 @@ const loadVideo = (source: { src: string; type: string }) => {
   if (player.value) {
     console.log('Loading new video source:', source)
     player.value.src(source)
+
   } else {
     console.error('Video player not available to load new source.')
   }
@@ -266,6 +267,13 @@ const goTo = (seconds: number) => {
   }
 }
 
+const srcInfo = () => {
+  if (player.value) {
+    return { uri: player.value.src||'', type: player.value.techName_ ||''}
+  }
+  return { uri: '', type: '' }
+}
+
 export interface VideoPlayerInstance {
   playPause: () => void
   isPlayingValue: boolean
@@ -275,6 +283,7 @@ export interface VideoPlayerInstance {
   loadVideo: (source: { src: string; type: string }) => void
   elapsedTimeValue: number
   goTo: (seconds: number) => void
+  srcInfo: { uri: string; type: string }
 }
 
 defineExpose({
@@ -286,6 +295,7 @@ defineExpose({
   loadVideo,
   elapsedTimeValue,
   goTo,
+  srcInfo,
 })
 </script>
 

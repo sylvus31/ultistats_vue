@@ -2,8 +2,14 @@
 import { useKeyboardStore } from '../stores/keyboardStore'
 import { useJournalStore } from '@/stores/journal'
 import { useTeamStore } from '@/stores/Team'
-import { onMounted, ref, watch } from 'vue'
+import { onMounted, ref, watch, type Ref } from 'vue'
 import { useInitStore } from '@/stores/init'
+import type { VideoPlayerInstance } from '@/components/VideoPlayer.vue'
+
+const videoPlayerRef = ref<VideoPlayerInstance | null>(null)
+const setVideoPlayerRef = (ref: Ref<VideoPlayerInstance | null>) => {
+  videoPlayerRef.value = ref.value
+}
 
 const journalStore = useJournalStore()
 const keyboardStore = useKeyboardStore()
@@ -20,15 +26,28 @@ const handleLosseFocus = () => {
 }
 
 const saveFile = () => {
-  const data = JSON.stringify(journalStore.sortedRecords, (_key, value) =>
-    value instanceof Set ? [...value] : value,
-  )
-  const blob = new Blob([data], { type: 'application/json' })
+  const records = journalStore.sortedRecords
+  const version = '1'
+  const videoSrc =videoPlayerRef.value ? videoPlayerRef.value.srcInfo : {uri:'',type:''}
+  const teamName_A = document.getElementById('teamName_A') as HTMLInputElement
+  const teamName_B = document.getElementById('teamName_B') as HTMLInputElement
+
+  const data = {
+    'version': version,
+    'videoSrc': videoSrc,
+    'teams': [
+      { name: teamName_A.value },
+      { name: teamName_B.value },
+    ],
+    'records': records,
+  }
+
+  const blobPart=JSON.stringify(data, (_key, value) =>
+    value instanceof Set ? [...value] : value,)
+  const blob = new Blob([blobPart], { type: 'application/json' })
   const url = window.URL.createObjectURL(blob)
   const a = document.createElement('a')
   a.href = url
-  const teamName_A = document.getElementById('teamName_A') as HTMLInputElement
-  const teamName_B = document.getElementById('teamName_B') as HTMLInputElement
   a.download = teamName_A.value + '_vs_' + teamName_B.value + '.json'
   a.click()
   window.URL.revokeObjectURL(url)
@@ -115,12 +134,6 @@ const importData = (data: string) => {
 onMounted(() => {
   const initStore = useInitStore()
   const initReady = ref(initStore.isReady())
-  watch(initReady, () => {})
-})
-
-onMounted(() => {
-  const initStore = useInitStore()
-  const initReady = ref(initStore.isReady())
   watch(initReady, () => {
     if (initStore.hasRecords()) {
       journalStore.deleteAllRecords()
@@ -132,6 +145,10 @@ onMounted(() => {
       teamStore.teams[1].name = teams[1].name
     }
   })
+})
+
+defineExpose({
+  setVideoPlayerRef,
 })
 </script>
 
