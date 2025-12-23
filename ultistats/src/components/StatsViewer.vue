@@ -161,8 +161,8 @@ const initRow = (name: string) => {
   }
 }
 
-initStats(rows.value)
 const initMap = () => {
+  initStats(rows.value)
   const emptyMap = new Map<string, Row>()
   const players = teamStore.players.map((p) => p.name)
   players.forEach((p) => {

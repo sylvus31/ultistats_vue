@@ -122,6 +122,11 @@ export const useTeamStore = defineStore('team', () => {
       return player.id === 't' + teamIndex
     })!.name = teamName
   }
+
+  function setPlayersOfTeam(teamIndex: number, teamPlayers: Player[]) {
+    teams.value[teamIndex].players.splice(0)
+    teams.value[teamIndex].players.push(...teamPlayers)
+  }
   // --- Return ---
   // Make state, getters, and actions available to components
   return {
@@ -129,6 +134,7 @@ export const useTeamStore = defineStore('team', () => {
     players,
     teams,
     setTeamName,
+    setPlayersOfTeam,
     // Getters
     activePlayers,
     playingPlayers,

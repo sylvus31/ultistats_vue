@@ -6,6 +6,8 @@ import { onMounted, ref, watch, type Ref } from 'vue'
 import { useInitStore } from '@/stores/init'
 import type { VideoPlayerInstance } from '@/components/VideoPlayer.vue'
 import { storeToRefs } from 'pinia'
+import type { Player } from '@/types/Player'
+import { createPlayer } from '@/types/Player'
 
 const initStore = useInitStore()
 const videoPlayerRef = ref<VideoPlayerInstance | null>(null)
@@ -96,6 +98,7 @@ const addRecords = (jsonData: any, timOffset: number) => {
 
 const importData = (data: string) => {
   const jsonData = JSON.parse(data)
+  let timOffset = 0
 
   if (journalStore.sortedRecords.length > 0) {
     const confirmDialog = document.createElement('dialog')
@@ -103,10 +106,10 @@ const importData = (data: string) => {
     confirmDialog.innerHTML = `
   <form method="dialog">
     <h2>Records already exist</h2>
-    <p>Do you want to overwrite the existing records or add new ones?</p>
+    <p>Do you want to overwrite the existing records?</p>
     <menu>
       <button value="overwrite">Overwrite</button>
-      <button value="add">Add</button>
+      <!-- <button value="add">Add</button> -->
       <button value="cancel">Cancel</button>
     </menu>
   </form>
@@ -114,7 +117,6 @@ const importData = (data: string) => {
     document.body.appendChild(confirmDialog)
     confirmDialog.showModal()
     confirmDialog.addEventListener('close', () => {
-      let timOffset = 0
       if (confirmDialog.returnValue === 'cancel') {
         return
       }
@@ -124,18 +126,31 @@ const importData = (data: string) => {
       if (confirmDialog.returnValue === 'add') {
         timOffset = Math.max(...journalStore.sortedRecords.map((p) => p.ts)) + 3600
       }
-      addRecords(jsonData, timOffset)
     })
-  } else {
-    addRecords(jsonData, 0)
   }
+  addRecords(jsonData, timOffset)
+
+  teamStore.setTeamName(0, jsonData.teams[0].name)
+  teamStore.setTeamName(1, jsonData.teams[1].name)
+
+  const players:Array<Player>=[]
+  jsonData.teams[0].players?.forEach((playerData:any)=>{
+    players.push(createPlayer(playerData['id'], playerData['name'], playerData['key_code']))
+  })
+
+  teamStore.setPlayersOfTeam(0, players)
 }
 
 onMounted(() => {
   const params = new URLSearchParams(window.location.search)
   if (params.has('file')) {
-    initStore.setFile(params.get('file') || '')
+    fetch(`${window.location.origin}/save/${params.get('file')}`)
+      .then((response) => response.text())
+      .then((data) => {
+        importData(data)
+      })
   }
+
   const { records } = storeToRefs(initStore)
   watch(records, () => {
     journalStore.deleteAllRecords()
@@ -144,8 +159,8 @@ onMounted(() => {
 
   const { teams } = storeToRefs(initStore)
   watch(teams, () => {
-    teamStore.teams[0].name = teams.value[0].name
-    teamStore.teams[1].name = teams.value[1].name
+    teamStore.setTeamName(0, teams.value[0].name)
+    teamStore.setTeamName(1, teams.value[1].name)
   })
 })
 
