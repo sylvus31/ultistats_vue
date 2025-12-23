@@ -5,7 +5,9 @@ import { useTeamStore } from '@/stores/Team'
 import { onMounted, ref, watch, type Ref } from 'vue'
 import { useInitStore } from '@/stores/init'
 import type { VideoPlayerInstance } from '@/components/VideoPlayer.vue'
+import { storeToRefs } from 'pinia'
 
+const initStore = useInitStore()
 const videoPlayerRef = ref<VideoPlayerInstance | null>(null)
 const setVideoPlayerRef = (ref: Ref<VideoPlayerInstance | null>) => {
   videoPlayerRef.value = ref.value
@@ -28,22 +30,20 @@ const handleLosseFocus = () => {
 const saveFile = () => {
   const records = journalStore.sortedRecords
   const version = '1'
-  const videoSrc =videoPlayerRef.value ? videoPlayerRef.value.srcInfo : {uri:'',type:''}
+  const videoSrc = videoPlayerRef.value ? videoPlayerRef.value.srcInfo : { uri: '', type: '' }
   const teamName_A = document.getElementById('teamName_A') as HTMLInputElement
   const teamName_B = document.getElementById('teamName_B') as HTMLInputElement
 
   const data = {
-    'version': version,
-    'videoSrc': videoSrc,
-    'teams': [
-      { name: teamName_A.value },
-      { name: teamName_B.value },
-    ],
-    'records': records,
+    version: version,
+    videoSrc: videoSrc,
+    teams: [{ name: teamName_A.value }, { name: teamName_B.value }],
+    records: records,
   }
 
-  const blobPart=JSON.stringify(data, (_key, value) =>
-    value instanceof Set ? [...value] : value,)
+  const blobPart = JSON.stringify(data, (_key, value) =>
+    value instanceof Set ? [...value] : value,
+  )
   const blob = new Blob([blobPart], { type: 'application/json' })
   const url = window.URL.createObjectURL(blob)
   const a = document.createElement('a')
@@ -132,18 +132,20 @@ const importData = (data: string) => {
 }
 
 onMounted(() => {
-  const initStore = useInitStore()
-  const initReady = ref(initStore.isReady())
-  watch(initReady, () => {
-    if (initStore.hasRecords()) {
-      journalStore.deleteAllRecords()
-      addRecords(initStore.getRecords(), 0)
-    }
-    if (initStore.getTeams()) {
-      const teams = initStore.getTeams()
-      teamStore.teams[0].name = teams[0].name
-      teamStore.teams[1].name = teams[1].name
-    }
+  const params = new URLSearchParams(window.location.search)
+  if (params.has('file')) {
+    initStore.setFile(params.get('file') || '')
+  }
+  const { records } = storeToRefs(initStore)
+  watch(records, () => {
+    journalStore.deleteAllRecords()
+    addRecords(records.value, 0)
+  })
+
+  const { teams } = storeToRefs(initStore)
+  watch(teams, () => {
+    teamStore.teams[0].name = teams.value[0].name
+    teamStore.teams[1].name = teams.value[1].name
   })
 })
 
