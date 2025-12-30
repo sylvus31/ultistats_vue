@@ -122,6 +122,7 @@ const importData = (data: string) => {
       }
       if (confirmDialog.returnValue === 'overwrite') {
         journalStore.deleteAllRecords()
+        teamStore.clearTeams()
       }
       if (confirmDialog.returnValue === 'add') {
         timOffset = Math.max(...journalStore.sortedRecords.map((p) => p.ts)) + 3600
@@ -130,15 +131,19 @@ const importData = (data: string) => {
   }
   addRecords(jsonData, timOffset)
 
-  teamStore.setTeamName(0, jsonData.teams[0].name)
-  teamStore.setTeamName(1, jsonData.teams[1].name)
+  for (let index = 0; index < 2; index++) {
+    teamStore.setTeamName(index, jsonData.teams[index].name)
 
-  const players:Array<Player>=[]
-  jsonData.teams[0].players?.forEach((playerData:any)=>{
-    players.push(createPlayer(playerData['id'], playerData['name'], playerData['key_code']))
-  })
+    const players: Array<Player> = []
+    jsonData.teams[index].players?.forEach((playerData: any) => {
+      players.push(createPlayer(playerData['id'], playerData['name'], playerData['key_code']))
+    })
 
-  teamStore.setPlayersOfTeam(0, players)
+    teamStore.setPlayersOfTeam(index, players)
+  }
+
+
+  initStore.videoSrc = jsonData.videoSrc || { uri: '', type: '' }
 }
 
 onMounted(() => {
