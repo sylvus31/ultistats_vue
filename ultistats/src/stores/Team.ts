@@ -6,12 +6,14 @@ import { createPlayer, type Player } from '@/types/Player'
 class Team {
   players: Player[]
   name: string
-  constructor(name: string = '', players: Player[] = []) {
+  id: string
+  constructor(name: string = '', id: string, players: Player[] = []) {
     this.name = name
     this.players = players
+    this.id = id
   }
 }
-const team_0 = new Team('BTR', [
+const team_0 = new Team('BTR', 't0', [
   { id: 'p1', name: 'Thomas', isActive: false, key_code: 'Numpad7', playing: false },
   {
     id: 'p2',
@@ -31,7 +33,7 @@ const team_0 = new Team('BTR', [
   { id: 'p9', name: 'Salma', isActive: false, key_code: 'NumpadMultiply', playing: false },
 ])
 
-const team_1 = new Team('ADVERSAIRE')
+const team_1 = new Team('ADVERSAIRE', 't1')
 // Define the store with the ID 'team'
 export const useTeamStore = defineStore('team', () => {
   const teams = ref<[Team, Team]>([team_0, team_1])
@@ -48,10 +50,6 @@ export const useTeamStore = defineStore('team', () => {
   const playingPlayers = computed(() => players.value.filter((player) => player.playing))
   const nonPlayingPlayers = computed(() => players.value.filter((player) => !player.playing))
 
-  // Example getter: Get a player by their ID
-  const getPlayerById = computed(() => {
-    return (playerId: string) => players.value.find((p) => p.id === playerId)
-  })
   function haveSameElements<T>(ref: Set<T>, comp: Set<T>): boolean {
     if (ref.size !== comp.size) {
       return false // Different number of elements
@@ -76,6 +74,10 @@ export const useTeamStore = defineStore('team', () => {
 
   function getPlayerByName(name: string) {
     return players.value.find((p) => p.name === name)
+  }
+
+  function getPlayerByID(id: string) {
+    return players.value.find((p) => p.id === id)
   }
 
   function getPlayerByKeyCodeAndModifiers(keycode: string, modifiers: Set<string>) {
@@ -116,11 +118,9 @@ export const useTeamStore = defineStore('team', () => {
     })
   }
 
-  function setTeamName(teamIndex: number, teamName: string) {
+  function setTeamNameAndID(teamIndex: number, teamName: string, teamID: string) {
     teams.value[teamIndex].name = teamName
-    players.value.find((player) => {
-      return player.id === 't' + teamIndex
-    })!.name = teamName
+    teams.value[teamIndex].id = teamID
   }
 
   function setPlayersOfTeam(teamIndex: number, teamPlayers: Player[]) {
@@ -128,10 +128,10 @@ export const useTeamStore = defineStore('team', () => {
     teams.value[teamIndex].players.push(...teamPlayers)
   }
 
-  function clearTeams(name_1:string='Team 1',name_2:string='Team 2') {
-    teams.value[0].name=name_1
+  function clearTeams(name_1: string = 'Team 1', name_2: string = 'Team 2') {
+    teams.value[0].name = name_1
     teams.value[0].players.splice(0)
-    teams.value[1].name=name_2
+    teams.value[1].name = name_2
     teams.value[1].players.splice(0)
   }
   // --- Return ---
@@ -140,13 +140,12 @@ export const useTeamStore = defineStore('team', () => {
     // State
     players,
     teams,
-    setTeamName,
+    setTeamNameAndID,
     setPlayersOfTeam,
     // Getters
     activePlayers,
     playingPlayers,
     nonPlayingPlayers,
-    getPlayerById,
     getPlayerByKeyCodeAndModifiers,
     setPlayingStatus,
     // Actions
@@ -154,7 +153,8 @@ export const useTeamStore = defineStore('team', () => {
     updatePlayer,
     selectActivePlayer,
     getPlayerTeam,
-    getPlayerByName,
+    // getPlayerByName,
+    getPlayerByID,
     clearTeams,
   }
 })

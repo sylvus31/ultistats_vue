@@ -1,0 +1,3894 @@
+{
+  "version": 1,
+  "videoSrc": {
+    "type": "youtube",
+    "uri": "https://www.youtube.com/watch?v=Z18A0HxM2Y4"
+  },
+  "teams": [
+    {
+      "id": "t0",
+      "name": "BTR",
+      "players": [
+        {
+          "id": "p1",
+          "name": "P-M",
+          "key_code": "Numpad7"
+        },
+        {
+          "id": "p2",
+          "name": "Burger",
+          "key_code": "Numpad8"
+        },
+        {
+          "id": "p3",
+          "name": "Elie",
+          "key_code": "Numpad9"
+        },
+        {
+          "id": "p4",
+          "name": "Alex",
+          "key_code": "Numpad4"
+        },
+        {
+          "id": "p5",
+          "name": "Blaise",
+          "key_code": "Numpad5"
+        },
+        {
+          "id": "p6",
+          "name": "Yohan",
+          "key_code": "Numpad6"
+        },
+        {
+          "id": "p7",
+          "name": "Arnaud",
+          "key_code": "Numpad1"
+        },
+        {
+          "id": "p8",
+          "name": "Samuel",
+          "key_code": "Numpad2"
+        },
+        {
+          "id": "p9",
+          "name": "Octave",
+          "key_code": "Numpad3"
+        }
+      ]
+    },
+    {
+      "id": "t1",
+      "name": "Cognac",
+      "players": [
+        {
+          "id": "p10",
+          "name": "Co"
+        },
+        {
+          "id": "p11",
+          "name": "Niak"
+        },
+        {
+          "id": "p12",
+          "name": "wesh"
+        }
+      ]
+    }
+  ],
+  "records": [
+    {
+      "id": 0,
+      "name": "Line",
+      "ts": 112.23736197329711,
+      "type": "line",
+      "players": ["p1", "p2", "p3", "p6", "p9"],
+      "source": "user"
+    },
+    {
+      "id": 1,
+      "name": "t1",
+      "ts": 116.07873690653992,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 2,
+      "name": "pull",
+      "ts": 135.068531,
+      "type": "event",
+      "source": "user"
+    },
+    {
+      "id": 3,
+      "name": "p6",
+      "ts": 149.9952779847412,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 4,
+      "name": "pick up disc",
+      "ts": 154.9876459885559,
+      "terminal": false,
+      "type": "positiveAction",
+      "source": "user"
+    },
+    {
+      "id": 6,
+      "name": "Passe",
+      "ts": 156.0405684809265,
+      "modifiers": [],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 5,
+      "name": "p1",
+      "ts": 157.09349097329712,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 7,
+      "name": "Dump",
+      "ts": 160.62497897329712,
+      "modifiers": ["break"],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 8,
+      "name": "p3",
+      "ts": 160.79423097329712,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 9,
+      "name": "Avant",
+      "ts": 162.04437030663047,
+      "modifiers": ["break"],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 10,
+      "name": "p2",
+      "ts": 163.2928979732971,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 12,
+      "name": "Passe",
+      "ts": 164.7422649732971,
+      "modifiers": [],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 11,
+      "name": "p6",
+      "ts": 166.19163197329712,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 13,
+      "name": "Dump",
+      "ts": 169.13942430663047,
+      "modifiers": ["break"],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 14,
+      "name": "p3",
+      "ts": 169.9258529732971,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 15,
+      "name": "Avant",
+      "ts": 171.8671896399638,
+      "modifiers": ["break"],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 16,
+      "name": "p1",
+      "ts": 173.0504079732971,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 17,
+      "name": "Swing",
+      "ts": 177.75969730663047,
+      "modifiers": ["break"],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 18,
+      "name": "p6",
+      "ts": 179.0720959732971,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 19,
+      "name": "Swing",
+      "ts": 181.65454830663046,
+      "modifiers": [],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 20,
+      "name": "p2",
+      "ts": 182.21304197329712,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 21,
+      "name": "Swing",
+      "ts": 182.93647063996377,
+      "modifiers": [],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 22,
+      "name": "p6",
+      "ts": 183.5782109732971,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 24,
+      "name": "Passe",
+      "ts": 184.7579879732971,
+      "modifiers": [],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 23,
+      "name": "p2",
+      "ts": 185.9377649732971,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 25,
+      "name": "Avant",
+      "ts": 187.9672039732971,
+      "modifiers": [],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 26,
+      "name": "score",
+      "ts": 188.3930159732971,
+      "terminal": true,
+      "type": "positiveAction",
+      "source": "user"
+    },
+    {
+      "id": 27,
+      "name": "Line",
+      "ts": 234.36636997329714,
+      "type": "line",
+      "players": ["p3", "p4", "p5", "p7", "p8"],
+      "source": "user"
+    },
+    {
+      "id": 28,
+      "name": "p3",
+      "ts": 235.33745795994565,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 29,
+      "name": "pull",
+      "ts": 236.86988797329712,
+      "type": "event",
+      "source": "user"
+    },
+    {
+      "id": 30,
+      "name": "t1",
+      "ts": 241.4684199732971,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 31,
+      "name": "pick up disc",
+      "ts": 243.20899111253357,
+      "terminal": false,
+      "type": "positiveAction",
+      "source": "user"
+    },
+    {
+      "id": 32,
+      "name": "Avant",
+      "ts": 244.3487579732971,
+      "modifiers": [],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 33,
+      "name": "t1",
+      "ts": 244.8228829732971,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 34,
+      "name": "Swing",
+      "ts": 245.91476097329712,
+      "modifiers": [],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 35,
+      "name": "t1",
+      "ts": 246.30715897329713,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 36,
+      "name": "Avant",
+      "ts": 252.6034869732971,
+      "modifiers": [],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 37,
+      "name": "t1",
+      "ts": 253.78233297329712,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 38,
+      "name": "Knife",
+      "ts": 258.4374179732971,
+      "modifiers": [],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 39,
+      "name": "t1",
+      "ts": 259.76241497329664,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 40,
+      "name": "score",
+      "ts": 259.76241497329664,
+      "terminal": true,
+      "type": "positiveAction",
+      "source": "user"
+    },
+    {
+      "id": 52,
+      "name": "Line",
+      "ts": 295.9445779732971,
+      "type": "line",
+      "players": ["p1", "p2", "p3", "p6", "p9"],
+      "source": "user"
+    },
+    {
+      "id": 42,
+      "name": "t1",
+      "ts": 298.84093086457824,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 44,
+      "name": "pull",
+      "ts": 300.0579409732971,
+      "type": "event",
+      "source": "user"
+    },
+    {
+      "id": 45,
+      "name": "p6",
+      "ts": 303.1666059732971,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 46,
+      "name": "pick up disc",
+      "ts": 303.1999393066305,
+      "terminal": false,
+      "type": "positiveAction",
+      "source": "user"
+    },
+    {
+      "id": 47,
+      "name": "Avant",
+      "ts": 307.8092949732971,
+      "modifiers": [],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 48,
+      "name": "p1",
+      "ts": 308.3166699732971,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 49,
+      "name": "Avant",
+      "ts": 309.7186409732971,
+      "modifiers": ["longue"],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 50,
+      "name": "p9",
+      "ts": 311.4463529732971,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 51,
+      "name": "score",
+      "ts": 311.4463529732971,
+      "terminal": true,
+      "type": "positiveAction",
+      "source": "user"
+    },
+    {
+      "id": 53,
+      "name": "Line",
+      "ts": 346.1843223066304,
+      "type": "line",
+      "players": ["p4", "p5", "p6", "p7", "p8"],
+      "source": "user"
+    },
+    {
+      "id": 54,
+      "name": "p5",
+      "ts": 346.31765563996385,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 56,
+      "name": "pull",
+      "ts": 348.0724139446869,
+      "type": "event",
+      "source": "user"
+    },
+    {
+      "id": 57,
+      "name": "t1",
+      "ts": 354.07345603433225,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 58,
+      "name": "pick up disc",
+      "ts": 365.0716789923706,
+      "terminal": false,
+      "type": "positiveAction",
+      "source": "user"
+    },
+    {
+      "id": 59,
+      "name": "Swing",
+      "ts": 369.8448519732971,
+      "modifiers": ["break"],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 61,
+      "name": "t1",
+      "ts": 371.19367856484985,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 60,
+      "name": "Avant",
+      "ts": 372.54250515640257,
+      "modifiers": ["break"],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 62,
+      "name": "t1",
+      "ts": 374.28220993896485,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 64,
+      "name": "Passe",
+      "ts": 376.90809053337864,
+      "modifiers": [],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 63,
+      "name": "t1",
+      "ts": 379.53397112779237,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 65,
+      "name": "Avant",
+      "ts": 381.05628715068053,
+      "modifiers": [],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 66,
+      "name": "t1",
+      "ts": 383.23027863996384,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 67,
+      "name": "drop",
+      "ts": 383.23027863996384,
+      "terminal": true,
+      "type": "negativeAction",
+      "source": "user"
+    },
+    {
+      "id": 68,
+      "name": "p4",
+      "ts": 388.7979569732971,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 70,
+      "name": "pick up disc",
+      "ts": 389.93314997329713,
+      "terminal": false,
+      "type": "positiveAction",
+      "source": "user"
+    },
+    {
+      "id": 71,
+      "name": "Avant",
+      "ts": 392.467196973297,
+      "modifiers": ["longue"],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 72,
+      "name": "p8",
+      "ts": 395.5764049732971,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 73,
+      "name": "score",
+      "ts": 401.6109670896454,
+      "terminal": true,
+      "type": "positiveAction",
+      "source": "user"
+    },
+    {
+      "id": 74,
+      "name": "Line",
+      "ts": 430.7865319732971,
+      "type": "line",
+      "players": ["p1", "p2", "p3", "p4", "p9"],
+      "source": "user"
+    },
+    {
+      "id": 75,
+      "name": "p3",
+      "ts": 431.8362989732971,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 76,
+      "name": "pull",
+      "ts": 439.3895750476837,
+      "type": "event",
+      "source": "user"
+    },
+    {
+      "id": 77,
+      "name": "t1",
+      "ts": 444.4441319732971,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 78,
+      "name": "pick up disc",
+      "ts": 450.9914729103546,
+      "terminal": false,
+      "type": "positiveAction",
+      "source": "user"
+    },
+    {
+      "id": 79,
+      "name": "Swing",
+      "ts": 455.4039659732971,
+      "modifiers": [],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 80,
+      "name": "t1",
+      "ts": 456.9360589732971,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 83,
+      "name": "Passe",
+      "ts": 468.0070074732971,
+      "modifiers": [],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 81,
+      "name": "Avant",
+      "ts": 479.0779559732971,
+      "modifiers": [],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 82,
+      "name": "t1",
+      "ts": 479.0779559732971,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 84,
+      "name": "Avant",
+      "ts": 481.3129969732971,
+      "modifiers": ["longue"],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 85,
+      "name": "t1",
+      "ts": 484.6486539732971,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 86,
+      "name": "score",
+      "ts": 488.4420889008179,
+      "terminal": true,
+      "type": "positiveAction",
+      "source": "user"
+    },
+    {
+      "id": 87,
+      "name": "Line",
+      "ts": 517.0842189732971,
+      "type": "line",
+      "players": ["p3", "p5", "p6", "p7", "p8"],
+      "source": "user"
+    },
+    {
+      "id": 88,
+      "name": "t1",
+      "ts": 519.0671469351502,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 89,
+      "name": "pull",
+      "ts": 523.3167391506805,
+      "type": "event",
+      "source": "user"
+    },
+    {
+      "id": 90,
+      "name": "p5",
+      "ts": 528.4562969732971,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 91,
+      "name": "pick up disc",
+      "ts": 532.2472430190735,
+      "terminal": false,
+      "type": "positiveAction",
+      "source": "user"
+    },
+    {
+      "id": 92,
+      "name": "Avant",
+      "ts": 533.6516319732971,
+      "modifiers": [],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 93,
+      "name": "p7",
+      "ts": 534.2258189732971,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 94,
+      "name": "Avant",
+      "ts": 536.1982629732971,
+      "modifiers": [],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 95,
+      "name": "t1",
+      "ts": 545.3169129370575,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 96,
+      "name": "pick up disc",
+      "ts": 558.2306569389648,
+      "terminal": false,
+      "type": "positiveAction",
+      "source": "user"
+    },
+    {
+      "id": 97,
+      "name": "Dump",
+      "ts": 561.4794939732972,
+      "modifiers": [],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 98,
+      "name": "t1",
+      "ts": 561.4794939732972,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 100,
+      "name": "Swing",
+      "ts": 564.7135019732971,
+      "modifiers": [],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 101,
+      "name": "t1",
+      "ts": 564.7135019732971,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 103,
+      "name": "Avant",
+      "ts": 567.9075039732971,
+      "modifiers": [],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 104,
+      "name": "p6",
+      "ts": 568.5411809732971,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 105,
+      "name": "intercept",
+      "ts": 568.5411809732971,
+      "terminal": true,
+      "type": "positiveAction",
+      "source": "user"
+    },
+    {
+      "id": 106,
+      "name": "p5",
+      "ts": 574.9347069732971,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 108,
+      "name": "pick up disc",
+      "ts": 574.9347069732971,
+      "terminal": false,
+      "type": "positiveAction",
+      "source": "user"
+    },
+    {
+      "id": 109,
+      "name": "Swing",
+      "ts": 577.6763209732972,
+      "modifiers": [],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 110,
+      "name": "p6",
+      "ts": 577.9801909732971,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 112,
+      "name": "Passe",
+      "ts": 579.9900324732971,
+      "modifiers": [],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 111,
+      "name": "t1",
+      "ts": 581.9998739732971,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 113,
+      "name": "intercept",
+      "ts": 581.9998739732971,
+      "terminal": true,
+      "type": "positiveAction",
+      "source": "user"
+    },
+    {
+      "id": 114,
+      "name": "t1",
+      "ts": 584.4269529732971,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 116,
+      "name": "pick up disc",
+      "ts": 584.4269529732971,
+      "terminal": false,
+      "type": "positiveAction",
+      "source": "user"
+    },
+    {
+      "id": 117,
+      "name": "Swing",
+      "ts": 586.2321159732971,
+      "modifiers": [],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 118,
+      "name": "t1",
+      "ts": 586.2321159732971,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 121,
+      "name": "Passe",
+      "ts": 588.2029019732971,
+      "modifiers": [],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 120,
+      "name": "t1",
+      "ts": 590.1736879732971,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 122,
+      "name": "Swing",
+      "ts": 594.6580029732971,
+      "modifiers": [],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 123,
+      "name": "t1",
+      "ts": 595.6863629504089,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 124,
+      "name": "drop",
+      "ts": 595.9196809732971,
+      "terminal": true,
+      "type": "negativeAction",
+      "source": "user"
+    },
+    {
+      "id": 125,
+      "name": "p3",
+      "ts": 601.6850399732971,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 127,
+      "name": "Swing",
+      "ts": 605.5486749732971,
+      "modifiers": [],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 128,
+      "name": "p6",
+      "ts": 607.5914369732972,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 129,
+      "name": "Swing",
+      "ts": 608.3904769732972,
+      "modifiers": [],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 130,
+      "name": "p3",
+      "ts": 609.9248759790191,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 132,
+      "name": "Passe",
+      "ts": 611.9615544761582,
+      "modifiers": [],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 131,
+      "name": "p8",
+      "ts": 613.9982329732971,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 134,
+      "name": "Passe",
+      "ts": 615.0220129732971,
+      "modifiers": [],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 133,
+      "name": "p5",
+      "ts": 616.0457929732971,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 135,
+      "name": "score",
+      "ts": 616.4701059732971,
+      "terminal": true,
+      "type": "positiveAction",
+      "source": "user"
+    },
+    {
+      "id": 136,
+      "name": "Line",
+      "ts": 652.8519559732971,
+      "type": "line",
+      "players": ["p1", "p2", "p3", "p4", "p9"],
+      "source": "user"
+    },
+    {
+      "id": 137,
+      "name": "p4",
+      "ts": 657.1430619732971,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 138,
+      "name": "pull",
+      "ts": 660.6698849866485,
+      "type": "event",
+      "source": "user"
+    },
+    {
+      "id": 139,
+      "name": "t1",
+      "ts": 665.9201458874664,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 143,
+      "name": "pick up disc",
+      "ts": 682.3630099732972,
+      "terminal": false,
+      "type": "positiveAction",
+      "source": "user"
+    },
+    {
+      "id": 142,
+      "name": "Avant",
+      "ts": 682.3679489732971,
+      "modifiers": ["longue"],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 144,
+      "name": "t1",
+      "ts": 684.8851199732972,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 145,
+      "name": "score",
+      "ts": 685.3895029732971,
+      "terminal": true,
+      "type": "positiveAction",
+      "source": "user"
+    },
+    {
+      "id": 3,
+      "name": "Line",
+      "ts": 703.4454649732971,
+      "type": "line",
+      "players": ["p2", "p5", "p6", "p7", "p8"],
+      "source": "user"
+    },
+    {
+      "id": 4,
+      "name": "t1",
+      "ts": 720.3542859732971,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 5,
+      "name": "pull",
+      "ts": 722.8675180362396,
+      "type": "event",
+      "source": "user"
+    },
+    {
+      "id": 6,
+      "name": "p5",
+      "ts": 733.3663171811982,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 7,
+      "name": "pick up disc",
+      "ts": 738.376260076294,
+      "terminal": false,
+      "type": "positiveAction",
+      "source": "user"
+    },
+    {
+      "id": 8,
+      "name": "Avant",
+      "ts": 740.7602089732975,
+      "modifiers": [],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 9,
+      "name": "p2",
+      "ts": 741.6309269732972,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 10,
+      "name": "Swing",
+      "ts": 747.9481269732973,
+      "modifiers": ["break"],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 11,
+      "name": "p6",
+      "ts": 748.8951343066303,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 12,
+      "name": "Avant",
+      "ts": 751.8407669732971,
+      "modifiers": [],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 13,
+      "name": "p2",
+      "ts": 753.585906956131,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 14,
+      "name": "score",
+      "ts": 754.1739289732972,
+      "terminal": true,
+      "type": "positiveAction",
+      "source": "user"
+    },
+    {
+      "id": 15,
+      "name": "Line",
+      "ts": 785.1294509732971,
+      "type": "line",
+      "players": ["p1", "p3", "p4", "p6", "p9"],
+      "source": "user"
+    },
+    {
+      "id": 17,
+      "name": "p3",
+      "ts": 786.9964239732972,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 16,
+      "name": "pull",
+      "ts": 787.8708830648499,
+      "type": "event",
+      "source": "user"
+    },
+    {
+      "id": 18,
+      "name": "t1",
+      "ts": 793.9856899732971,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 19,
+      "name": "pick up disc",
+      "ts": 796.2832911010895,
+      "terminal": false,
+      "type": "positiveAction",
+      "source": "user"
+    },
+    {
+      "id": 20,
+      "name": "Avant",
+      "ts": 797.7233589732971,
+      "modifiers": [],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 21,
+      "name": "t1",
+      "ts": 797.7900256399637,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 22,
+      "name": "faute",
+      "ts": 804.6313709732971,
+      "type": "event",
+      "source": "user"
+    },
+    {
+      "id": 23,
+      "name": "t1",
+      "ts": 831.2595908283387,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 24,
+      "name": "Dump",
+      "ts": 834.919274306631,
+      "modifiers": [],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 25,
+      "name": "t1",
+      "ts": 835.640156994278,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 26,
+      "name": "Swing",
+      "ts": 839.4731249732971,
+      "modifiers": [],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 40,
+      "name": "t1",
+      "ts": 840.3984499732971,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 39,
+      "name": "Avant",
+      "ts": 841.3237749732971,
+      "modifiers": [],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 38,
+      "name": "t1",
+      "ts": 841.6441461392365,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 41,
+      "name": "Dump",
+      "ts": 842.1340479008179,
+      "modifiers": [],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 42,
+      "name": "t1",
+      "ts": 843.0702499732971,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 44,
+      "name": "Passe",
+      "ts": 843.5846050133514,
+      "modifiers": [],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 43,
+      "name": "t1",
+      "ts": 844.0989600534058,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 45,
+      "name": "Swing",
+      "ts": 849.0119169732972,
+      "modifiers": [],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 46,
+      "name": "t1",
+      "ts": 850.1514409732971,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 48,
+      "name": "Swing",
+      "ts": 853.3656120247955,
+      "modifiers": [],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 47,
+      "name": "t1",
+      "ts": 856.5797830762939,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 50,
+      "name": "Swing",
+      "ts": 857.8246104856948,
+      "modifiers": [],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 49,
+      "name": "t1",
+      "ts": 859.0694378950958,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 52,
+      "name": "Swing",
+      "ts": 860.8243294904632,
+      "modifiers": [],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 51,
+      "name": "t1",
+      "ts": 862.5792210858307,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 53,
+      "name": "Swing",
+      "ts": 864.0048093066313,
+      "modifiers": [],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 54,
+      "name": "t1",
+      "ts": 864.996444011444,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 55,
+      "name": "Swing",
+      "ts": 868.7194473066306,
+      "modifiers": [],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 56,
+      "name": "t1",
+      "ts": 869.9246959904633,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 57,
+      "name": "Swing",
+      "ts": 871.4198209523163,
+      "modifiers": [],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 58,
+      "name": "t1",
+      "ts": 872.6613859961853,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 59,
+      "name": "Swing",
+      "ts": 875.1695029637604,
+      "modifiers": [],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 60,
+      "name": "t1",
+      "ts": 875.919120917984,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 61,
+      "name": "Swing",
+      "ts": 878.4104740305175,
+      "modifiers": [],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 62,
+      "name": "t1",
+      "ts": 878.6697399160767,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 63,
+      "name": "Avant",
+      "ts": 879.4868199732971,
+      "modifiers": [],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 64,
+      "name": "t1",
+      "ts": 881.7631456399638,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 66,
+      "name": "Passe",
+      "ts": 883.9673967703909,
+      "modifiers": [],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 65,
+      "name": "t1",
+      "ts": 886.1716479008179,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 67,
+      "name": "Dump",
+      "ts": 887.3613036399641,
+      "modifiers": [],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 68,
+      "name": "t1",
+      "ts": 888.0711931602173,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 69,
+      "name": "Dump",
+      "ts": 891.9913013066309,
+      "modifiers": [],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 70,
+      "name": "t1",
+      "ts": 892.4507919637604,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 71,
+      "name": "Swing",
+      "ts": 899.0168809732971,
+      "modifiers": [],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 72,
+      "name": "p3",
+      "ts": 899.6984876399633,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 73,
+      "name": "intercept",
+      "ts": 899.7318209732966,
+      "terminal": true,
+      "type": "positiveAction",
+      "source": "user"
+    },
+    {
+      "id": 74,
+      "name": "p3",
+      "ts": 902.7757219732971,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 76,
+      "name": "pick up disc",
+      "ts": 902.7757219732971,
+      "terminal": false,
+      "type": "positiveAction",
+      "source": "user"
+    },
+    {
+      "id": 77,
+      "name": "Avant",
+      "ts": 908.0849213066307,
+      "modifiers": [],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 78,
+      "name": "main gauche",
+      "ts": 908.0849213066307,
+      "type": "comment",
+      "source": "user",
+      "details": ""
+    },
+    {
+      "id": 79,
+      "name": "p9",
+      "ts": 909.2470129732972,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 80,
+      "name": "score",
+      "ts": 910.2947820953674,
+      "terminal": true,
+      "type": "positiveAction",
+      "source": "user"
+    },
+    {
+      "id": 81,
+      "name": "Line",
+      "ts": 936.0862199732971,
+      "type": "line",
+      "players": ["p2", "p5", "p7", "p8", "p9"],
+      "source": "user"
+    },
+    {
+      "id": 82,
+      "name": "p5",
+      "ts": 945.1993511583099,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 83,
+      "name": "pull",
+      "ts": 951.4629180247955,
+      "type": "event",
+      "source": "user"
+    },
+    {
+      "id": 84,
+      "name": "t1",
+      "ts": 960.3397329732971,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 85,
+      "name": "pick up disc",
+      "ts": 965.6661899732972,
+      "terminal": false,
+      "type": "positiveAction",
+      "source": "user"
+    },
+    {
+      "id": 86,
+      "name": "Avant",
+      "ts": 969.6801336399643,
+      "modifiers": [],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 87,
+      "name": "t1",
+      "ts": 970.3907080457764,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 88,
+      "name": "Avant",
+      "ts": 971.9515460362396,
+      "modifiers": [],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 89,
+      "name": "t1",
+      "ts": 973.1876501106262,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 90,
+      "name": "Dump",
+      "ts": 976.1158157711182,
+      "modifiers": [],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 91,
+      "name": "p2",
+      "ts": 979.9874959732971,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 92,
+      "name": "pick up disc",
+      "ts": 979.9874959732971,
+      "terminal": false,
+      "type": "positiveAction",
+      "source": "user"
+    },
+    {
+      "id": 95,
+      "name": "Dump",
+      "ts": 983.6800973066308,
+      "modifiers": [],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 96,
+      "name": "p8",
+      "ts": 984.3395469732972,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 97,
+      "name": "Swing",
+      "ts": 992.7406699732976,
+      "modifiers": [],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 98,
+      "name": "p9",
+      "ts": 993.5047080782012,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 99,
+      "name": "Swing",
+      "ts": 999.4234429732971,
+      "modifiers": [],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 100,
+      "name": "p8",
+      "ts": 1000.1874878378753,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 101,
+      "name": "Avant",
+      "ts": 1003.496172639964,
+      "modifiers": [],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 102,
+      "name": "p7",
+      "ts": 1003.9924168493194,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 104,
+      "name": "Passe",
+      "ts": 1004.1403772446422,
+      "modifiers": [],
+      "type": "pass",
+      "source": "ai"
+    },
+    {
+      "id": 103,
+      "name": "t1",
+      "ts": 1004.288337639965,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 105,
+      "name": "intercept",
+      "ts": 1004.3550043066316,
+      "terminal": true,
+      "type": "positiveAction",
+      "source": "user"
+    },
+    {
+      "id": 106,
+      "name": "Dump",
+      "ts": 1009.615707973297,
+      "modifiers": [],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 107,
+      "name": "t1",
+      "ts": 1010.4030571811982,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 108,
+      "name": "Avant",
+      "ts": 1011.5531778970033,
+      "modifiers": [],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 109,
+      "name": "t1",
+      "ts": 1012.5436201087189,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 110,
+      "name": "Avant",
+      "ts": 1014.7933221811982,
+      "modifiers": [],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 111,
+      "name": "t1",
+      "ts": 1015.7923070095367,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 112,
+      "name": "Swing",
+      "ts": 1020.2077429732976,
+      "modifiers": [],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 113,
+      "name": "t1",
+      "ts": 1021.1623688474122,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 114,
+      "name": "Avant",
+      "ts": 1025.7300069732971,
+      "modifiers": [],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 115,
+      "name": "t1",
+      "ts": 1027.015775011444,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 116,
+      "name": "Avant",
+      "ts": 1029.6468059732972,
+      "modifiers": [],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 117,
+      "name": "t1",
+      "ts": 1029.9220221392363,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 118,
+      "name": "score",
+      "ts": 1030.388133973297,
+      "terminal": true,
+      "type": "positiveAction",
+      "source": "user"
+    },
+    {
+      "id": 119,
+      "name": "Line",
+      "ts": 1065.315844973297,
+      "type": "line",
+      "players": ["p1", "p3", "p4", "p6", "p9"],
+      "source": "user"
+    },
+    {
+      "id": 120,
+      "name": "t1",
+      "ts": 1078.406881973297,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 121,
+      "name": "pull",
+      "ts": 1079.8593399732972,
+      "type": "event",
+      "source": "user"
+    },
+    {
+      "id": 122,
+      "name": "p6",
+      "ts": 1083.402913973297,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 123,
+      "name": "Swing",
+      "ts": 1083.9876499732975,
+      "modifiers": [],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 124,
+      "name": "p3",
+      "ts": 1084.4934538283387,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 125,
+      "name": "Swing",
+      "ts": 1088.5428879732976,
+      "modifiers": [],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 126,
+      "name": "p6",
+      "ts": 1089.2963608073578,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 127,
+      "name": "Avant",
+      "ts": 1090.2061909732972,
+      "modifiers": [],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 128,
+      "name": "p4",
+      "ts": 1091.7111171239776,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 129,
+      "name": "Avant",
+      "ts": 1092.311910639964,
+      "modifiers": [],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 130,
+      "name": "p9",
+      "ts": 1093.5018069809264,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 131,
+      "name": "Avant",
+      "ts": 1095.2828839732972,
+      "modifiers": [],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 132,
+      "name": "t1",
+      "ts": 1096.654355306631,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 133,
+      "name": "intercept",
+      "ts": 1096.7210219732976,
+      "terminal": true,
+      "type": "positiveAction",
+      "source": "user"
+    },
+    {
+      "id": 134,
+      "name": "Swing",
+      "ts": 1102.7613110667571,
+      "modifiers": [],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 135,
+      "name": "t1",
+      "ts": 1103.733139973297,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 136,
+      "name": "Avant",
+      "ts": 1106.032078956131,
+      "modifiers": [],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 137,
+      "name": "t1",
+      "ts": 1106.6851081106263,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 138,
+      "name": "Swing",
+      "ts": 1108.436188973297,
+      "modifiers": [],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 139,
+      "name": "t1",
+      "ts": 1109.1772527615815,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 140,
+      "name": "Swing",
+      "ts": 1110.188133005722,
+      "modifiers": [],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 141,
+      "name": "t1",
+      "ts": 1110.6853909217987,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 142,
+      "name": "Swing",
+      "ts": 1115.9280949675751,
+      "modifiers": [],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 143,
+      "name": "t1",
+      "ts": 1116.4270319446869,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 144,
+      "name": "Avant",
+      "ts": 1118.210673061035,
+      "modifiers": [],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 145,
+      "name": "t1",
+      "ts": 1119.7097309904632,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 146,
+      "name": "score",
+      "ts": 1121.042197973297,
+      "terminal": true,
+      "type": "positiveAction",
+      "source": "user"
+    },
+    {
+      "id": 148,
+      "name": "Line",
+      "ts": 1159.118540973297,
+      "type": "line",
+      "players": ["p3", "p4", "p5", "p6", "p7"],
+      "source": "user"
+    },
+    {
+      "id": 149,
+      "name": "t1",
+      "ts": 1166.413294973297,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 1,
+      "name": "pull",
+      "ts": 1166.631284639964,
+      "type": "event",
+      "source": "user"
+    },
+    {
+      "id": 150,
+      "name": "p5",
+      "ts": 1172.3061439732971,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 152,
+      "name": "pick up disc",
+      "ts": 1185.114514912262,
+      "terminal": false,
+      "type": "positiveAction",
+      "source": "user"
+    },
+    {
+      "id": 153,
+      "name": "Swing",
+      "ts": 1187.1370403066305,
+      "modifiers": [],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 154,
+      "name": "p6",
+      "ts": 1187.8603439942779,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 155,
+      "name": "Avant",
+      "ts": 1191.6775126399639,
+      "modifiers": [],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 156,
+      "name": "p7",
+      "ts": 1192.145534994278,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 157,
+      "name": "Avant",
+      "ts": 1193.3218509732972,
+      "modifiers": ["longue"],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 158,
+      "name": "t1",
+      "ts": 1195.008247973297,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 159,
+      "name": "intercept",
+      "ts": 1195.0749146399637,
+      "terminal": true,
+      "type": "positiveAction",
+      "source": "user"
+    },
+    {
+      "id": 160,
+      "name": "Avant",
+      "ts": 1202.3183123066308,
+      "modifiers": [],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 161,
+      "name": "p6",
+      "ts": 1203.9110643066301,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 162,
+      "name": "intercept",
+      "ts": 1203.9443976399634,
+      "terminal": true,
+      "type": "positiveAction",
+      "source": "user"
+    },
+    {
+      "id": 163,
+      "name": "Avant",
+      "ts": 1205.2556976399642,
+      "modifiers": [],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 164,
+      "name": "p5",
+      "ts": 1205.7171399217987,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 165,
+      "name": "Swing",
+      "ts": 1208.904464639964,
+      "modifiers": [],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 166,
+      "name": "p3",
+      "ts": 1209.403589994278,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 167,
+      "name": "Swing",
+      "ts": 1210.7571503066308,
+      "modifiers": [],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 168,
+      "name": "p6",
+      "ts": 1211.2189020782014,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 169,
+      "name": "Avant",
+      "ts": 1212.4821979732972,
+      "modifiers": [],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 170,
+      "name": "p5",
+      "ts": 1214.3027279732971,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 171,
+      "name": "Dump",
+      "ts": 1216.813605306631,
+      "modifiers": [],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 172,
+      "name": "p6",
+      "ts": 1217.545065994278,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 173,
+      "name": "Swing",
+      "ts": 1220.7516953066313,
+      "modifiers": [],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 174,
+      "name": "p3",
+      "ts": 1221.4685831087188,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 175,
+      "name": "Avant",
+      "ts": 1222.649288797821,
+      "modifiers": [],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 176,
+      "name": "p6",
+      "ts": 1223.448978973297,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 177,
+      "name": "Avant",
+      "ts": 1225.217176973297,
+      "modifiers": [],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 178,
+      "name": "p3",
+      "ts": 1226.2438469732972,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 179,
+      "name": "score",
+      "ts": 1227.7685310514985,
+      "terminal": true,
+      "type": "positiveAction",
+      "source": "user"
+    },
+    {
+      "id": 180,
+      "name": "Line",
+      "ts": 1261.9973639866485,
+      "type": "line",
+      "players": ["p1", "p2", "p4", "p5", "p9"],
+      "source": "user"
+    },
+    {
+      "id": 2,
+      "name": "p4",
+      "ts": 1263.1798739732972,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 3,
+      "name": "pull",
+      "ts": 1266.723028938965,
+      "type": "event",
+      "source": "user"
+    },
+    {
+      "id": 183,
+      "name": "t1",
+      "ts": 1272.566913973297,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 185,
+      "name": "pick up disc",
+      "ts": 1273.5887149809264,
+      "terminal": false,
+      "type": "positiveAction",
+      "source": "user"
+    },
+    {
+      "id": 186,
+      "name": "Swing",
+      "ts": 1275.3122739732978,
+      "modifiers": ["break"],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 187,
+      "name": "t1",
+      "ts": 1276.746778973297,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 188,
+      "name": "Avant",
+      "ts": 1278.3223689732972,
+      "modifiers": [],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 189,
+      "name": "t1",
+      "ts": 1279.1022120038147,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 190,
+      "name": "Avant",
+      "ts": 1281.920610038147,
+      "modifiers": ["longue"],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 191,
+      "name": "t1",
+      "ts": 1285.2791879732972,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 192,
+      "name": "score",
+      "ts": 1286.4355209732971,
+      "terminal": true,
+      "type": "positiveAction",
+      "source": "user"
+    },
+    {
+      "id": 4,
+      "name": "Line",
+      "ts": 1300.1955909732972,
+      "type": "line",
+      "players": ["p1", "p3", "p5", "p6", "p7"],
+      "source": "user"
+    },
+    {
+      "id": 5,
+      "name": "t1",
+      "ts": 1310.2784139160767,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 6,
+      "name": "pull",
+      "ts": 1330.2924159332429,
+      "type": "event",
+      "source": "user"
+    },
+    {
+      "id": 7,
+      "name": "p5",
+      "ts": 1333.4496349732972,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 8,
+      "name": "Avant",
+      "ts": 1335.8228779732972,
+      "modifiers": ["longue"],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 9,
+      "name": "p3",
+      "ts": 1337.8542869351502,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 10,
+      "name": "score",
+      "ts": 1339.6224299732971,
+      "terminal": true,
+      "type": "positiveAction",
+      "source": "user"
+    },
+    {
+      "id": 11,
+      "name": "Line",
+      "ts": 1371.600370973297,
+      "type": "line",
+      "players": ["p1", "p2", "p4", "p8", "p9"],
+      "source": "user"
+    },
+    {
+      "id": 12,
+      "name": "p1",
+      "ts": 1371.679903066757,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 13,
+      "name": "pull",
+      "ts": 1375.4082828397827,
+      "type": "event",
+      "source": "user"
+    },
+    {
+      "id": 14,
+      "name": "t1",
+      "ts": 1377.3818779732972,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 16,
+      "name": "Swing",
+      "ts": 1377.8675754732972,
+      "modifiers": [],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 15,
+      "name": "t1",
+      "ts": 1378.3532729732972,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 18,
+      "name": "Avant",
+      "ts": 1383.5898439732975,
+      "modifiers": [],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 17,
+      "name": "t1",
+      "ts": 1384.1196968607635,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 20,
+      "name": "Avant",
+      "ts": 1386.062832639964,
+      "modifiers": [],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 19,
+      "name": "t1",
+      "ts": 1386.867305917984,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 22,
+      "name": "Avant",
+      "ts": 1387.8530026399644,
+      "modifiers": [],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 21,
+      "name": "t1",
+      "ts": 1388.366426856949,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 24,
+      "name": "Avant",
+      "ts": 1391.6205813464585,
+      "modifiers": [],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 23,
+      "name": "t1",
+      "ts": 1395.0354589732972,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 26,
+      "name": "Hammer",
+      "ts": 1397.6114169732973,
+      "modifiers": [],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 25,
+      "name": "t1",
+      "ts": 1398.864975,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 27,
+      "name": "score",
+      "ts": 1399.9184909732971,
+      "terminal": true,
+      "type": "positiveAction",
+      "source": "user"
+    },
+    {
+      "id": 28,
+      "name": "Line",
+      "ts": 1418.984878973297,
+      "type": "line",
+      "players": ["p2", "p4", "p5", "p6", "p7"],
+      "source": "user"
+    },
+    {
+      "id": 29,
+      "name": "t1",
+      "ts": 1423.7179221487731,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 30,
+      "name": "pull",
+      "ts": 1445.721665102997,
+      "type": "event",
+      "source": "user"
+    },
+    {
+      "id": 31,
+      "name": "p5",
+      "ts": 1455.714804125885,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 32,
+      "name": "pick up disc",
+      "ts": 1458.711224005722,
+      "terminal": false,
+      "type": "positiveAction",
+      "source": "user"
+    },
+    {
+      "id": 33,
+      "name": "Swing",
+      "ts": 1460.5364133066305,
+      "modifiers": [],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 34,
+      "name": "p3",
+      "ts": 1461.4300099732968,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 35,
+      "name": "Avant",
+      "ts": 1463.4822686399639,
+      "modifiers": [],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 36,
+      "name": "p2",
+      "ts": 1464.5591743066302,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 37,
+      "name": "Swing",
+      "ts": 1466.6497439732973,
+      "modifiers": [],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 38,
+      "name": "p3",
+      "ts": 1467.3666049847411,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 39,
+      "name": "Avant",
+      "ts": 1468.3637363066307,
+      "modifiers": [],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 40,
+      "name": "p6",
+      "ts": 1468.8658430782014,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 41,
+      "name": "Avant",
+      "ts": 1470.4834366399643,
+      "modifiers": [],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 42,
+      "name": "p5",
+      "ts": 1471.2077410667573,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 43,
+      "name": "Avant",
+      "ts": 1474.3052269732977,
+      "modifiers": [],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 44,
+      "name": "p2",
+      "ts": 1474.7971739217987,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 45,
+      "name": "Swing",
+      "ts": 1475.4714436399645,
+      "modifiers": [],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 46,
+      "name": "p3",
+      "ts": 1475.9454131296998,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 47,
+      "name": "Swing",
+      "ts": 1479.4976216399643,
+      "modifiers": [],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 48,
+      "name": "p2",
+      "ts": 1480.456131868393,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 49,
+      "name": "Avant",
+      "ts": 1482.337046639964,
+      "modifiers": ["break"],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 50,
+      "name": "p5",
+      "ts": 1484.2783449732972,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 51,
+      "name": "score",
+      "ts": 1484.9300909732972,
+      "terminal": true,
+      "type": "positiveAction",
+      "source": "user"
+    },
+    {
+      "id": 54,
+      "name": "Line",
+      "ts": 1512.248422973297,
+      "type": "line",
+      "players": ["p1", "p2", "p3", "p4", "p6"],
+      "source": "user"
+    },
+    {
+      "id": 55,
+      "name": "p3",
+      "ts": 1513.6536890514983,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 56,
+      "name": "pull",
+      "ts": 1523.1379540228882,
+      "type": "event",
+      "source": "user"
+    },
+    {
+      "id": 57,
+      "name": "t1",
+      "ts": 1527.968997973297,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 58,
+      "name": "Avant",
+      "ts": 1530.678670973298,
+      "modifiers": ["break"],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 59,
+      "name": "p2",
+      "ts": 1532.3704349732977,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 60,
+      "name": "intercept",
+      "ts": 1532.4371016399643,
+      "terminal": true,
+      "type": "positiveAction",
+      "source": "user"
+    },
+    {
+      "id": 62,
+      "name": "Passe",
+      "ts": 1536.020633808538,
+      "modifiers": [],
+      "type": "pass",
+      "source": "ai"
+    },
+    {
+      "id": 61,
+      "name": "p6",
+      "ts": 1539.6041659771117,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 63,
+      "name": "pick up disc",
+      "ts": 1541.5966938950958,
+      "terminal": false,
+      "type": "positiveAction",
+      "source": "user"
+    },
+    {
+      "id": 64,
+      "name": "Swing",
+      "ts": 1542.8804769732974,
+      "modifiers": [],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 65,
+      "name": "p3",
+      "ts": 1543.608433891281,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 66,
+      "name": "Swing",
+      "ts": 1546.0758179732975,
+      "modifiers": [],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 67,
+      "name": "p6",
+      "ts": 1546.5459770362397,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 68,
+      "name": "Avant",
+      "ts": 1549.0237709732974,
+      "modifiers": [],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 69,
+      "name": "p3",
+      "ts": 1549.4899238188018,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 70,
+      "name": "Avant",
+      "ts": 1553.4938589732972,
+      "modifiers": [],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 71,
+      "name": "faute",
+      "ts": 1554.3977589732972,
+      "type": "event",
+      "source": "user"
+    },
+    {
+      "id": 72,
+      "name": "t1",
+      "ts": 1625.4805409732971,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 73,
+      "name": "Swing",
+      "ts": 1625.5138743066304,
+      "modifiers": [],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 74,
+      "name": "t1",
+      "ts": 1625.996160994278,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 75,
+      "name": "Swing",
+      "ts": 1629.4567879732977,
+      "modifiers": [],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 76,
+      "name": "t1",
+      "ts": 1629.9227061602173,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 77,
+      "name": "Swing",
+      "ts": 1633.4995959732973,
+      "modifiers": [],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 78,
+      "name": "t1",
+      "ts": 1634.1428239008178,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 79,
+      "name": "Avant",
+      "ts": 1638.087444306631,
+      "modifiers": [],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 80,
+      "name": "t1",
+      "ts": 1638.5522211296998,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 81,
+      "name": "Swing",
+      "ts": 1640.8673269732972,
+      "modifiers": [],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 82,
+      "name": "t1",
+      "ts": 1641.5767978073577,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 83,
+      "name": "Swing",
+      "ts": 1644.144603639964,
+      "modifiers": [],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 84,
+      "name": "t1",
+      "ts": 1644.8715421392365,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 85,
+      "name": "Avant",
+      "ts": 1651.230432639964,
+      "modifiers": ["break"],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 86,
+      "name": "t1",
+      "ts": 1652.6973279732972,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 87,
+      "name": "Knife",
+      "ts": 1657.7470889732974,
+      "modifiers": ["longue"],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 88,
+      "name": "p1",
+      "ts": 1659.5652583066305,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 89,
+      "name": "intercept",
+      "ts": 1659.5985916399638,
+      "terminal": true,
+      "type": "positiveAction",
+      "source": "user"
+    },
+    {
+      "id": 91,
+      "name": "Passe",
+      "ts": 1661.9309908066305,
+      "modifiers": [],
+      "type": "pass",
+      "source": "ai"
+    },
+    {
+      "id": 90,
+      "name": "p4",
+      "ts": 1664.263389973297,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 92,
+      "name": "pick up disc",
+      "ts": 1666.5690899752044,
+      "terminal": false,
+      "type": "positiveAction",
+      "source": "user"
+    },
+    {
+      "id": 93,
+      "name": "Avant",
+      "ts": 1667.2517006399646,
+      "modifiers": [],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 94,
+      "name": "p2",
+      "ts": 1667.977735973297,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 95,
+      "name": "Avant",
+      "ts": 1670.1940083066306,
+      "modifiers": [],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 96,
+      "name": "p3",
+      "ts": 1671.3290999732972,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 97,
+      "name": "Skoober",
+      "ts": 1673.4236229732974,
+      "modifiers": ["longue"],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 98,
+      "name": "p4",
+      "ts": 1675.705165973297,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 99,
+      "name": "score",
+      "ts": 1675.8718326399635,
+      "terminal": true,
+      "type": "positiveAction",
+      "source": "user"
+    },
+    {
+      "id": 100,
+      "name": "Line",
+      "ts": 1721.747099973297,
+      "type": "line",
+      "players": ["p5", "p6", "p7", "p8", "p9"],
+      "source": "user"
+    },
+    {
+      "id": 101,
+      "name": "p5",
+      "ts": 1722.9849531335144,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 102,
+      "name": "pull",
+      "ts": 1726.4902808760223,
+      "type": "event",
+      "source": "user"
+    },
+    {
+      "id": 103,
+      "name": "t1",
+      "ts": 1732.440177973297,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 104,
+      "name": "Avant",
+      "ts": 1738.6920013066306,
+      "modifiers": ["break", "longue"],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 105,
+      "name": "t1",
+      "ts": 1742.323340973297,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 106,
+      "name": "Swing",
+      "ts": 1746.0107093066306,
+      "modifiers": [],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 107,
+      "name": "t1",
+      "ts": 1746.4029140362395,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 108,
+      "name": "Swing",
+      "ts": 1749.673865306631,
+      "modifiers": [],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 109,
+      "name": "t1",
+      "ts": 1750.140272099182,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 110,
+      "name": "Avant",
+      "ts": 1751.2017159732975,
+      "modifiers": [],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 111,
+      "name": "t1",
+      "ts": 1751.9194469523163,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 112,
+      "name": "Avant",
+      "ts": 1753.701018973297,
+      "modifiers": ["break"],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 113,
+      "name": "t1",
+      "ts": 1754.546179973297,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 114,
+      "name": "Avant",
+      "ts": 1756.2210913066306,
+      "modifiers": [],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 115,
+      "name": "t1",
+      "ts": 1757.402406973297,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 116,
+      "name": "score",
+      "ts": 1757.4357403066304,
+      "terminal": true,
+      "type": "positiveAction",
+      "source": "user"
+    },
+    {
+      "id": 151,
+      "name": "Line",
+      "ts": 1808.7443726399638,
+      "type": "line",
+      "players": ["p1", "p2", "p3", "p4", "p6"],
+      "source": "user"
+    },
+    {
+      "id": 118,
+      "name": "t1",
+      "ts": 1810.777705973297,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 121,
+      "name": "pull",
+      "ts": 1811.530620961853,
+      "type": "event",
+      "source": "user"
+    },
+    {
+      "id": 119,
+      "name": "p3",
+      "ts": 1814.799668973297,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 122,
+      "name": "Swing",
+      "ts": 1820.0998333066307,
+      "modifiers": [],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 123,
+      "name": "p6",
+      "ts": 1821.06137615831,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 124,
+      "name": "Avant",
+      "ts": 1825.4760749732977,
+      "modifiers": [],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 125,
+      "name": "p3",
+      "ts": 1826.4452168588562,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 126,
+      "name": "Swing",
+      "ts": 1829.6243949732975,
+      "modifiers": [],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 127,
+      "name": "p6",
+      "ts": 1830.5351769294282,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 128,
+      "name": "Avant",
+      "ts": 1832.4469916399642,
+      "modifiers": [],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 129,
+      "name": "p1",
+      "ts": 1833.524452973297,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 130,
+      "name": "Swing",
+      "ts": 1835.747763639964,
+      "modifiers": [],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 131,
+      "name": "p4",
+      "ts": 1836.2201817558594,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 132,
+      "name": "Swing",
+      "ts": 1837.7479281564026,
+      "modifiers": [],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 133,
+      "name": "p3",
+      "ts": 1838.7542759122618,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 134,
+      "name": "Skoober",
+      "ts": 1841.5886639809264,
+      "modifiers": ["break"],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 135,
+      "name": "t1",
+      "ts": 1853.477522973297,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 152,
+      "name": "pick up disc",
+      "ts": 1854.1390111068115,
+      "terminal": false,
+      "type": "positiveAction",
+      "source": "user"
+    },
+    {
+      "id": 136,
+      "name": "Swing",
+      "ts": 1858.6218313066306,
+      "modifiers": ["break"],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 137,
+      "name": "t1",
+      "ts": 1859.3491799637604,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 138,
+      "name": "Avant",
+      "ts": 1861.2560056399639,
+      "modifiers": [],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 139,
+      "name": "t1",
+      "ts": 1862.2033859809264,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 140,
+      "name": "Swing",
+      "ts": 1869.2454666399638,
+      "modifiers": ["break"],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 141,
+      "name": "t1",
+      "ts": 1869.9622569217986,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 142,
+      "name": "Avant",
+      "ts": 1871.1032633066309,
+      "modifiers": ["break"],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 143,
+      "name": "t1",
+      "ts": 1871.8724940152588,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 144,
+      "name": "Avant",
+      "ts": 1873.5092553066306,
+      "modifiers": ["break"],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 145,
+      "name": "t1",
+      "ts": 1875.198400973297,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 146,
+      "name": "Dump",
+      "ts": 1879.4448939732974,
+      "modifiers": [],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 147,
+      "name": "t1",
+      "ts": 1880.660844885559,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 148,
+      "name": "Avant",
+      "ts": 1882.348736639964,
+      "modifiers": ["break"],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 149,
+      "name": "t1",
+      "ts": 1884.286745973297,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 150,
+      "name": "score",
+      "ts": 1888.0664549961853,
+      "terminal": true,
+      "type": "positiveAction",
+      "source": "user"
+    },
+    {
+      "id": 153,
+      "name": "Line",
+      "ts": 1906.117918639964,
+      "type": "line",
+      "players": ["p5", "p6", "p7", "p8", "p9"],
+      "source": "user"
+    },
+    {
+      "id": 154,
+      "name": "t1",
+      "ts": 1911.1344238569488,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 155,
+      "name": "pull",
+      "ts": 1924.8781889332429,
+      "type": "event",
+      "source": "user"
+    },
+    {
+      "id": 156,
+      "name": "p5",
+      "ts": 1929.3745507463227,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 157,
+      "name": "pick up disc",
+      "ts": 1941.886522818802,
+      "terminal": false,
+      "type": "positiveAction",
+      "source": "user"
+    },
+    {
+      "id": 158,
+      "name": "Avant",
+      "ts": 1943.2776539732977,
+      "modifiers": ["break"],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 159,
+      "name": "p9",
+      "ts": 1944.456313973297,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 160,
+      "name": "Swing",
+      "ts": 1947.0214999732973,
+      "modifiers": [],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 161,
+      "name": "p5",
+      "ts": 1947.4732379427796,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 162,
+      "name": "Avant",
+      "ts": 1952.704234306631,
+      "modifiers": [],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 163,
+      "name": "p6",
+      "ts": 1953.4359370152588,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 164,
+      "name": "Avant",
+      "ts": 1954.4343209732974,
+      "modifiers": [],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 165,
+      "name": "p9",
+      "ts": 1955.104388973297,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 166,
+      "name": "score",
+      "ts": 1955.1377223066304,
+      "terminal": true,
+      "type": "positiveAction",
+      "source": "user"
+    },
+    {
+      "id": 167,
+      "name": "Line",
+      "ts": 1981.172449973297,
+      "type": "line",
+      "players": ["p1", "p2", "p3", "p4", "p7"],
+      "source": "user"
+    },
+    {
+      "id": 168,
+      "name": "p3",
+      "ts": 1984.2161030534057,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 169,
+      "name": "pull",
+      "ts": 1996.7010939961854,
+      "type": "event",
+      "source": "user"
+    },
+    {
+      "id": 170,
+      "name": "t1",
+      "ts": 2002.370348973297,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 171,
+      "name": "pick up disc",
+      "ts": 2004.6403958111725,
+      "terminal": false,
+      "type": "positiveAction",
+      "source": "user"
+    },
+    {
+      "id": 172,
+      "name": "Avant",
+      "ts": 2006.4973439732971,
+      "modifiers": ["break"],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 173,
+      "name": "t1",
+      "ts": 2007.4675979713898,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 174,
+      "name": "Swing",
+      "ts": 2008.766803306631,
+      "modifiers": [],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 175,
+      "name": "t1",
+      "ts": 2009.226991087738,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 176,
+      "name": "Dump",
+      "ts": 2012.5021576399638,
+      "modifiers": [],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 177,
+      "name": "t1",
+      "ts": 2013.2247238703,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 178,
+      "name": "Avant",
+      "ts": 2015.692335973297,
+      "modifiers": [],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 179,
+      "name": "t1",
+      "ts": 2016.7320100247955,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 180,
+      "name": "Dump",
+      "ts": 2018.5642303066309,
+      "modifiers": [],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 181,
+      "name": "t1",
+      "ts": 2019.5206369408722,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 182,
+      "name": "Avant",
+      "ts": 2022.913602306631,
+      "modifiers": ["longue"],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 183,
+      "name": "p3",
+      "ts": 2025.368847973297,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 184,
+      "name": "intercept",
+      "ts": 2025.4355146399637,
+      "terminal": true,
+      "type": "positiveAction",
+      "source": "user"
+    },
+    {
+      "id": 185,
+      "name": "faute",
+      "ts": 2040.143300973297,
+      "type": "event",
+      "source": "user"
+    },
+    {
+      "id": 186,
+      "name": "t1",
+      "ts": 2098.8299599732973,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 187,
+      "name": "Knife",
+      "ts": 2105.3835613066312,
+      "modifiers": ["break"],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 188,
+      "name": "t1",
+      "ts": 2107.2104109732973,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 189,
+      "name": "score",
+      "ts": 2107.575496973297,
+      "terminal": true,
+      "type": "positiveAction",
+      "source": "user"
+    },
+    {
+      "id": 190,
+      "name": "Line",
+      "ts": 2142.4804479732975,
+      "type": "line",
+      "players": ["p2", "p3", "p4", "p6", "p7"],
+      "source": "user"
+    },
+    {
+      "id": 191,
+      "name": "t1",
+      "ts": 2145.55999302861,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 192,
+      "name": "pull",
+      "ts": 2150.5687259103543,
+      "type": "event",
+      "source": "user"
+    },
+    {
+      "id": 193,
+      "name": "p4",
+      "ts": 2152.251557973297,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 194,
+      "name": "Avant",
+      "ts": 2154.141921973297,
+      "modifiers": [],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 195,
+      "name": "travel?",
+      "ts": 2154.141921973297,
+      "type": "comment",
+      "source": "user",
+      "details": ""
+    },
+    {
+      "id": 196,
+      "name": "p6",
+      "ts": 2154.419746921799,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 197,
+      "name": "Avant",
+      "ts": 2157.625457306631,
+      "modifiers": [],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 198,
+      "name": "p2",
+      "ts": 2158.0703259942784,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 199,
+      "name": "Swing",
+      "ts": 2160.5635049732973,
+      "modifiers": ["break"],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 200,
+      "name": "p6",
+      "ts": 2161.4813699732968,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 201,
+      "name": "Swing",
+      "ts": 2163.0121783066306,
+      "modifiers": ["break"],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 202,
+      "name": "p4",
+      "ts": 2163.7867069732974,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 203,
+      "name": "Avant",
+      "ts": 2165.816227306631,
+      "modifiers": [],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 204,
+      "name": "p7",
+      "ts": 2166.2778078493193,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 205,
+      "name": "Avant",
+      "ts": 2169.100608639964,
+      "modifiers": [],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 206,
+      "name": "p2",
+      "ts": 2170.8024369732975,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 207,
+      "name": "score",
+      "ts": 2171.310647973297,
+      "terminal": true,
+      "type": "positiveAction",
+      "source": "user"
+    }
+  ]
+}

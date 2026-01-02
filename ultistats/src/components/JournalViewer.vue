@@ -171,7 +171,7 @@ defineExpose({
           style="display: none"
           title="Supprimer l'action"
         ></span>
-        {{ record.name }}
+        {{ teamStore.getPlayerByID(record.name)?.name || record.name }}
         <span v-if="record.type === jet.PASS && 'modifiers' in record"
           ><button
             class="pass-button"
