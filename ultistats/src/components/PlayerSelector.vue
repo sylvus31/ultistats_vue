@@ -43,8 +43,7 @@ function logPlayer(eventCode: string, activeModifiers: Set<string>) {
 <template>
   <div class="buttons">
     <sl-button
-      v-for="player in players"
-      :key="player.id"
+      v-for="player in players" :key="player.id"
       @click="selectPlayer(player)"
       :class="{ active: player.isActive }"
     >

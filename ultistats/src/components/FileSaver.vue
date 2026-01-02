@@ -100,6 +100,23 @@ const importData = (data: string) => {
   const jsonData = JSON.parse(data)
   let timOffset = 0
 
+  function setData() {
+    for (let index = 0; index < 2; index++) {
+      teamStore.setTeamName(index, jsonData.teams[index].name)
+
+      const players: Array<Player> = []
+      jsonData.teams[index].players?.forEach((playerData: any) => {
+        players.push(createPlayer(playerData['id'], playerData['name'], playerData['key_code']))
+      })
+
+      teamStore.setPlayersOfTeam(index, players)
+    }
+
+    addRecords(jsonData, timOffset)
+
+    initStore.videoSrc = jsonData.videoSrc || { uri: '', type: '' }
+  }
+
   if (journalStore.sortedRecords.length > 0) {
     const confirmDialog = document.createElement('dialog')
     confirmDialog.style.position = 'absolute'
@@ -127,23 +144,11 @@ const importData = (data: string) => {
       if (confirmDialog.returnValue === 'add') {
         timOffset = Math.max(...journalStore.sortedRecords.map((p) => p.ts)) + 3600
       }
+      setData()
     })
+  } else {
+    setData()
   }
-  addRecords(jsonData, timOffset)
-
-  for (let index = 0; index < 2; index++) {
-    teamStore.setTeamName(index, jsonData.teams[index].name)
-
-    const players: Array<Player> = []
-    jsonData.teams[index].players?.forEach((playerData: any) => {
-      players.push(createPlayer(playerData['id'], playerData['name'], playerData['key_code']))
-    })
-
-    teamStore.setPlayersOfTeam(index, players)
-  }
-
-
-  initStore.videoSrc = jsonData.videoSrc || { uri: '', type: '' }
 }
 
 onMounted(() => {
@@ -182,16 +187,16 @@ defineExpose({
     @focusin="handleGetFocus"
     @focusout="handleLosseFocus"
     class="styled-input"
-    :value="teamStore.teams[0].name"
+    v-model="teamStore.teams[0].name"
   />
   VS
   <input
     id="teamName_B"
+    v-model="teamStore.teams[1].name"
     type="text"
     @focusin="handleGetFocus"
     @focusout="handleLosseFocus"
     class="styled-input"
-    :value="teamStore.teams[1].name"
   />
   <sl-button @click="loadFile">Load File</sl-button>
 </template>
