@@ -1,0 +1,3892 @@
+{
+  "version": 1,
+  "videoSrc": {
+    "type": "youtube",
+    "uri": "https://www.youtube.com/watch?v=Z18A0HxM2Y4"
+  },
+  "teams": [
+    {
+      "name": "BTR",
+      "players": [
+        {
+          "id": "p1",
+          "name": "P-M",
+          "key_code": "Numpad7"
+        },
+        {
+          "id": "p2",
+          "name": "Burger",
+          "key_code": "Numpad8"
+        },
+        {
+          "id": "p3",
+          "name": "Elie",
+          "key_code": "Numpad9"
+        },
+        {
+          "id": "p4",
+          "name": "Alex",
+          "key_code": "Numpad4"
+        },
+        {
+          "id": "p5",
+          "name": "Blaise",
+          "key_code": "Numpad5"
+        },
+        {
+          "id": "p6",
+          "name": "Yohan",
+          "key_code": "Numpad6"
+        },
+        {
+          "id": "p7",
+          "name": "Arnaud",
+          "key_code": "Numpad1"
+        },
+        {
+          "id": "p8",
+          "name": "Samuel",
+          "key_code": "Numpad2"
+        },
+        {
+          "id": "p9",
+          "name": "Octave",
+          "key_code": "Numpad3"
+        }
+      ]
+    },
+    {
+      "name": "Cognac",
+      "players": [
+        {
+          "id": "p10",
+          "name": "Co"
+        },
+        {
+          "id": "p11",
+          "name": "Niak"
+        },
+        {
+          "id": "p12",
+          "name": "wesh"
+        }
+      ]
+    }
+  ],
+  "records": [
+    {
+      "id": 0,
+      "name": "Line",
+      "ts": 147.619293,
+      "type": "line",
+      "players": ["P-M", "Burger", "Elie", "Yohan", "Octave", "BTR", "Cognac"],
+      "source": "user"
+    },
+    {
+      "id": 1,
+      "name": "Cognac",
+      "ts": 151.4606679332428,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 2,
+      "name": "pull",
+      "ts": 170.4504620267029,
+      "type": "event",
+      "source": "user"
+    },
+    {
+      "id": 3,
+      "name": "Yohan",
+      "ts": 185.37720901144408,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 4,
+      "name": "pick up disc",
+      "ts": 190.36957701525878,
+      "terminal": false,
+      "type": "positiveAction",
+      "source": "user"
+    },
+    {
+      "id": 6,
+      "name": "Passe",
+      "ts": 191.4224995076294,
+      "modifiers": [],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 5,
+      "name": "P-M",
+      "ts": 192.475422,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 7,
+      "name": "Dump",
+      "ts": 196.00691,
+      "modifiers": ["break"],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 8,
+      "name": "Elie",
+      "ts": 196.176162,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 9,
+      "name": "Avant",
+      "ts": 197.42630133333336,
+      "modifiers": ["break"],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 10,
+      "name": "Burger",
+      "ts": 198.674829,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 12,
+      "name": "Passe",
+      "ts": 200.12419599999998,
+      "modifiers": [],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 11,
+      "name": "Yohan",
+      "ts": 201.573563,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 13,
+      "name": "Dump",
+      "ts": 204.52135533333336,
+      "modifiers": ["break"],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 14,
+      "name": "Elie",
+      "ts": 205.307784,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 15,
+      "name": "Avant",
+      "ts": 207.2491206666667,
+      "modifiers": ["break"],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 16,
+      "name": "P-M",
+      "ts": 208.43233899999998,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 17,
+      "name": "Swing",
+      "ts": 213.14162833333336,
+      "modifiers": ["break"],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 18,
+      "name": "Yohan",
+      "ts": 214.454027,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 19,
+      "name": "Swing",
+      "ts": 217.03647933333335,
+      "modifiers": [],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 20,
+      "name": "Burger",
+      "ts": 217.594973,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 21,
+      "name": "Swing",
+      "ts": 218.31840166666666,
+      "modifiers": [],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 22,
+      "name": "Yohan",
+      "ts": 218.960142,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 24,
+      "name": "Passe",
+      "ts": 220.139919,
+      "modifiers": [],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 23,
+      "name": "Burger",
+      "ts": 221.319696,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 25,
+      "name": "Avant",
+      "ts": 223.349135,
+      "modifiers": [],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 26,
+      "name": "score",
+      "ts": 223.774947,
+      "terminal": true,
+      "type": "positiveAction",
+      "source": "user"
+    },
+    {
+      "id": 27,
+      "name": "Line",
+      "ts": 269.748301,
+      "type": "line",
+      "players": ["Elie", "Alex", "Blaise", "Arnaud", "Samuel", "BTR", "Cognac"],
+      "source": "user"
+    },
+    {
+      "id": 28,
+      "name": "Elie",
+      "ts": 270.71938898664854,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 29,
+      "name": "pull",
+      "ts": 272.251819,
+      "type": "event",
+      "source": "user"
+    },
+    {
+      "id": 30,
+      "name": "Cognac",
+      "ts": 276.850351,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 31,
+      "name": "pick up disc",
+      "ts": 278.59092213923645,
+      "terminal": false,
+      "type": "positiveAction",
+      "source": "user"
+    },
+    {
+      "id": 32,
+      "name": "Avant",
+      "ts": 279.730689,
+      "modifiers": [],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 33,
+      "name": "Cognac",
+      "ts": 280.204814,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 34,
+      "name": "Swing",
+      "ts": 281.296692,
+      "modifiers": [],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 35,
+      "name": "Cognac",
+      "ts": 281.68909,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 36,
+      "name": "Avant",
+      "ts": 287.985418,
+      "modifiers": [],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 37,
+      "name": "Cognac",
+      "ts": 289.164264,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 38,
+      "name": "Knife",
+      "ts": 293.819349,
+      "modifiers": [],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 39,
+      "name": "Cognac",
+      "ts": 295.14434599999953,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 40,
+      "name": "score",
+      "ts": 295.14434599999953,
+      "terminal": true,
+      "type": "positiveAction",
+      "source": "user"
+    },
+    {
+      "id": 52,
+      "name": "Line",
+      "ts": 331.326509,
+      "type": "line",
+      "players": ["P-M", "Burger", "Elie", "Yohan", "Octave", "BTR", "Cognac"],
+      "source": "user"
+    },
+    {
+      "id": 42,
+      "name": "Cognac",
+      "ts": 334.2228618912811,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 44,
+      "name": "pull",
+      "ts": 335.439872,
+      "type": "event",
+      "source": "user"
+    },
+    {
+      "id": 45,
+      "name": "Yohan",
+      "ts": 338.548537,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 46,
+      "name": "pick up disc",
+      "ts": 338.58187033333337,
+      "terminal": false,
+      "type": "positiveAction",
+      "source": "user"
+    },
+    {
+      "id": 47,
+      "name": "Avant",
+      "ts": 343.191226,
+      "modifiers": [],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 48,
+      "name": "P-M",
+      "ts": 343.698601,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 49,
+      "name": "Avant",
+      "ts": 345.100572,
+      "modifiers": ["longue"],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 50,
+      "name": "Octave",
+      "ts": 346.828284,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 51,
+      "name": "score",
+      "ts": 346.828284,
+      "terminal": true,
+      "type": "positiveAction",
+      "source": "user"
+    },
+    {
+      "id": 53,
+      "name": "Line",
+      "ts": 381.5662533333333,
+      "type": "line",
+      "players": ["Alex", "Blaise", "Yohan", "Arnaud", "Samuel", "BTR", "Cognac"],
+      "source": "user"
+    },
+    {
+      "id": 54,
+      "name": "Blaise",
+      "ts": 381.69958666666673,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 56,
+      "name": "pull",
+      "ts": 383.4543449713898,
+      "type": "event",
+      "source": "user"
+    },
+    {
+      "id": 57,
+      "name": "Cognac",
+      "ts": 389.45538706103514,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 58,
+      "name": "pick up disc",
+      "ts": 400.4536100190735,
+      "terminal": false,
+      "type": "positiveAction",
+      "source": "user"
+    },
+    {
+      "id": 59,
+      "name": "Swing",
+      "ts": 405.226783,
+      "modifiers": ["break"],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 61,
+      "name": "Cognac",
+      "ts": 406.57560959155273,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 60,
+      "name": "Avant",
+      "ts": 407.92443618310546,
+      "modifiers": ["break"],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 62,
+      "name": "Cognac",
+      "ts": 409.66414096566774,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 64,
+      "name": "Passe",
+      "ts": 412.2900215600815,
+      "modifiers": [],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 63,
+      "name": "Cognac",
+      "ts": 414.91590215449526,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 65,
+      "name": "Avant",
+      "ts": 416.4382181773834,
+      "modifiers": [],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 66,
+      "name": "Cognac",
+      "ts": 418.61220966666673,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 67,
+      "name": "drop",
+      "ts": 418.61220966666673,
+      "terminal": true,
+      "type": "negativeAction",
+      "source": "user"
+    },
+    {
+      "id": 68,
+      "name": "Alex",
+      "ts": 424.179888,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 70,
+      "name": "pick up disc",
+      "ts": 425.315081,
+      "terminal": false,
+      "type": "positiveAction",
+      "source": "user"
+    },
+    {
+      "id": 71,
+      "name": "Avant",
+      "ts": 427.8491279999999,
+      "modifiers": ["longue"],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 72,
+      "name": "Samuel",
+      "ts": 430.958336,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 73,
+      "name": "score",
+      "ts": 436.9928981163483,
+      "terminal": true,
+      "type": "positiveAction",
+      "source": "user"
+    },
+    {
+      "id": 74,
+      "name": "Line",
+      "ts": 466.168463,
+      "type": "line",
+      "players": ["P-M", "Burger", "Elie", "Alex", "Octave", "BTR", "Cognac"],
+      "source": "user"
+    },
+    {
+      "id": 75,
+      "name": "Elie",
+      "ts": 467.21823,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 76,
+      "name": "pull",
+      "ts": 474.7715060743866,
+      "type": "event",
+      "source": "user"
+    },
+    {
+      "id": 77,
+      "name": "Cognac",
+      "ts": 479.826063,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 78,
+      "name": "pick up disc",
+      "ts": 486.3734039370575,
+      "terminal": false,
+      "type": "positiveAction",
+      "source": "user"
+    },
+    {
+      "id": 79,
+      "name": "Swing",
+      "ts": 490.785897,
+      "modifiers": [],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 80,
+      "name": "Cognac",
+      "ts": 492.31799,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 83,
+      "name": "Passe",
+      "ts": 503.3889385,
+      "modifiers": [],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 81,
+      "name": "Avant",
+      "ts": 514.459887,
+      "modifiers": [],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 82,
+      "name": "Cognac",
+      "ts": 514.459887,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 84,
+      "name": "Avant",
+      "ts": 516.694928,
+      "modifiers": ["longue"],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 85,
+      "name": "Cognac",
+      "ts": 520.030585,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 86,
+      "name": "score",
+      "ts": 523.8240199275208,
+      "terminal": true,
+      "type": "positiveAction",
+      "source": "user"
+    },
+    {
+      "id": 87,
+      "name": "Line",
+      "ts": 552.46615,
+      "type": "line",
+      "players": ["Elie", "Blaise", "Yohan", "Arnaud", "Samuel", "BTR", "Cognac"],
+      "source": "user"
+    },
+    {
+      "id": 88,
+      "name": "Cognac",
+      "ts": 554.449077961853,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 89,
+      "name": "pull",
+      "ts": 558.6986701773834,
+      "type": "event",
+      "source": "user"
+    },
+    {
+      "id": 90,
+      "name": "Blaise",
+      "ts": 563.838228,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 91,
+      "name": "pick up disc",
+      "ts": 567.6291740457764,
+      "terminal": false,
+      "type": "positiveAction",
+      "source": "user"
+    },
+    {
+      "id": 92,
+      "name": "Avant",
+      "ts": 569.033563,
+      "modifiers": [],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 93,
+      "name": "Arnaud",
+      "ts": 569.60775,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 94,
+      "name": "Avant",
+      "ts": 571.580194,
+      "modifiers": [],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 95,
+      "name": "Cognac",
+      "ts": 580.6988439637604,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 96,
+      "name": "pick up disc",
+      "ts": 593.6125879656677,
+      "terminal": false,
+      "type": "positiveAction",
+      "source": "user"
+    },
+    {
+      "id": 97,
+      "name": "Dump",
+      "ts": 596.861425,
+      "modifiers": [],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 98,
+      "name": "Cognac",
+      "ts": 596.861425,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 100,
+      "name": "Swing",
+      "ts": 600.095433,
+      "modifiers": [],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 101,
+      "name": "Cognac",
+      "ts": 600.095433,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 103,
+      "name": "Avant",
+      "ts": 603.289435,
+      "modifiers": [],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 104,
+      "name": "Yohan",
+      "ts": 603.923112,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 105,
+      "name": "intercept",
+      "ts": 603.923112,
+      "terminal": true,
+      "type": "positiveAction",
+      "source": "user"
+    },
+    {
+      "id": 106,
+      "name": "Blaise",
+      "ts": 610.316638,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 108,
+      "name": "pick up disc",
+      "ts": 610.316638,
+      "terminal": false,
+      "type": "positiveAction",
+      "source": "user"
+    },
+    {
+      "id": 109,
+      "name": "Swing",
+      "ts": 613.058252,
+      "modifiers": [],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 110,
+      "name": "Yohan",
+      "ts": 613.362122,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 112,
+      "name": "Passe",
+      "ts": 615.3719635,
+      "modifiers": [],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 111,
+      "name": "Cognac",
+      "ts": 617.381805,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 113,
+      "name": "intercept",
+      "ts": 617.381805,
+      "terminal": true,
+      "type": "positiveAction",
+      "source": "user"
+    },
+    {
+      "id": 114,
+      "name": "Cognac",
+      "ts": 619.808884,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 116,
+      "name": "pick up disc",
+      "ts": 619.808884,
+      "terminal": false,
+      "type": "positiveAction",
+      "source": "user"
+    },
+    {
+      "id": 117,
+      "name": "Swing",
+      "ts": 621.614047,
+      "modifiers": [],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 118,
+      "name": "Cognac",
+      "ts": 621.614047,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 121,
+      "name": "Passe",
+      "ts": 623.584833,
+      "modifiers": [],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 120,
+      "name": "Cognac",
+      "ts": 625.555619,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 122,
+      "name": "Swing",
+      "ts": 630.039934,
+      "modifiers": [],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 123,
+      "name": "Cognac",
+      "ts": 631.0682939771118,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 124,
+      "name": "drop",
+      "ts": 631.301612,
+      "terminal": true,
+      "type": "negativeAction",
+      "source": "user"
+    },
+    {
+      "id": 125,
+      "name": "Elie",
+      "ts": 637.066971,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 127,
+      "name": "Swing",
+      "ts": 640.930606,
+      "modifiers": [],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 128,
+      "name": "Yohan",
+      "ts": 642.973368,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 129,
+      "name": "Swing",
+      "ts": 643.772408,
+      "modifiers": [],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 130,
+      "name": "Elie",
+      "ts": 645.306807005722,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 132,
+      "name": "Passe",
+      "ts": 647.3434855028611,
+      "modifiers": [],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 131,
+      "name": "Samuel",
+      "ts": 649.380164,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 134,
+      "name": "Passe",
+      "ts": 650.403944,
+      "modifiers": [],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 133,
+      "name": "Blaise",
+      "ts": 651.427724,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 135,
+      "name": "score",
+      "ts": 651.852037,
+      "terminal": true,
+      "type": "positiveAction",
+      "source": "user"
+    },
+    {
+      "id": 136,
+      "name": "Line",
+      "ts": 688.233887,
+      "type": "line",
+      "players": ["P-M", "Burger", "Elie", "Alex", "Octave", "BTR", "Cognac"],
+      "source": "user"
+    },
+    {
+      "id": 137,
+      "name": "Alex",
+      "ts": 692.524993,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 138,
+      "name": "pull",
+      "ts": 696.0518160133514,
+      "type": "event",
+      "source": "user"
+    },
+    {
+      "id": 139,
+      "name": "Cognac",
+      "ts": 701.3020769141693,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 143,
+      "name": "pick up disc",
+      "ts": 717.744941,
+      "terminal": false,
+      "type": "positiveAction",
+      "source": "user"
+    },
+    {
+      "id": 142,
+      "name": "Avant",
+      "ts": 717.74988,
+      "modifiers": ["longue"],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 144,
+      "name": "Cognac",
+      "ts": 720.267051,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 145,
+      "name": "score",
+      "ts": 720.771434,
+      "terminal": true,
+      "type": "positiveAction",
+      "source": "user"
+    },
+    {
+      "id": 3,
+      "name": "Line",
+      "ts": 738.827396,
+      "type": "line",
+      "players": ["Burger", "Blaise", "Yohan", "Arnaud", "Samuel", "BTR", "Cognac"],
+      "source": "user"
+    },
+    {
+      "id": 4,
+      "name": "Cognac",
+      "ts": 755.736217,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 5,
+      "name": "pull",
+      "ts": 758.2494490629425,
+      "type": "event",
+      "source": "user"
+    },
+    {
+      "id": 6,
+      "name": "Blaise",
+      "ts": 768.748248207901,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 7,
+      "name": "pick up disc",
+      "ts": 773.7581911029969,
+      "terminal": false,
+      "type": "positiveAction",
+      "source": "user"
+    },
+    {
+      "id": 8,
+      "name": "Avant",
+      "ts": 776.1421400000004,
+      "modifiers": [],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 9,
+      "name": "Burger",
+      "ts": 777.012858,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 10,
+      "name": "Swing",
+      "ts": 783.3300580000002,
+      "modifiers": ["break"],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 11,
+      "name": "Yohan",
+      "ts": 784.2770653333332,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 12,
+      "name": "Avant",
+      "ts": 787.222698,
+      "modifiers": [],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 13,
+      "name": "Burger",
+      "ts": 788.9678379828339,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 14,
+      "name": "score",
+      "ts": 789.55586,
+      "terminal": true,
+      "type": "positiveAction",
+      "source": "user"
+    },
+    {
+      "id": 15,
+      "name": "Line",
+      "ts": 820.511382,
+      "type": "line",
+      "players": ["P-M", "Elie", "Alex", "Yohan", "Octave", "BTR", "Cognac"],
+      "source": "user"
+    },
+    {
+      "id": 17,
+      "name": "Elie",
+      "ts": 822.378355,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 16,
+      "name": "pull",
+      "ts": 823.2528140915528,
+      "type": "event",
+      "source": "user"
+    },
+    {
+      "id": 18,
+      "name": "Cognac",
+      "ts": 829.367621,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 19,
+      "name": "pick up disc",
+      "ts": 831.6652221277924,
+      "terminal": false,
+      "type": "positiveAction",
+      "source": "user"
+    },
+    {
+      "id": 20,
+      "name": "Avant",
+      "ts": 833.10529,
+      "modifiers": [],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 21,
+      "name": "Cognac",
+      "ts": 833.1719566666666,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 22,
+      "name": "faute",
+      "ts": 840.013302,
+      "type": "event",
+      "source": "user"
+    },
+    {
+      "id": 23,
+      "name": "Cognac",
+      "ts": 866.6415218550416,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 24,
+      "name": "Dump",
+      "ts": 870.3012053333339,
+      "modifiers": [],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 25,
+      "name": "Cognac",
+      "ts": 871.0220880209808,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 26,
+      "name": "Swing",
+      "ts": 874.855056,
+      "modifiers": [],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 40,
+      "name": "Cognac",
+      "ts": 875.780381,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 39,
+      "name": "Avant",
+      "ts": 876.705706,
+      "modifiers": [],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 38,
+      "name": "Cognac",
+      "ts": 877.0260771659393,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 41,
+      "name": "Dump",
+      "ts": 877.5159789275208,
+      "modifiers": [],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 42,
+      "name": "Cognac",
+      "ts": 878.452181,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 44,
+      "name": "Passe",
+      "ts": 878.9665360400543,
+      "modifiers": [],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 43,
+      "name": "Cognac",
+      "ts": 879.4808910801087,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 45,
+      "name": "Swing",
+      "ts": 884.393848,
+      "modifiers": [],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 46,
+      "name": "Cognac",
+      "ts": 885.533372,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 48,
+      "name": "Swing",
+      "ts": 888.7475430514984,
+      "modifiers": [],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 47,
+      "name": "Cognac",
+      "ts": 891.9617141029968,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 50,
+      "name": "Swing",
+      "ts": 893.2065415123977,
+      "modifiers": [],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 49,
+      "name": "Cognac",
+      "ts": 894.4513689217987,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 52,
+      "name": "Swing",
+      "ts": 896.2062605171661,
+      "modifiers": [],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 51,
+      "name": "Cognac",
+      "ts": 897.9611521125336,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 53,
+      "name": "Swing",
+      "ts": 899.3867403333342,
+      "modifiers": [],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 54,
+      "name": "Cognac",
+      "ts": 900.3783750381469,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 55,
+      "name": "Swing",
+      "ts": 904.1013783333335,
+      "modifiers": [],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 56,
+      "name": "Cognac",
+      "ts": 905.3066270171662,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 57,
+      "name": "Swing",
+      "ts": 906.8017519790192,
+      "modifiers": [],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 58,
+      "name": "Cognac",
+      "ts": 908.0433170228882,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 59,
+      "name": "Swing",
+      "ts": 910.5514339904632,
+      "modifiers": [],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 60,
+      "name": "Cognac",
+      "ts": 911.3010519446868,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 61,
+      "name": "Swing",
+      "ts": 913.7924050572204,
+      "modifiers": [],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 62,
+      "name": "Cognac",
+      "ts": 914.0516709427795,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 63,
+      "name": "Avant",
+      "ts": 914.868751,
+      "modifiers": [],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 64,
+      "name": "Cognac",
+      "ts": 917.1450766666667,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 66,
+      "name": "Passe",
+      "ts": 919.3493277970938,
+      "modifiers": [],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 65,
+      "name": "Cognac",
+      "ts": 921.5535789275208,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 67,
+      "name": "Dump",
+      "ts": 922.743234666667,
+      "modifiers": [],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 68,
+      "name": "Cognac",
+      "ts": 923.4531241869201,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 69,
+      "name": "Dump",
+      "ts": 927.3732323333338,
+      "modifiers": [],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 70,
+      "name": "Cognac",
+      "ts": 927.8327229904633,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 71,
+      "name": "Swing",
+      "ts": 934.398812,
+      "modifiers": [],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 72,
+      "name": "Elie",
+      "ts": 935.0804186666662,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 73,
+      "name": "intercept",
+      "ts": 935.1137519999995,
+      "terminal": true,
+      "type": "positiveAction",
+      "source": "user"
+    },
+    {
+      "id": 74,
+      "name": "Elie",
+      "ts": 938.157653,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 76,
+      "name": "pick up disc",
+      "ts": 938.157653,
+      "terminal": false,
+      "type": "positiveAction",
+      "source": "user"
+    },
+    {
+      "id": 77,
+      "name": "Avant",
+      "ts": 943.4668523333336,
+      "modifiers": [],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 78,
+      "name": "main gauche",
+      "ts": 943.4668523333336,
+      "type": "comment",
+      "source": "user",
+      "details": ""
+    },
+    {
+      "id": 79,
+      "name": "Octave",
+      "ts": 944.628944,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 80,
+      "name": "score",
+      "ts": 945.6767131220703,
+      "terminal": true,
+      "type": "positiveAction",
+      "source": "user"
+    },
+    {
+      "id": 81,
+      "name": "Line",
+      "ts": 971.468151,
+      "type": "line",
+      "players": ["Burger", "Blaise", "Arnaud", "Samuel", "Octave", "BTR", "Cognac"],
+      "source": "user"
+    },
+    {
+      "id": 82,
+      "name": "Blaise",
+      "ts": 980.5812821850128,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 83,
+      "name": "pull",
+      "ts": 986.8448490514984,
+      "type": "event",
+      "source": "user"
+    },
+    {
+      "id": 84,
+      "name": "Cognac",
+      "ts": 995.721664,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 85,
+      "name": "pick up disc",
+      "ts": 1001.048121,
+      "terminal": false,
+      "type": "positiveAction",
+      "source": "user"
+    },
+    {
+      "id": 86,
+      "name": "Avant",
+      "ts": 1005.0620646666672,
+      "modifiers": [],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 87,
+      "name": "Cognac",
+      "ts": 1005.7726390724793,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 88,
+      "name": "Avant",
+      "ts": 1007.3334770629425,
+      "modifiers": [],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 89,
+      "name": "Cognac",
+      "ts": 1008.5695811373291,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 90,
+      "name": "Dump",
+      "ts": 1011.497746797821,
+      "modifiers": [],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 91,
+      "name": "Burger",
+      "ts": 1015.369427,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 92,
+      "name": "pick up disc",
+      "ts": 1015.369427,
+      "terminal": false,
+      "type": "positiveAction",
+      "source": "user"
+    },
+    {
+      "id": 95,
+      "name": "Dump",
+      "ts": 1019.0620283333337,
+      "modifiers": [],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 96,
+      "name": "Samuel",
+      "ts": 1019.721478,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 97,
+      "name": "Swing",
+      "ts": 1028.1226010000005,
+      "modifiers": [],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 98,
+      "name": "Octave",
+      "ts": 1028.8866391049041,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 99,
+      "name": "Swing",
+      "ts": 1034.805374,
+      "modifiers": [],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 100,
+      "name": "Samuel",
+      "ts": 1035.5694188645782,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 101,
+      "name": "Avant",
+      "ts": 1038.878103666667,
+      "modifiers": [],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 102,
+      "name": "Arnaud",
+      "ts": 1039.3743478760223,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 104,
+      "name": "Passe",
+      "ts": 1039.522308271345,
+      "modifiers": [],
+      "type": "pass",
+      "source": "ai"
+    },
+    {
+      "id": 103,
+      "name": "Cognac",
+      "ts": 1039.6702686666679,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 105,
+      "name": "intercept",
+      "ts": 1039.7369353333345,
+      "terminal": true,
+      "type": "positiveAction",
+      "source": "user"
+    },
+    {
+      "id": 106,
+      "name": "Dump",
+      "ts": 1044.997639,
+      "modifiers": [],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 107,
+      "name": "Cognac",
+      "ts": 1045.784988207901,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 108,
+      "name": "Avant",
+      "ts": 1046.9351089237061,
+      "modifiers": [],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 109,
+      "name": "Cognac",
+      "ts": 1047.9255511354218,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 110,
+      "name": "Avant",
+      "ts": 1050.175253207901,
+      "modifiers": [],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 111,
+      "name": "Cognac",
+      "ts": 1051.1742380362396,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 112,
+      "name": "Swing",
+      "ts": 1055.5896740000005,
+      "modifiers": [],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 113,
+      "name": "Cognac",
+      "ts": 1056.544299874115,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 114,
+      "name": "Avant",
+      "ts": 1061.111938,
+      "modifiers": [],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 115,
+      "name": "Cognac",
+      "ts": 1062.397706038147,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 116,
+      "name": "Avant",
+      "ts": 1065.028737,
+      "modifiers": [],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 117,
+      "name": "Cognac",
+      "ts": 1065.3039531659392,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 118,
+      "name": "score",
+      "ts": 1065.770065,
+      "terminal": true,
+      "type": "positiveAction",
+      "source": "user"
+    },
+    {
+      "id": 119,
+      "name": "Line",
+      "ts": 1100.697776,
+      "type": "line",
+      "players": ["P-M", "Elie", "Alex", "Yohan", "Octave", "BTR", "Cognac"],
+      "source": "user"
+    },
+    {
+      "id": 120,
+      "name": "Cognac",
+      "ts": 1113.788813,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 121,
+      "name": "pull",
+      "ts": 1115.241271,
+      "type": "event",
+      "source": "user"
+    },
+    {
+      "id": 122,
+      "name": "Yohan",
+      "ts": 1118.784845,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 123,
+      "name": "Swing",
+      "ts": 1119.3695810000004,
+      "modifiers": [],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 124,
+      "name": "Elie",
+      "ts": 1119.8753848550416,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 125,
+      "name": "Swing",
+      "ts": 1123.9248190000005,
+      "modifiers": [],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 126,
+      "name": "Yohan",
+      "ts": 1124.6782918340607,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 127,
+      "name": "Avant",
+      "ts": 1125.588122,
+      "modifiers": [],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 128,
+      "name": "Alex",
+      "ts": 1127.0930481506805,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 129,
+      "name": "Avant",
+      "ts": 1127.693841666667,
+      "modifiers": [],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 130,
+      "name": "Octave",
+      "ts": 1128.8837380076293,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 131,
+      "name": "Avant",
+      "ts": 1130.664815,
+      "modifiers": [],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 132,
+      "name": "Cognac",
+      "ts": 1132.036286333334,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 133,
+      "name": "intercept",
+      "ts": 1132.1029530000005,
+      "terminal": true,
+      "type": "positiveAction",
+      "source": "user"
+    },
+    {
+      "id": 134,
+      "name": "Swing",
+      "ts": 1138.14324209346,
+      "modifiers": [],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 135,
+      "name": "Cognac",
+      "ts": 1139.115071,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 136,
+      "name": "Avant",
+      "ts": 1141.414009982834,
+      "modifiers": [],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 137,
+      "name": "Cognac",
+      "ts": 1142.0670391373292,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 138,
+      "name": "Swing",
+      "ts": 1143.81812,
+      "modifiers": [],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 139,
+      "name": "Cognac",
+      "ts": 1144.5591837882844,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 140,
+      "name": "Swing",
+      "ts": 1145.5700640324249,
+      "modifiers": [],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 141,
+      "name": "Cognac",
+      "ts": 1146.0673219485016,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 142,
+      "name": "Swing",
+      "ts": 1151.310025994278,
+      "modifiers": [],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 143,
+      "name": "Cognac",
+      "ts": 1151.8089629713897,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 144,
+      "name": "Avant",
+      "ts": 1153.592604087738,
+      "modifiers": [],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 145,
+      "name": "Cognac",
+      "ts": 1155.091662017166,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 146,
+      "name": "score",
+      "ts": 1156.424129,
+      "terminal": true,
+      "type": "positiveAction",
+      "source": "user"
+    },
+    {
+      "id": 148,
+      "name": "Line",
+      "ts": 1194.500472,
+      "type": "line",
+      "players": ["Elie", "Alex", "Blaise", "Yohan", "Arnaud", "BTR", "Cognac"],
+      "source": "user"
+    },
+    {
+      "id": 149,
+      "name": "Cognac",
+      "ts": 1201.795226,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 1,
+      "name": "pull",
+      "ts": 1202.0132156666668,
+      "type": "event",
+      "source": "user"
+    },
+    {
+      "id": 150,
+      "name": "Blaise",
+      "ts": 1207.688075,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 152,
+      "name": "pick up disc",
+      "ts": 1220.4964459389648,
+      "terminal": false,
+      "type": "positiveAction",
+      "source": "user"
+    },
+    {
+      "id": 153,
+      "name": "Swing",
+      "ts": 1222.5189713333334,
+      "modifiers": [],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 154,
+      "name": "Yohan",
+      "ts": 1223.2422750209807,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 155,
+      "name": "Avant",
+      "ts": 1227.0594436666668,
+      "modifiers": [],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 156,
+      "name": "Arnaud",
+      "ts": 1227.527466020981,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 157,
+      "name": "Avant",
+      "ts": 1228.703782,
+      "modifiers": ["longue"],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 158,
+      "name": "Cognac",
+      "ts": 1230.390179,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 159,
+      "name": "intercept",
+      "ts": 1230.4568456666666,
+      "terminal": true,
+      "type": "positiveAction",
+      "source": "user"
+    },
+    {
+      "id": 160,
+      "name": "Avant",
+      "ts": 1237.7002433333337,
+      "modifiers": [],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 161,
+      "name": "Yohan",
+      "ts": 1239.292995333333,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 162,
+      "name": "intercept",
+      "ts": 1239.3263286666663,
+      "terminal": true,
+      "type": "positiveAction",
+      "source": "user"
+    },
+    {
+      "id": 163,
+      "name": "Avant",
+      "ts": 1240.637628666667,
+      "modifiers": [],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 164,
+      "name": "Blaise",
+      "ts": 1241.0990709485015,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 165,
+      "name": "Swing",
+      "ts": 1244.286395666667,
+      "modifiers": [],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 166,
+      "name": "Elie",
+      "ts": 1244.785521020981,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 167,
+      "name": "Swing",
+      "ts": 1246.1390813333337,
+      "modifiers": [],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 168,
+      "name": "Yohan",
+      "ts": 1246.6008331049043,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 169,
+      "name": "Avant",
+      "ts": 1247.864129,
+      "modifiers": [],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 170,
+      "name": "Blaise",
+      "ts": 1249.684659,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 171,
+      "name": "Dump",
+      "ts": 1252.1955363333338,
+      "modifiers": [],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 172,
+      "name": "Yohan",
+      "ts": 1252.926997020981,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 173,
+      "name": "Swing",
+      "ts": 1256.1336263333342,
+      "modifiers": [],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 174,
+      "name": "Elie",
+      "ts": 1256.8505141354217,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 175,
+      "name": "Avant",
+      "ts": 1258.031219824524,
+      "modifiers": [],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 176,
+      "name": "Yohan",
+      "ts": 1258.83091,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 177,
+      "name": "Avant",
+      "ts": 1260.599108,
+      "modifiers": [],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 178,
+      "name": "Elie",
+      "ts": 1261.625778,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 179,
+      "name": "score",
+      "ts": 1263.1504620782014,
+      "terminal": true,
+      "type": "positiveAction",
+      "source": "user"
+    },
+    {
+      "id": 180,
+      "name": "Line",
+      "ts": 1297.3792950133513,
+      "type": "line",
+      "players": ["P-M", "Burger", "Alex", "Blaise", "Octave", "BTR", "Cognac"],
+      "source": "user"
+    },
+    {
+      "id": 2,
+      "name": "Alex",
+      "ts": 1298.561805,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 3,
+      "name": "pull",
+      "ts": 1302.1049599656678,
+      "type": "event",
+      "source": "user"
+    },
+    {
+      "id": 183,
+      "name": "Cognac",
+      "ts": 1307.948845,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 185,
+      "name": "pick up disc",
+      "ts": 1308.9706460076293,
+      "terminal": false,
+      "type": "positiveAction",
+      "source": "user"
+    },
+    {
+      "id": 186,
+      "name": "Swing",
+      "ts": 1310.6942050000007,
+      "modifiers": ["break"],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 187,
+      "name": "Cognac",
+      "ts": 1312.12871,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 188,
+      "name": "Avant",
+      "ts": 1313.7043,
+      "modifiers": [],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 189,
+      "name": "Cognac",
+      "ts": 1314.4841430305175,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 190,
+      "name": "Avant",
+      "ts": 1317.30254106485,
+      "modifiers": ["longue"],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 191,
+      "name": "Cognac",
+      "ts": 1320.661119,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 192,
+      "name": "score",
+      "ts": 1321.817452,
+      "terminal": true,
+      "type": "positiveAction",
+      "source": "user"
+    },
+    {
+      "id": 4,
+      "name": "Line",
+      "ts": 1335.577522,
+      "type": "line",
+      "players": ["P-M", "Elie", "Blaise", "Yohan", "Arnaud", "BTR", "Cognac"],
+      "source": "user"
+    },
+    {
+      "id": 5,
+      "name": "Cognac",
+      "ts": 1345.6603449427796,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 6,
+      "name": "pull",
+      "ts": 1365.6743469599458,
+      "type": "event",
+      "source": "user"
+    },
+    {
+      "id": 7,
+      "name": "Blaise",
+      "ts": 1368.831566,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 8,
+      "name": "Avant",
+      "ts": 1371.204809,
+      "modifiers": ["longue"],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 9,
+      "name": "Elie",
+      "ts": 1373.236217961853,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 10,
+      "name": "score",
+      "ts": 1375.004361,
+      "terminal": true,
+      "type": "positiveAction",
+      "source": "user"
+    },
+    {
+      "id": 11,
+      "name": "Line",
+      "ts": 1406.982302,
+      "type": "line",
+      "players": ["P-M", "Burger", "Alex", "Samuel", "Octave", "BTR", "Cognac"],
+      "source": "user"
+    },
+    {
+      "id": 12,
+      "name": "P-M",
+      "ts": 1407.06183409346,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 13,
+      "name": "pull",
+      "ts": 1410.7902138664856,
+      "type": "event",
+      "source": "user"
+    },
+    {
+      "id": 14,
+      "name": "Cognac",
+      "ts": 1412.763809,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 16,
+      "name": "Swing",
+      "ts": 1413.2495065,
+      "modifiers": [],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 15,
+      "name": "Cognac",
+      "ts": 1413.735204,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 18,
+      "name": "Avant",
+      "ts": 1418.9717750000004,
+      "modifiers": [],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 17,
+      "name": "Cognac",
+      "ts": 1419.5016278874664,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 20,
+      "name": "Avant",
+      "ts": 1421.4447636666669,
+      "modifiers": [],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 19,
+      "name": "Cognac",
+      "ts": 1422.2492369446868,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 22,
+      "name": "Avant",
+      "ts": 1423.2349336666673,
+      "modifiers": [],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 21,
+      "name": "Cognac",
+      "ts": 1423.7483578836518,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 24,
+      "name": "Avant",
+      "ts": 1427.0025123731614,
+      "modifiers": [],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 23,
+      "name": "Cognac",
+      "ts": 1430.41739,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 26,
+      "name": "Hammer",
+      "ts": 1432.9933480000002,
+      "modifiers": [],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 25,
+      "name": "Cognac",
+      "ts": 1434.2469060267028,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 27,
+      "name": "score",
+      "ts": 1435.300422,
+      "terminal": true,
+      "type": "positiveAction",
+      "source": "user"
+    },
+    {
+      "id": 28,
+      "name": "Line",
+      "ts": 1454.36681,
+      "type": "line",
+      "players": ["Burger", "Alex", "Blaise", "Yohan", "Arnaud", "BTR", "Cognac"],
+      "source": "user"
+    },
+    {
+      "id": 29,
+      "name": "Cognac",
+      "ts": 1459.099853175476,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 30,
+      "name": "pull",
+      "ts": 1481.1035961296998,
+      "type": "event",
+      "source": "user"
+    },
+    {
+      "id": 31,
+      "name": "Blaise",
+      "ts": 1491.0967351525878,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 32,
+      "name": "pick up disc",
+      "ts": 1494.0931550324249,
+      "terminal": false,
+      "type": "positiveAction",
+      "source": "user"
+    },
+    {
+      "id": 33,
+      "name": "Swing",
+      "ts": 1495.9183443333334,
+      "modifiers": [],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 34,
+      "name": "Elie",
+      "ts": 1496.8119409999997,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 35,
+      "name": "Avant",
+      "ts": 1498.8641996666668,
+      "modifiers": [],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 36,
+      "name": "Burger",
+      "ts": 1499.941105333333,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 37,
+      "name": "Swing",
+      "ts": 1502.0316750000002,
+      "modifiers": [],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 38,
+      "name": "Elie",
+      "ts": 1502.748536011444,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 39,
+      "name": "Avant",
+      "ts": 1503.7456673333336,
+      "modifiers": [],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 40,
+      "name": "Yohan",
+      "ts": 1504.2477741049042,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 41,
+      "name": "Avant",
+      "ts": 1505.8653676666672,
+      "modifiers": [],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 42,
+      "name": "Blaise",
+      "ts": 1506.5896720934602,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 43,
+      "name": "Avant",
+      "ts": 1509.6871580000006,
+      "modifiers": [],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 44,
+      "name": "Burger",
+      "ts": 1510.1791049485016,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 45,
+      "name": "Swing",
+      "ts": 1510.8533746666674,
+      "modifiers": [],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 46,
+      "name": "Elie",
+      "ts": 1511.3273441564027,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 47,
+      "name": "Swing",
+      "ts": 1514.8795526666672,
+      "modifiers": [],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 48,
+      "name": "Burger",
+      "ts": 1515.8380628950958,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 49,
+      "name": "Avant",
+      "ts": 1517.718977666667,
+      "modifiers": ["break"],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 50,
+      "name": "Blaise",
+      "ts": 1519.660276,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 51,
+      "name": "score",
+      "ts": 1520.312022,
+      "terminal": true,
+      "type": "positiveAction",
+      "source": "user"
+    },
+    {
+      "id": 54,
+      "name": "Line",
+      "ts": 1547.630354,
+      "type": "line",
+      "players": ["P-M", "Burger", "Elie", "Alex", "Yohan", "BTR", "Cognac"],
+      "source": "user"
+    },
+    {
+      "id": 55,
+      "name": "Elie",
+      "ts": 1549.0356200782012,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 56,
+      "name": "pull",
+      "ts": 1558.519885049591,
+      "type": "event",
+      "source": "user"
+    },
+    {
+      "id": 57,
+      "name": "Cognac",
+      "ts": 1563.350929,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 58,
+      "name": "Avant",
+      "ts": 1566.060602000001,
+      "modifiers": ["break"],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 59,
+      "name": "Burger",
+      "ts": 1567.7523660000006,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 60,
+      "name": "intercept",
+      "ts": 1567.8190326666672,
+      "terminal": true,
+      "type": "positiveAction",
+      "source": "user"
+    },
+    {
+      "id": 62,
+      "name": "Passe",
+      "ts": 1571.4025648352408,
+      "modifiers": [],
+      "type": "pass",
+      "source": "ai"
+    },
+    {
+      "id": 61,
+      "name": "Yohan",
+      "ts": 1574.9860970038146,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 63,
+      "name": "pick up disc",
+      "ts": 1576.9786249217987,
+      "terminal": false,
+      "type": "positiveAction",
+      "source": "user"
+    },
+    {
+      "id": 64,
+      "name": "Swing",
+      "ts": 1578.2624080000003,
+      "modifiers": [],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 65,
+      "name": "Elie",
+      "ts": 1578.990364917984,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 66,
+      "name": "Swing",
+      "ts": 1581.4577490000004,
+      "modifiers": [],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 67,
+      "name": "Yohan",
+      "ts": 1581.9279080629426,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 68,
+      "name": "Avant",
+      "ts": 1584.4057020000002,
+      "modifiers": [],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 69,
+      "name": "Elie",
+      "ts": 1584.8718548455047,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 70,
+      "name": "Avant",
+      "ts": 1588.87579,
+      "modifiers": [],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 71,
+      "name": "faute",
+      "ts": 1589.77969,
+      "type": "event",
+      "source": "user"
+    },
+    {
+      "id": 72,
+      "name": "Cognac",
+      "ts": 1660.862472,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 73,
+      "name": "Swing",
+      "ts": 1660.8958053333333,
+      "modifiers": [],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 74,
+      "name": "Cognac",
+      "ts": 1661.3780920209808,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 75,
+      "name": "Swing",
+      "ts": 1664.8387190000005,
+      "modifiers": [],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 76,
+      "name": "Cognac",
+      "ts": 1665.3046371869202,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 77,
+      "name": "Swing",
+      "ts": 1668.8815270000002,
+      "modifiers": [],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 78,
+      "name": "Cognac",
+      "ts": 1669.5247549275207,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 79,
+      "name": "Avant",
+      "ts": 1673.4693753333338,
+      "modifiers": [],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 80,
+      "name": "Cognac",
+      "ts": 1673.9341521564027,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 81,
+      "name": "Swing",
+      "ts": 1676.249258,
+      "modifiers": [],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 82,
+      "name": "Cognac",
+      "ts": 1676.9587288340606,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 83,
+      "name": "Swing",
+      "ts": 1679.526534666667,
+      "modifiers": [],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 84,
+      "name": "Cognac",
+      "ts": 1680.2534731659393,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 85,
+      "name": "Avant",
+      "ts": 1686.6123636666669,
+      "modifiers": ["break"],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 86,
+      "name": "Cognac",
+      "ts": 1688.079259,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 87,
+      "name": "Knife",
+      "ts": 1693.1290200000003,
+      "modifiers": ["longue"],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 88,
+      "name": "P-M",
+      "ts": 1694.9471893333334,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 89,
+      "name": "intercept",
+      "ts": 1694.9805226666667,
+      "terminal": true,
+      "type": "positiveAction",
+      "source": "user"
+    },
+    {
+      "id": 91,
+      "name": "Passe",
+      "ts": 1697.3129218333333,
+      "modifiers": [],
+      "type": "pass",
+      "source": "ai"
+    },
+    {
+      "id": 90,
+      "name": "Alex",
+      "ts": 1699.645321,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 92,
+      "name": "pick up disc",
+      "ts": 1701.9510210019073,
+      "terminal": false,
+      "type": "positiveAction",
+      "source": "user"
+    },
+    {
+      "id": 93,
+      "name": "Avant",
+      "ts": 1702.6336316666675,
+      "modifiers": [],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 94,
+      "name": "Burger",
+      "ts": 1703.359667,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 95,
+      "name": "Avant",
+      "ts": 1705.5759393333335,
+      "modifiers": [],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 96,
+      "name": "Elie",
+      "ts": 1706.711031,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 97,
+      "name": "Skoober",
+      "ts": 1708.8055540000003,
+      "modifiers": ["longue"],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 98,
+      "name": "Alex",
+      "ts": 1711.0870969999999,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 99,
+      "name": "score",
+      "ts": 1711.2537636666664,
+      "terminal": true,
+      "type": "positiveAction",
+      "source": "user"
+    },
+    {
+      "id": 100,
+      "name": "Line",
+      "ts": 1757.129031,
+      "type": "line",
+      "players": ["Blaise", "Yohan", "Arnaud", "Samuel", "Octave", "BTR", "Cognac"],
+      "source": "user"
+    },
+    {
+      "id": 101,
+      "name": "Blaise",
+      "ts": 1758.3668841602173,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 102,
+      "name": "pull",
+      "ts": 1761.8722119027252,
+      "type": "event",
+      "source": "user"
+    },
+    {
+      "id": 103,
+      "name": "Cognac",
+      "ts": 1767.822109,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 104,
+      "name": "Avant",
+      "ts": 1774.0739323333335,
+      "modifiers": ["break", "longue"],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 105,
+      "name": "Cognac",
+      "ts": 1777.705272,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 106,
+      "name": "Swing",
+      "ts": 1781.3926403333335,
+      "modifiers": [],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 107,
+      "name": "Cognac",
+      "ts": 1781.7848450629424,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 108,
+      "name": "Swing",
+      "ts": 1785.0557963333338,
+      "modifiers": [],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 109,
+      "name": "Cognac",
+      "ts": 1785.522203125885,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 110,
+      "name": "Avant",
+      "ts": 1786.5836470000004,
+      "modifiers": [],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 111,
+      "name": "Cognac",
+      "ts": 1787.3013779790192,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 112,
+      "name": "Avant",
+      "ts": 1789.08295,
+      "modifiers": ["break"],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 113,
+      "name": "Cognac",
+      "ts": 1789.928111,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 114,
+      "name": "Avant",
+      "ts": 1791.6030223333335,
+      "modifiers": [],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 115,
+      "name": "Cognac",
+      "ts": 1792.784338,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 116,
+      "name": "score",
+      "ts": 1792.8176713333332,
+      "terminal": true,
+      "type": "positiveAction",
+      "source": "user"
+    },
+    {
+      "id": 151,
+      "name": "Line",
+      "ts": 1844.1263036666667,
+      "type": "line",
+      "players": ["P-M", "Burger", "Elie", "Alex", "Yohan", "BTR", "Cognac"],
+      "source": "user"
+    },
+    {
+      "id": 118,
+      "name": "Cognac",
+      "ts": 1846.159637,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 121,
+      "name": "pull",
+      "ts": 1846.9125519885558,
+      "type": "event",
+      "source": "user"
+    },
+    {
+      "id": 119,
+      "name": "Elie",
+      "ts": 1850.1816,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 122,
+      "name": "Swing",
+      "ts": 1855.4817643333336,
+      "modifiers": [],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 123,
+      "name": "Yohan",
+      "ts": 1856.4433071850128,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 124,
+      "name": "Avant",
+      "ts": 1860.8580060000006,
+      "modifiers": [],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 125,
+      "name": "Elie",
+      "ts": 1861.827147885559,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 126,
+      "name": "Swing",
+      "ts": 1865.0063260000004,
+      "modifiers": [],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 127,
+      "name": "Yohan",
+      "ts": 1865.917107956131,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 128,
+      "name": "Avant",
+      "ts": 1867.828922666667,
+      "modifiers": [],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 129,
+      "name": "P-M",
+      "ts": 1868.906384,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 130,
+      "name": "Swing",
+      "ts": 1871.1296946666669,
+      "modifiers": [],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 131,
+      "name": "Alex",
+      "ts": 1871.6021127825622,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 132,
+      "name": "Swing",
+      "ts": 1873.1298591831055,
+      "modifiers": [],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 133,
+      "name": "Elie",
+      "ts": 1874.1362069389647,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 134,
+      "name": "Skoober",
+      "ts": 1876.9705950076293,
+      "modifiers": ["break"],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 135,
+      "name": "Cognac",
+      "ts": 1888.859454,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 152,
+      "name": "pick up disc",
+      "ts": 1889.5209421335144,
+      "terminal": false,
+      "type": "positiveAction",
+      "source": "user"
+    },
+    {
+      "id": 136,
+      "name": "Swing",
+      "ts": 1894.0037623333335,
+      "modifiers": ["break"],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 137,
+      "name": "Cognac",
+      "ts": 1894.7311109904633,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 138,
+      "name": "Avant",
+      "ts": 1896.6379366666667,
+      "modifiers": [],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 139,
+      "name": "Cognac",
+      "ts": 1897.5853170076293,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 140,
+      "name": "Swing",
+      "ts": 1904.6273976666666,
+      "modifiers": ["break"],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 141,
+      "name": "Cognac",
+      "ts": 1905.3441879485015,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 142,
+      "name": "Avant",
+      "ts": 1906.4851943333338,
+      "modifiers": ["break"],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 143,
+      "name": "Cognac",
+      "ts": 1907.2544250419617,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 144,
+      "name": "Avant",
+      "ts": 1908.8911863333335,
+      "modifiers": ["break"],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 145,
+      "name": "Cognac",
+      "ts": 1910.580332,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 146,
+      "name": "Dump",
+      "ts": 1914.8268250000003,
+      "modifiers": [],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 147,
+      "name": "Cognac",
+      "ts": 1916.042775912262,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 148,
+      "name": "Avant",
+      "ts": 1917.730667666667,
+      "modifiers": ["break"],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 149,
+      "name": "Cognac",
+      "ts": 1919.668677,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 150,
+      "name": "score",
+      "ts": 1923.4483860228881,
+      "terminal": true,
+      "type": "positiveAction",
+      "source": "user"
+    },
+    {
+      "id": 153,
+      "name": "Line",
+      "ts": 1941.499849666667,
+      "type": "line",
+      "players": ["Blaise", "Yohan", "Arnaud", "Samuel", "Octave", "BTR", "Cognac"],
+      "source": "user"
+    },
+    {
+      "id": 154,
+      "name": "Cognac",
+      "ts": 1946.5163548836517,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 155,
+      "name": "pull",
+      "ts": 1960.2601199599458,
+      "type": "event",
+      "source": "user"
+    },
+    {
+      "id": 156,
+      "name": "Blaise",
+      "ts": 1964.7564817730256,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 157,
+      "name": "pick up disc",
+      "ts": 1977.2684538455048,
+      "terminal": false,
+      "type": "positiveAction",
+      "source": "user"
+    },
+    {
+      "id": 158,
+      "name": "Avant",
+      "ts": 1978.6595850000006,
+      "modifiers": ["break"],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 159,
+      "name": "Octave",
+      "ts": 1979.838245,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 160,
+      "name": "Swing",
+      "ts": 1982.4034310000002,
+      "modifiers": [],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 161,
+      "name": "Blaise",
+      "ts": 1982.8551689694825,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 162,
+      "name": "Avant",
+      "ts": 1988.0861653333338,
+      "modifiers": [],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 163,
+      "name": "Yohan",
+      "ts": 1988.8178680419617,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 164,
+      "name": "Avant",
+      "ts": 1989.8162520000003,
+      "modifiers": [],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 165,
+      "name": "Octave",
+      "ts": 1990.48632,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 166,
+      "name": "score",
+      "ts": 1990.5196533333333,
+      "terminal": true,
+      "type": "positiveAction",
+      "source": "user"
+    },
+    {
+      "id": 167,
+      "name": "Line",
+      "ts": 2016.554381,
+      "type": "line",
+      "players": ["P-M", "Burger", "Elie", "Alex", "Arnaud", "BTR", "Cognac"],
+      "source": "user"
+    },
+    {
+      "id": 168,
+      "name": "Elie",
+      "ts": 2019.5980340801086,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 169,
+      "name": "pull",
+      "ts": 2032.0830250228883,
+      "type": "event",
+      "source": "user"
+    },
+    {
+      "id": 170,
+      "name": "Cognac",
+      "ts": 2037.75228,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 171,
+      "name": "pick up disc",
+      "ts": 2040.0223268378754,
+      "terminal": false,
+      "type": "positiveAction",
+      "source": "user"
+    },
+    {
+      "id": 172,
+      "name": "Avant",
+      "ts": 2041.879275,
+      "modifiers": ["break"],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 173,
+      "name": "Cognac",
+      "ts": 2042.8495289980926,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 174,
+      "name": "Swing",
+      "ts": 2044.1487343333338,
+      "modifiers": [],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 175,
+      "name": "Cognac",
+      "ts": 2044.608922114441,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 176,
+      "name": "Dump",
+      "ts": 2047.8840886666667,
+      "modifiers": [],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 177,
+      "name": "Cognac",
+      "ts": 2048.606654897003,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 178,
+      "name": "Avant",
+      "ts": 2051.074267,
+      "modifiers": [],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 179,
+      "name": "Cognac",
+      "ts": 2052.1139410514984,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 180,
+      "name": "Dump",
+      "ts": 2053.9461613333337,
+      "modifiers": [],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 181,
+      "name": "Cognac",
+      "ts": 2054.902567967575,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 182,
+      "name": "Avant",
+      "ts": 2058.295533333334,
+      "modifiers": ["longue"],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 183,
+      "name": "Elie",
+      "ts": 2060.750779,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 184,
+      "name": "intercept",
+      "ts": 2060.8174456666666,
+      "terminal": true,
+      "type": "positiveAction",
+      "source": "user"
+    },
+    {
+      "id": 185,
+      "name": "faute",
+      "ts": 2075.525232,
+      "type": "event",
+      "source": "user"
+    },
+    {
+      "id": 186,
+      "name": "Cognac",
+      "ts": 2134.211891,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 187,
+      "name": "Knife",
+      "ts": 2140.765492333334,
+      "modifiers": ["break"],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 188,
+      "name": "Cognac",
+      "ts": 2142.5923420000004,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 189,
+      "name": "score",
+      "ts": 2142.957428,
+      "terminal": true,
+      "type": "positiveAction",
+      "source": "user"
+    },
+    {
+      "id": 190,
+      "name": "Line",
+      "ts": 2177.862379,
+      "type": "line",
+      "players": ["Burger", "Elie", "Alex", "Yohan", "Arnaud", "BTR", "Cognac"],
+      "source": "user"
+    },
+    {
+      "id": 191,
+      "name": "Cognac",
+      "ts": 2180.941924055313,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 192,
+      "name": "pull",
+      "ts": 2185.9506569370574,
+      "type": "event",
+      "source": "user"
+    },
+    {
+      "id": 193,
+      "name": "Alex",
+      "ts": 2187.633489,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 194,
+      "name": "Avant",
+      "ts": 2189.523853,
+      "modifiers": [],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 195,
+      "name": "travel?",
+      "ts": 2189.523853,
+      "type": "comment",
+      "source": "user",
+      "details": ""
+    },
+    {
+      "id": 196,
+      "name": "Yohan",
+      "ts": 2189.8016779485015,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 197,
+      "name": "Avant",
+      "ts": 2193.0073883333334,
+      "modifiers": [],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 198,
+      "name": "Burger",
+      "ts": 2193.452257020981,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 199,
+      "name": "Swing",
+      "ts": 2195.945436,
+      "modifiers": ["break"],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 200,
+      "name": "Yohan",
+      "ts": 2196.863301,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 201,
+      "name": "Swing",
+      "ts": 2198.3941093333337,
+      "modifiers": ["break"],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 202,
+      "name": "Alex",
+      "ts": 2199.168638,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 203,
+      "name": "Avant",
+      "ts": 2201.198158333334,
+      "modifiers": [],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 204,
+      "name": "Arnaud",
+      "ts": 2201.6597388760224,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 205,
+      "name": "Avant",
+      "ts": 2204.482539666667,
+      "modifiers": [],
+      "type": "pass",
+      "source": "user"
+    },
+    {
+      "id": 206,
+      "name": "Burger",
+      "ts": 2206.184368,
+      "type": "player",
+      "source": "user"
+    },
+    {
+      "id": 207,
+      "name": "score",
+      "ts": 2206.692579,
+      "terminal": true,
+      "type": "positiveAction",
+      "source": "user"
+    }
+  ]
+}

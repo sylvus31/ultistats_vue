@@ -23,6 +23,7 @@
 import { onMounted, ref, watch } from 'vue' // Import ref
 import { useKeyboardStore } from '../stores/keyboardStore'
 import { useInitStore } from '@/stores/init'
+import { storeToRefs } from 'pinia'
 const componentId = 'YTvideoSelector'
 
 const keyboardStore = useKeyboardStore()
@@ -73,8 +74,8 @@ const handleLosseFocus = () => {
 
 onMounted(() => {
   const initStore = useInitStore()
-  const initReady = ref(initStore.isReady())
-  watch(initReady, () => {
+  const {videoSrc} = storeToRefs(initStore)
+  watch(videoSrc, () => {
     if (initStore.isYoutubeVideo()) {
       if (youtubeInputRef.value) {
         youtubeInputRef.value.value = initStore.getVideoUri()

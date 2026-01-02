@@ -27,6 +27,7 @@ const fileInputRef = ref<HTMLInputElement | null>(null) // Ref for the hidden fi
 const journalViewerRef = ref<InstanceType<typeof JournalViewer> | null>(null)
 const statsViewerRef = ref<InstanceType<typeof StatsViewer> | null>(null)
 const statsViewerTeamRef = ref<InstanceType<typeof StatsViewerTeam> | null>(null)
+const fileSaverRef = ref<InstanceType<typeof FileSaver> | null>(null)
 
 // Method to trigger the hidden file input
 const openFileDialog = () => {
@@ -42,6 +43,7 @@ const handleFileChange = (event: Event) => {
     useJournalStore().setVideoPlayerRef(videoPlayerRef)
     journalViewerRef.value?.setVideoPlayerRef(videoPlayerRef)
     statsViewerRef.value?.setVideoPlayerRef(videoPlayerRef)
+    fileSaverRef.value?.setVideoPlayerRef(videoPlayerRef)
 
     // Create an object URL for the selected file
     const source = {

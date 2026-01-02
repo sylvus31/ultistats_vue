@@ -2,8 +2,18 @@
 import { useKeyboardStore } from '../stores/keyboardStore'
 import { useJournalStore } from '@/stores/journal'
 import { useTeamStore } from '@/stores/Team'
-import { onMounted, ref, watch } from 'vue'
+import { onMounted, ref, watch, type Ref } from 'vue'
 import { useInitStore } from '@/stores/init'
+import type { VideoPlayerInstance } from '@/components/VideoPlayer.vue'
+import { storeToRefs } from 'pinia'
+import type { Player } from '@/types/Player'
+import { createPlayer } from '@/types/Player'
+
+const initStore = useInitStore()
+const videoPlayerRef = ref<VideoPlayerInstance | null>(null)
+const setVideoPlayerRef = (ref: Ref<VideoPlayerInstance | null>) => {
+  videoPlayerRef.value = ref.value
+}
 
 const journalStore = useJournalStore()
 const keyboardStore = useKeyboardStore()
@@ -20,15 +30,26 @@ const handleLosseFocus = () => {
 }
 
 const saveFile = () => {
-  const data = JSON.stringify(journalStore.sortedRecords, (_key, value) =>
+  const records = journalStore.sortedRecords
+  const version = '1'
+  const videoSrc = videoPlayerRef.value ? videoPlayerRef.value.srcInfo : { uri: '', type: '' }
+  const teamName_A = document.getElementById('teamName_A') as HTMLInputElement
+  const teamName_B = document.getElementById('teamName_B') as HTMLInputElement
+
+  const data = {
+    version: version,
+    videoSrc: videoSrc,
+    teams: [{ name: teamName_A.value }, { name: teamName_B.value }],
+    records: records,
+  }
+
+  const blobPart = JSON.stringify(data, (_key, value) =>
     value instanceof Set ? [...value] : value,
   )
-  const blob = new Blob([data], { type: 'application/json' })
+  const blob = new Blob([blobPart], { type: 'application/json' })
   const url = window.URL.createObjectURL(blob)
   const a = document.createElement('a')
   a.href = url
-  const teamName_A = document.getElementById('teamName_A') as HTMLInputElement
-  const teamName_B = document.getElementById('teamName_B') as HTMLInputElement
   a.download = teamName_A.value + '_vs_' + teamName_B.value + '.json'
   a.click()
   window.URL.revokeObjectURL(url)
@@ -77,6 +98,24 @@ const addRecords = (jsonData: any, timOffset: number) => {
 
 const importData = (data: string) => {
   const jsonData = JSON.parse(data)
+  let timOffset = 0
+
+  function setData() {
+    for (let index = 0; index < 2; index++) {
+      teamStore.setTeamName(index, jsonData.teams[index].name)
+
+      const players: Array<Player> = []
+      jsonData.teams[index].players?.forEach((playerData: any) => {
+        players.push(createPlayer(playerData['id'], playerData['name'], playerData['key_code']))
+      })
+
+      teamStore.setPlayersOfTeam(index, players)
+    }
+
+    addRecords(jsonData, timOffset)
+
+    initStore.videoSrc = jsonData.videoSrc || { uri: '', type: '' }
+  }
 
   if (journalStore.sortedRecords.length > 0) {
     const confirmDialog = document.createElement('dialog')
@@ -84,10 +123,10 @@ const importData = (data: string) => {
     confirmDialog.innerHTML = `
   <form method="dialog">
     <h2>Records already exist</h2>
-    <p>Do you want to overwrite the existing records or add new ones?</p>
+    <p>Do you want to overwrite the existing records?</p>
     <menu>
       <button value="overwrite">Overwrite</button>
-      <button value="add">Add</button>
+      <!-- <button value="add">Add</button> -->
       <button value="cancel">Cancel</button>
     </menu>
   </form>
@@ -95,43 +134,48 @@ const importData = (data: string) => {
     document.body.appendChild(confirmDialog)
     confirmDialog.showModal()
     confirmDialog.addEventListener('close', () => {
-      let timOffset = 0
       if (confirmDialog.returnValue === 'cancel') {
         return
       }
       if (confirmDialog.returnValue === 'overwrite') {
         journalStore.deleteAllRecords()
+        teamStore.clearTeams()
       }
       if (confirmDialog.returnValue === 'add') {
         timOffset = Math.max(...journalStore.sortedRecords.map((p) => p.ts)) + 3600
       }
-      addRecords(jsonData, timOffset)
+      setData()
     })
   } else {
-    addRecords(jsonData, 0)
+    setData()
   }
 }
 
 onMounted(() => {
-  const initStore = useInitStore()
-  const initReady = ref(initStore.isReady())
-  watch(initReady, () => {})
+  const params = new URLSearchParams(window.location.search)
+  if (params.has('file')) {
+    fetch(`${window.location.origin}/save/${params.get('file')}`)
+      .then((response) => response.text())
+      .then((data) => {
+        importData(data)
+      })
+  }
+
+  const { records } = storeToRefs(initStore)
+  watch(records, () => {
+    journalStore.deleteAllRecords()
+    addRecords(records.value, 0)
+  })
+
+  const { teams } = storeToRefs(initStore)
+  watch(teams, () => {
+    teamStore.setTeamName(0, teams.value[0].name)
+    teamStore.setTeamName(1, teams.value[1].name)
+  })
 })
 
-onMounted(() => {
-  const initStore = useInitStore()
-  const initReady = ref(initStore.isReady())
-  watch(initReady, () => {
-    if (initStore.hasRecords()) {
-      journalStore.deleteAllRecords()
-      addRecords(initStore.getRecords(), 0)
-    }
-    if (initStore.getTeams()) {
-      const teams = initStore.getTeams()
-      teamStore.teams[0].name = teams[0].name
-      teamStore.teams[1].name = teams[1].name
-    }
-  })
+defineExpose({
+  setVideoPlayerRef,
 })
 </script>
 
@@ -143,16 +187,16 @@ onMounted(() => {
     @focusin="handleGetFocus"
     @focusout="handleLosseFocus"
     class="styled-input"
-    :value="teamStore.teams[0].name"
+    v-model="teamStore.teams[0].name"
   />
   VS
   <input
     id="teamName_B"
+    v-model="teamStore.teams[1].name"
     type="text"
     @focusin="handleGetFocus"
     @focusout="handleLosseFocus"
     class="styled-input"
-    :value="teamStore.teams[1].name"
   />
   <sl-button @click="loadFile">Load File</sl-button>
 </template>
