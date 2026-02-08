@@ -131,6 +131,26 @@ function scrollToLastActiveButtons() {
   }
 }
 
+function getRecordName(record: JournalEntry): string {
+  switch (record.type) {
+    case jet.PLAYER:
+      return teamStore.getPlayerByID(record.name)?.name ?? '?'
+    case jet.POSITIVE_ACTION:
+    case jet.NEGATIVE_ACTION:
+      return actionsStore.getActionByID(record.name)?.name ?? '?'
+    case jet.PASS:
+      return passesStore.getPassByID(record.name)?.name ?? '?'
+    case jet.EVENT:
+      return eventsStore.getEventByID(record.name)?.name ?? '?'
+    case jet.COMMENT:
+      return record.name
+    case jet.LINE:
+      return 'Ligne'
+    default:
+      return '?'
+  }
+}
+
 onUpdated(() => {
   const buttonContainer = document.querySelector('.button-container')
   if (buttonContainer) {
@@ -171,7 +191,7 @@ defineExpose({
           style="display: none"
           title="Supprimer l'action"
         ></span>
-        {{ teamStore.getPlayerByID(record.name)?.name || record.name }}
+        {{ getRecordName(record) }}
         <span v-if="record.type === jet.PASS && 'modifiers' in record"
           ><button
             class="pass-button"
@@ -194,6 +214,11 @@ defineExpose({
         >
           ({{ record.players.size }})
         </span>
+        <span
+          v-if="record.type === jet.COMMENT && record.details"
+          class="mdi mdi-comment-text-outline"
+          :title="record.details"
+        ></span>
         <span
           v-if="record.source === src.AI"
           class="mdi mdi-robot-outline"

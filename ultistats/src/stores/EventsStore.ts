@@ -24,7 +24,12 @@ export const useEventsStore = defineStore('eventsStore', () => {
       })
     })
 
+  function getEventByID(id: string): Event | undefined {
+    return events.value?.find((e) => e.id === id)
+  }
+
   return {
     events,
+    getEventByID,
   }
 })

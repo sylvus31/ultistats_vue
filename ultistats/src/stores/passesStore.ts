@@ -19,17 +19,15 @@ export const usePassesStore = defineStore('passesStore', () => {
   ])
 
   // --- Getters ---
-  // Example getter: Get only active players
   const activePass = computed(() => passes.value.filter((p) => p.isActive))
 
-  // Example getter: Get a player by their ID
-  const getpassById = computed(() => {
+  const getPassByID = computed(() => {
     return (playerId: string) => passes.value.find((p) => p.id === playerId)
   })
 
   // Action to toggle a player's active status
   function togglePasStatus(actionId: string) {
-    const action = getpassById.value(actionId) // Use the getter
+    const action = getPassByID.value(actionId) // Use the getter
     if (action) {
       action.isActive = !action.isActive
     }
@@ -75,7 +73,7 @@ export const usePassesStore = defineStore('passesStore', () => {
     passesModifiers,
     // Getters
     activePass,
-    getpassById,
+    getPassByID,
     getActionByKey,
     // passes
     togglePasStatus,

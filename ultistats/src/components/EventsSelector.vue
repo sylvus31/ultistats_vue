@@ -10,7 +10,7 @@ const journalStore = useJournalStore()
     <sl-button
       v-for="action in eventsStore.events"
       :key="action.id"
-      @click="journalStore.addEventEntry(action.name)"
+      @click="journalStore.addEventEntry(action.id)"
     >
       <span class="pass-name">{{ action.name }}</span>
     </sl-button>

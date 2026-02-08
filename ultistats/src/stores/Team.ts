@@ -148,13 +148,12 @@ export const useTeamStore = defineStore('team', () => {
     nonPlayingPlayers,
     getPlayerByKeyCodeAndModifiers,
     setPlayingStatus,
+    getPlayerByID,
     // Actions
     removePlayer,
     updatePlayer,
     selectActivePlayer,
     getPlayerTeam,
-    // getPlayerByName,
-    getPlayerByID,
     clearTeams,
   }
 })

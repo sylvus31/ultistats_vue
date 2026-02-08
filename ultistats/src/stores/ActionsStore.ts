@@ -27,7 +27,13 @@ export const useActionsStore = defineStore('actionsStore', () => {
         nb++
       })
     })
-  fetch('/actions/negative_actions.json')
+
+  fetch('/actions/negative_actions.json',{
+    headers: {
+      'Content-Type': 'application/json',
+      Accept: 'application/json',
+    },
+  })
     .then((response) => response.json())
     .then((data) => {
       let nb = 1
@@ -43,5 +49,13 @@ export const useActionsStore = defineStore('actionsStore', () => {
       })
     })
 
-  return { positiveActions, negativeActions }
+  function getActionByID(id: string): Action | undefined {
+    const action = positiveActions.value?.find((a) => a.id === id)
+    if (action) {
+      return action
+    }
+    return negativeActions.value?.find((a) => a.id === id)
+  }
+
+  return { positiveActions, negativeActions, getActionByID }
 })
