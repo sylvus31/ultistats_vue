@@ -43,12 +43,12 @@
     </Column>
     <Column field="targets" header="Targets">
       <template #body="slotProps">
-        <TargetsCell :value="slotProps.data.targets" />
+        <TargetsCell :value="new Map<string, number>(Array.from(slotProps.data.targets, ([key, value]) => [teamStore.getPlayerByID(key)!.name, value]))" />
       </template>
     </Column>
     <Column field="providers" header="Providers">
       <template #body="slotProps">
-        <TargetsCell :value="slotProps.data.providers" />
+        <TargetsCell :value="new Map<string, number>(Array.from(slotProps.data.providers, ([key, value]) => [teamStore.getPlayerByID(key)!.name, value]))" />
       </template>
     </Column>
     <Column field="passesType" header="Passes Type">
@@ -105,6 +105,7 @@ class StringNumberMap extends Map<string, number> {
   }
 }
 interface Row {
+  id: string
   player: string
   passes_total: number
   passes_success: number
@@ -128,19 +129,20 @@ interface Row {
 const rows = ref<Row[]>([])
 const initStats = (r: Row[]) => {
   r.splice(0, r.length)
-  const teamNames = teamStore.teams.map((t) => t.name)
+  const teamNames = teamStore.teams.map((t) => t.id)
   teamNames.forEach((t) => {
     r.push(initRow(t))
   })
 
   teamStore.players.forEach((p) => {
-    if (teamNames.includes(p.name)) return
-    r.push(initRow(p.name))
+    if (teamNames.includes(p.id)) return
+    r.push(initRow(p.id))
   })
 }
-const initRow = (name: string) => {
+const initRow = (id: string) => {
   return {
-    player: name,
+    id: id,
+    player: teamStore.getPlayerByID(id)?.name || id,
     passes_total: 0,
     passes_success: 0,
     passes_fail: 0,
@@ -164,7 +166,7 @@ const initRow = (name: string) => {
 const initMap = () => {
   initStats(rows.value)
   const emptyMap = new Map<string, Row>()
-  const players = teamStore.players.map((p) => p.name)
+  const players = teamStore.players.map((p) => p.id)
   players.forEach((p) => {
     emptyMap.set(p, initRow(p))
   })
@@ -176,10 +178,10 @@ const getStatsForOnePoint = (records: JournalEntry[]) => {
   const baseValues = initMap()
   records.forEach((r, i) => {
     if (r.type === jet.PLAYER) {
-      const thrower = teamStore.getPlayerByName(r.name)!
+      const thrower = teamStore.getPlayerByID(r.name)!
       for (let j = i + 1; j < records.length; j++) {
         if (records[j].type === jet.PLAYER) {
-          const receiver = teamStore.getPlayerByName(records[j].name)!
+          const receiver = teamStore.getPlayerByID(records[j].name)!
           let passType = 'pass'
           let passModifiers = new Set<string>()
           //get type of pass
@@ -191,32 +193,32 @@ const getStatsForOnePoint = (records: JournalEntry[]) => {
               break
             }
           }
-          baseValues.get(thrower.name)!.passes_total += 1
-          baseValues.get(thrower.name)!.passesType.increment(passType)
+          baseValues.get(thrower.id)!.passes_total += 1
+          baseValues.get(thrower.id)!.passesType.increment(passType)
           const isLong = passModifiers.has('longue')
           const success = teamStore.getPlayerTeam(thrower) === teamStore.getPlayerTeam(receiver)
 
           if (success) {
-            baseValues.get(thrower.name)!.passes_success += 1
+            baseValues.get(thrower.id)!.passes_success += 1
             if (isLong) {
-              baseValues.get(thrower.name)!.long_success += 1
+              baseValues.get(thrower.id)!.long_success += 1
             }
           } else {
-            baseValues.get(thrower.name)!.passes_fail += 1
+            baseValues.get(thrower.id)!.passes_fail += 1
             if (isLong) {
-              baseValues.get(thrower.name)!.long_fail += 1
+              baseValues.get(thrower.id)!.long_fail += 1
             }
           }
           //count receivers
-          baseValues.get(thrower.name)!.targets.increment(receiver.name)
+          baseValues.get(thrower.id)!.targets.increment(receiver.id)
           //count providers
-          baseValues.get(receiver.name)!.providers.increment(thrower.name)
+          baseValues.get(receiver.id)!.providers.increment(thrower.id)
           break
         } else if (records[j].name === 'pull') {
-          baseValues.get(thrower.name)!.pulls += 1
+          baseValues.get(thrower.id)!.pulls += 1
           break
         } else if (records[j].name === 'pick up disc') {
-          baseValues.get(thrower.name)!.pickUps += 1
+          baseValues.get(thrower.id)!.pickUps += 1
           // no break needed, same player has disc
         }
       }
@@ -225,14 +227,14 @@ const getStatsForOnePoint = (records: JournalEntry[]) => {
       for (let j = i - 1; j >= 0; j--) {
         if (records[j].type === jet.PLAYER) {
           baseValues.get(records[j].name)!.points += 1
-          const scoreTeam = teamStore.getPlayerTeam(teamStore.getPlayerByName(records[j].name)!)
+          const scoreTeam = teamStore.getPlayerTeam(teamStore.getPlayerByID(records[j].name)!)
           // get passe D
           let pass_D_level = 0
           for (let k = j - 1; k >= 0; k--) {
             if (records[k].type === jet.PLAYER) {
               // calahan is counted as a pass D
               const passerTeam = teamStore.getPlayerTeam(
-                teamStore.getPlayerByName(records[k].name)!,
+                teamStore.getPlayerByID(records[k].name)!,
               )
               if (passerTeam != scoreTeam) {
                 break
@@ -277,7 +279,7 @@ const getStatsForOnePoint = (records: JournalEntry[]) => {
   })
 
   //add BTR line
-  const team_0_stats = baseValues.get(teamStore.teams[0].name)!
+  const team_0_stats = baseValues.get(teamStore.teams[0].id)!
   const teamNames = teamStore.teams.map((t) => t.name)
   baseValues.forEach((r) => {
     if (!teamNames.includes(r.player)) {
@@ -305,8 +307,8 @@ const getStatsForOnePoint = (records: JournalEntry[]) => {
       })
     }
   })
-  team_0_stats.played_time = baseValues.get(teamStore.teams[1].name)!.played_time
-  team_0_stats.played_points = baseValues.get(teamStore.teams[1].name)!.played_points
+  team_0_stats.played_time = baseValues.get(teamStore.teams[1].id)!.played_time
+  team_0_stats.played_points = baseValues.get(teamStore.teams[1].id)!.played_points
 
   return baseValues
 }
@@ -340,7 +342,7 @@ const updateStatGrid = () => {
   pointsForStats.forEach((p) => {
     const pointStats = getStatsForOnePoint(p.records)
     pointStats.forEach((r) => {
-      const playerTotalStats = statsMap.get(r.player)!
+      const playerTotalStats = statsMap.get(r.id)!
       playerTotalStats.passes_total += r.passes_total
       playerTotalStats.passes_success += r.passes_success
       playerTotalStats.passes_fail += r.passes_fail
@@ -368,7 +370,7 @@ const updateStatGrid = () => {
   })
 
   // update the grid
-  rows.value = rows.value.map((r) => statsMap.get(r.player)!)
+  rows.value = rows.value.map((r) => statsMap.get(r.id)!)
   console.log('updateStatGrid')
 }
 

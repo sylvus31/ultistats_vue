@@ -13,7 +13,7 @@ const journalStore = useJournalStore()
 
 const selectPlayer = (player: Player) => {
   teamStore.selectActivePlayer(player.id)
-  journalStore.addPlayerEntry(player.name)
+  journalStore.addPlayerEntry(player.id)
 }
 
 const keyboardStore = useKeyboardStore()
@@ -34,8 +34,7 @@ function noAction(event: string, activeModifiers: Set<string>) {
 function logPlayer(eventCode: string, activeModifiers: Set<string>) {
   const player = teamStore.getPlayerByKeyCodeAndModifiers(eventCode, activeModifiers)
   if (player) {
-    teamStore.selectActivePlayer(player.id)
-    journalStore.addPlayerEntry(player.name)
+    selectPlayer(player)
   }
 }
 </script>

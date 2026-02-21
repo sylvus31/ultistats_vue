@@ -2,18 +2,13 @@
 import { useKeyboardStore } from '../stores/keyboardStore'
 import { useJournalStore } from '@/stores/journal'
 import { useTeamStore } from '@/stores/Team'
-import { onMounted, ref, watch, type Ref } from 'vue'
+import { onMounted} from 'vue'
 import { useInitStore } from '@/stores/init'
-import type { VideoPlayerInstance } from '@/components/VideoPlayer.vue'
-import { storeToRefs } from 'pinia'
 import type { Player } from '@/types/Player'
 import { createPlayer } from '@/types/Player'
 
 const initStore = useInitStore()
-const videoPlayerRef = ref<VideoPlayerInstance | null>(null)
-const setVideoPlayerRef = (ref: Ref<VideoPlayerInstance | null>) => {
-  videoPlayerRef.value = ref.value
-}
+
 
 const journalStore = useJournalStore()
 const keyboardStore = useKeyboardStore()
@@ -32,14 +27,15 @@ const handleLosseFocus = () => {
 const saveFile = () => {
   const records = journalStore.sortedRecords
   const version = '1'
-  const videoSrc = videoPlayerRef.value ? videoPlayerRef.value.srcInfo : { uri: '', type: '' }
+  const videoSrc = initStore.videoSrc
   const teamName_A = document.getElementById('teamName_A') as HTMLInputElement
   const teamName_B = document.getElementById('teamName_B') as HTMLInputElement
 
   const data = {
     version: version,
     videoSrc: videoSrc,
-    teams: [{ name: teamName_A.value }, { name: teamName_B.value }],
+    teams: [{ name: teamName_A.value, id: teamStore.teams[0].id, players: teamStore.teams[0].players },
+    { name: teamName_B.value, id: teamStore.teams[1].id, players: teamStore.teams[1].players }],
     records: records,
   }
 
@@ -84,7 +80,7 @@ const addRecords = (jsonData: any, timOffset: number) => {
     records = jsonData
   }
   records.forEach((record: any) => {
-    //special treatment for sets stored as array in json
+    //special processing for sets stored as array in json
     if (record.modifiers) {
       record.modifiers = new Set(record.modifiers)
     }
@@ -102,7 +98,7 @@ const importData = (data: string) => {
 
   function setData() {
     for (let index = 0; index < 2; index++) {
-      teamStore.setTeamName(index, jsonData.teams[index].name)
+      teamStore.setTeamNameAndID(index, jsonData.teams[index].name, jsonData.teams[index].id)
 
       const players: Array<Player> = []
       jsonData.teams[index].players?.forEach((playerData: any) => {
@@ -160,23 +156,8 @@ onMounted(() => {
         importData(data)
       })
   }
-
-  const { records } = storeToRefs(initStore)
-  watch(records, () => {
-    journalStore.deleteAllRecords()
-    addRecords(records.value, 0)
-  })
-
-  const { teams } = storeToRefs(initStore)
-  watch(teams, () => {
-    teamStore.setTeamName(0, teams.value[0].name)
-    teamStore.setTeamName(1, teams.value[1].name)
-  })
 })
 
-defineExpose({
-  setVideoPlayerRef,
-})
 </script>
 
 <template>

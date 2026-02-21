@@ -39,7 +39,7 @@ export const separateRecordsInPoints = (records: JournalEntry[]) => {
         if (records[j].type == jet.PLAYER) {
           const teamStore = useTeamStore()
           tmp_points[tmp_points.length - 1].attackingTeam = teamStore.getPlayerTeam(
-            teamStore.getPlayerByName(records[j].name)!,
+            teamStore.getPlayerByID(records[j].name)!,
           )
           break
         }
@@ -49,7 +49,7 @@ export const separateRecordsInPoints = (records: JournalEntry[]) => {
         if (records[j].type == jet.PLAYER) {
           const teamStore = useTeamStore()
           tmp_points[tmp_points.length - 1].scoringTeam = teamStore.getPlayerTeam(
-            teamStore.getPlayerByName(records[j].name)!,
+            teamStore.getPlayerByID(records[j].name)!,
           )
           break
         }

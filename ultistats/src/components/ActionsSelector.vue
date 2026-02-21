@@ -11,7 +11,7 @@ const actionsStore = useActionsStore()
       v-for="action in actionsStore.positiveActions"
       :key="action.id"
       :class="{ positiveButton: true }"
-      @click="journalStore.addActionEntry(action.name, action.terminal, true)"
+      @click="journalStore.addActionEntry(action.id, action.terminal, true)"
     >
       <span class="pass-name">{{ action.name }}</span>
     </sl-button>
@@ -19,7 +19,7 @@ const actionsStore = useActionsStore()
       v-for="action in actionsStore.negativeActions"
       :key="action.id"
       :class="{ negativeButton: true }"
-      @click="journalStore.addActionEntry(action.name, action.terminal, false)"
+      @click="journalStore.addActionEntry(action.id, action.terminal, false)"
     >
       <span class="pass-name">{{ action.name }}</span>
     </sl-button>
