@@ -9,12 +9,6 @@ import { useJournalStore } from '@/stores/journal'
 const teamStore = useTeamStore()
 const { players } = storeToRefs(teamStore)
 
-const journalStore = useJournalStore()
-
-const selectPlayer = (player: Player) => {
-  teamStore.selectActivePlayer(player.id)
-  journalStore.addPlayerEntry(player.id)
-}
 
 const keyboardStore = useKeyboardStore()
 const componentId = 'PlayerSelector'
@@ -30,9 +24,14 @@ keyboardStore.addKeyBinding(componentId, 'NumpadEnter', 'modifier for players', 
 function noAction(event: string, activeModifiers: Set<string>) {
   console.log('no action', event, activeModifiers)
 }
-
-function logPlayer(eventCode: string, activeModifiers: Set<string>) {
-  const player = teamStore.getPlayerByKeyCodeAndModifiers(eventCode, activeModifiers)
+</script>
+<script lang="ts">
+const selectPlayer = (player: Player) => {
+  useTeamStore().selectActivePlayer(player.id)
+  useJournalStore().addPlayerEntry(player.id)
+}
+export function logPlayer(eventCode: string, activeModifiers: Set<string>) {
+  const player = useTeamStore().getPlayerByKeyCodeAndModifiers(eventCode, activeModifiers)
   if (player) {
     selectPlayer(player)
   }
