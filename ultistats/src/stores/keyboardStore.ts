@@ -33,6 +33,10 @@ export const useKeyboardStore = defineStore('keyboard', () => {
     updateFocus(defaultFocusCompId)
   }
 
+  function getKeyBinding(keyCode: string): KeyBinding | undefined {
+    return keyBindings.value.get(keyCode)
+  }
+
   function addKeyBinding(comp: string, keycode: string, msg: string, callback: keyBindingCallback) {
     if (keyBindings.value.has(keycode)) {
       console.log(keycode + ' already present', keyBindings.value.get(keycode))
@@ -128,6 +132,7 @@ export const useKeyboardStore = defineStore('keyboard', () => {
     addKeyBindingUP,
     removeKeyBinding,
     removeKeyBindingUP,
+    getKeyBinding,
     activeModifiers,
     userSpecialModifiers,
   }

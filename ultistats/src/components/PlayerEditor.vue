@@ -35,7 +35,14 @@ const handleKeyDown = (player, event: KeyboardEvent) => {
   if (keyboardStore.addKeyBinding(componentId, event.code, 'player: ' + player.name, logPlayer)) {
     player.key_code = event.code
   } else {
-    window.alert('This key is already assigned to another action. Please choose a different key.')
+
+    const result=window.confirm('This key is already assigned to ' + keyboardStore.getKeyBinding(event.code)?.msg + '. Do you want to reassign it to ' + player.name + '?')
+    if (result) {
+      keyboardStore.removeKeyBinding(event.code)
+      if (keyboardStore.addKeyBinding(componentId, event.code, 'player: ' + player.name, logPlayer)) {
+        player.key_code = event.code
+      }
+    }
   }
 }
 
