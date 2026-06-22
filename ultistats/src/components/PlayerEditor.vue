@@ -1,25 +1,24 @@
 <script setup lang="ts">
 import { useTeamStore } from '@/stores/Team'
 import { storeToRefs } from 'pinia'
-import '@shoelace-style/shoelace/dist/components/input/input.js';
+import '@shoelace-style/shoelace/dist/components/input/input.js'
 import { useKeyboardStore } from '../stores/keyboardStore'
-import { onMounted , onBeforeUnmount } from 'vue'
+import { onMounted, onBeforeUnmount } from 'vue'
 import { logPlayer } from './PlayerSelector.vue'
 
 const teamStore = useTeamStore()
 const { players } = storeToRefs(teamStore)
-
 
 const componentId = 'PlayerEditor'
 
 const keyboardStore = useKeyboardStore()
 
 const handleGetFocus = () => {
-  keyboardStore.requestFocus(componentId)
+  keyboardStore.forbidShortcuts()
 }
 
 const handleLosseFocus = () => {
-  keyboardStore.freeFocus()
+  keyboardStore.allowShortcuts()
 }
 
 onMounted(() => {
@@ -31,22 +30,29 @@ onBeforeUnmount(() => {
 })
 
 const handleKeyDown = (player, event: KeyboardEvent) => {
+  // TODO: implementer une interface pour gerer les cibles de touches et implement dans chaque classe
+
   event.preventDefault() // Prevent default behavior of the key press
   if (keyboardStore.addKeyBinding(componentId, event.code, 'player: ' + player.name, logPlayer)) {
     player.key_code = event.code
   } else {
-
-    const result=window.confirm('This key is already assigned to ' + keyboardStore.getKeyBinding(event.code)?.msg + '. Do you want to reassign it to ' + player.name + '?')
+    const result = window.confirm(
+      'This key is already assigned to ' +
+        keyboardStore.getKeyBinding(event.code)?.msg +
+        '. Do you want to reassign it to wwww ' +
+        player.name +
+        '?',
+    )
     if (result) {
       keyboardStore.removeKeyBinding(event.code)
-      if (keyboardStore.addKeyBinding(componentId, event.code, 'player: ' + player.name, logPlayer)) {
+      if (
+        keyboardStore.addKeyBinding(componentId, event.code, 'player: ' + player.name, logPlayer)
+      ) {
         player.key_code = event.code
       }
     }
   }
 }
-
-
 </script>
 
 <template>
@@ -60,38 +66,39 @@ const handleKeyDown = (player, event: KeyboardEvent) => {
           <th>Modifiers</th>
         </tr>
       </thead>
-    <tbody>
-      <tr v-for="player in players" :key="player.id" >
-        <td>
-          <sl-input v-model="player.name"  />
-        </td>
-        <td>
-          <sl-input v-model="player.number"  type="number" />
-        </td>
-        <td>
-          <sl-input v-model="player.key_code" @keydown="handleKeyDown(player, $event)"  />
-        </td>
-        <td>
-          <sl-select v-model="player.modifiers" >
-          </sl-select>
-        </td>
-      </tr>
-    </tbody>
-  </table>
+      <tbody>
+        <tr v-for="player in players" :key="player.id">
+          <td>
+            <sl-input v-model="player.name" />
+          </td>
+          <td>
+            <sl-input v-model="player.number" type="number" />
+          </td>
+          <td>
+            <sl-input v-model="player.key_code" @keydown="handleKeyDown(player, $event)" />
+          </td>
+          <td>
+            <label for="option1">
+              <input type="checkbox" />
+            </label>
+          </td>
+        </tr>
+      </tbody>
+    </table>
   </form>
 </template>
 
 <style scoped>
-  form {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
+form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
 
-  .sl-input {
-    margin-bottom: 10px;
-  }
-  table {
+.sl-input {
+  margin-bottom: 10px;
+}
+table {
   width: 100%;
   border-collapse: collapse;
   margin: 25px 0;
@@ -108,13 +115,14 @@ thead tr {
   text-align: left;
 }
 
-thead th{
-    position: sticky;
-    top: 0;
-    z-index: 1;
+thead th {
+  position: sticky;
+  top: 0;
+  z-index: 1;
 }
 
-th, td {
+th,
+td {
   padding: 12px 15px;
 }
 

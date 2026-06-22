@@ -2,26 +2,23 @@
 import { useKeyboardStore } from '../stores/keyboardStore'
 import { useJournalStore } from '@/stores/journal'
 import { useTeamStore } from '@/stores/Team'
-import { onMounted} from 'vue'
+import { onMounted } from 'vue'
 import { useInitStore } from '@/stores/init'
 import type { Player } from '@/types/Player'
 import { createPlayer } from '@/types/Player'
 
 const initStore = useInitStore()
 
-
 const journalStore = useJournalStore()
 const keyboardStore = useKeyboardStore()
 const teamStore = useTeamStore()
 
-const componentId = 'FileSaver'
-
 const handleGetFocus = () => {
-  keyboardStore.requestFocus(componentId)
+  keyboardStore.forbidShortcuts()
 }
 
 const handleLosseFocus = () => {
-  keyboardStore.freeFocus()
+  keyboardStore.allowShortcuts()
 }
 
 const saveFile = () => {
@@ -34,8 +31,10 @@ const saveFile = () => {
   const data = {
     version: version,
     videoSrc: videoSrc,
-    teams: [{ name: teamName_A.value, id: teamStore.teams[0].id, players: teamStore.teams[0].players },
-    { name: teamName_B.value, id: teamStore.teams[1].id, players: teamStore.teams[1].players }],
+    teams: [
+      { name: teamName_A.value, id: teamStore.teams[0].id, players: teamStore.teams[0].players },
+      { name: teamName_B.value, id: teamStore.teams[1].id, players: teamStore.teams[1].players },
+    ],
     records: records,
   }
 
@@ -157,7 +156,6 @@ onMounted(() => {
       })
   }
 })
-
 </script>
 
 <template>

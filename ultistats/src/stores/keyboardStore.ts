@@ -20,17 +20,17 @@ export const useKeyboardStore = defineStore('keyboard', () => {
     }
   }
   const defaultFocusCompId = ''
-  let focusHolderid: string = defaultFocusCompId
-  function updateFocus(component: string) {
-    console.log('focus set from <' + focusHolderid + '> to <' + component + '>')
-    focusHolderid = component
+  let shortcutAllowed = true
+  function updateShortcutsAllowance(status: boolean) {
+    shortcutAllowed = status
+    console.log('shortcuts: ', shortcutAllowed)
   }
-  function requestFocus(component: string) {
-    updateFocus(component)
+  function forbidShortcuts() {
+    updateShortcutsAllowance(false)
   }
 
-  function freeFocus() {
-    updateFocus(defaultFocusCompId)
+  function allowShortcuts() {
+    updateShortcutsAllowance(true)
   }
 
   function getKeyBinding(keyCode: string): KeyBinding | undefined {
@@ -76,7 +76,8 @@ export const useKeyboardStore = defineStore('keyboard', () => {
 
   onKeyStroke((event) => {
     // Ignore repeated key presses when the key is held down
-    if (event.repeat) {
+    if (event.repeat || !shortcutAllowed) {
+      console.log('repeat or allowed', event.repeat, shortcutAllowed)
       return
     }
 
@@ -84,19 +85,12 @@ export const useKeyboardStore = defineStore('keyboard', () => {
     const code = transformCodeForSpecialKeys(event.code)
 
     if (keyBindings.value.has(code)) {
-      if (
-        focusHolderid === defaultFocusCompId ||
-        focusHolderid === keyBindings.value.get(event.code)!.component
-      ) {
-        event.preventDefault()
-        if (modifierKeys.includes(code)) {
-          activeModifiers.add(code)
-        }
-        keyBindings.value.get(code)!.callback(code, activeModifiers)
-        console.log('onKeyStroke: activeModifiers', activeModifiers)
-      } else {
-        console.log(keyBindings.value.get(code)!.component + ' does not match ' + focusHolderid)
+      event.preventDefault()
+      if (modifierKeys.includes(code)) {
+        activeModifiers.add(code)
       }
+      keyBindings.value.get(code)!.callback(code, activeModifiers)
+      console.log('onKeyStroke: activeModifiers', activeModifiers)
     } else {
       console.log('no binding for', event.code)
     }
@@ -126,8 +120,8 @@ export const useKeyboardStore = defineStore('keyboard', () => {
   }
 
   return {
-    requestFocus,
-    freeFocus,
+    forbidShortcuts,
+    allowShortcuts,
     addKeyBinding,
     addKeyBindingUP,
     removeKeyBinding,
