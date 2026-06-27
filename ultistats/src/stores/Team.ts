@@ -14,7 +14,14 @@ class Team {
   }
 }
 const team_0 = new Team('BTR', 't0', [
-  { id: 'p1', name: 'Thomas', isActive: false, key_code: 'Numpad7', playing: false },
+  {
+    id: 'p1',
+    name: 'Thomas',
+    isActive: false,
+    key_code: 'Numpad7',
+    playing: false,
+    modifiers: new Set(),
+  },
   {
     id: 'p2',
     name: 'Guimsou',
@@ -80,11 +87,8 @@ export const useTeamStore = defineStore('team', () => {
     return players.value.find((p) => p.id === id)
   }
 
-  function getPlayerByKeyCodeAndModifiers(keycode: string, modifiers: Set<string>) {
-    return players.value.find(
-      (p) =>
-        p.key_code === keycode && haveSameElements(p.modifiers || new Set<string>(), modifiers),
-    )
+  function getPlayerByKeyCode(keycode: string) {
+    return players.value.find((p) => p.key_code === keycode)
   }
 
   // Action to remove a player by ID
@@ -146,7 +150,7 @@ export const useTeamStore = defineStore('team', () => {
     activePlayers,
     playingPlayers,
     nonPlayingPlayers,
-    getPlayerByKeyCodeAndModifiers,
+    getPlayerByKeyCodeAndModifiers: getPlayerByKeyCode,
     setPlayingStatus,
     getPlayerByID,
     // Actions

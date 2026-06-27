@@ -4,13 +4,10 @@ import { storeToRefs } from 'pinia'
 import '@shoelace-style/shoelace/dist/components/input/input.js'
 import { useKeyboardStore } from '../stores/keyboardStore'
 import { onMounted, onBeforeUnmount } from 'vue'
-import { logPlayer } from './PlayerSelector.vue'
+import { playersSelectorShortcutManagerName } from './interfaces/ShortcutTarget'
 
 const teamStore = useTeamStore()
 const { players } = storeToRefs(teamStore)
-
-const componentId = 'PlayerEditor'
-
 const keyboardStore = useKeyboardStore()
 
 const handleGetFocus = () => {
@@ -30,24 +27,20 @@ onBeforeUnmount(() => {
 })
 
 const handleKeyDown = (player, event: KeyboardEvent) => {
-  // TODO: implementer une interface pour gerer les cibles de touches et implement dans chaque classe
-
-  event.preventDefault() // Prevent default behavior of the key press
-  if (keyboardStore.addKeyBinding(componentId, event.code, 'player: ' + player.name, logPlayer)) {
+  event.preventDefault()
+  if (keyboardStore.addKeyBinding(event.code, playersSelectorShortcutManagerName)) {
     player.key_code = event.code
   } else {
     const result = window.confirm(
       'This key is already assigned to ' +
         keyboardStore.getKeyBinding(event.code)?.msg +
-        '. Do you want to reassign it to wwww ' +
+        '. Do you want to reassign it to ' +
         player.name +
         '?',
     )
     if (result) {
-      keyboardStore.removeKeyBinding(event.code)
-      if (
-        keyboardStore.addKeyBinding(componentId, event.code, 'player: ' + player.name, logPlayer)
-      ) {
+      keyboardStore.removeKeyBinding(event.code, new Set())
+      if (keyboardStore.addKeyBinding(event.code, playersSelectorShortcutManagerName)) {
         player.key_code = event.code
       }
     }

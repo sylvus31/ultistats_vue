@@ -2,24 +2,17 @@ import { defineStore } from 'pinia'
 import { ref } from 'vue'
 import { onKeyStroke, onKeyUp } from '@vueuse/core'
 import { KeyboardConstants } from '@/types/keyConstants'
+import type { ShortcutTarget } from '@/components/interfaces/ShortcutTarget'
 
 export const useKeyboardStore = defineStore('keyboard', () => {
-  const keyBindings = ref<Map<string, KeyBinding>>(new Map())
-  const keyBindingsUP = ref<Map<string, KeyBinding>>(new Map())
-
-  type keyBindingCallback = (eventCode: string, modifiers: Set<string>) => void
-  class KeyBinding {
-    msg: string
-    callback: keyBindingCallback
-    component: string
-
-    constructor(component: string, msg: string, callback: keyBindingCallback) {
-      this.msg = msg
-      this.callback = callback
-      this.component = component
-    }
+  type KeyCombo = {
+    key: string
+    modifiers: Set<string>
   }
-  const defaultFocusCompId = ''
+  const keyBindings = ref<Map<string, ShortcutTarget>>(new Map())
+  const keyBindingsUP = ref<Map<string, ShortcutTarget>>(new Map())
+  const shortcutTargetsNames = ref<Map<string, ShortcutTarget>>(new Map())
+
   let shortcutAllowed = true
   function updateShortcutsAllowance(status: boolean) {
     shortcutAllowed = status
@@ -33,34 +26,39 @@ export const useKeyboardStore = defineStore('keyboard', () => {
     updateShortcutsAllowance(true)
   }
 
-  function getKeyBinding(keyCode: string): KeyBinding | undefined {
-    return keyBindings.value.get(keyCode)
-  }
-
-  function addKeyBinding(comp: string, keycode: string, msg: string, callback: keyBindingCallback) {
-    if (keyBindings.value.has(keycode)) {
-      console.log(keycode + ' already present', keyBindings.value.get(keycode))
+  function registerShortcutTarget(name: string, target: ShortcutTarget) {
+    if (shortcutTargetsNames.value.has(name)) {
+      console.log(name + ' already present', shortcutTargetsNames.value.get(name))
       return false
     }
-    keyBindings.value.set(keycode, new KeyBinding(comp, msg, callback))
+    shortcutTargetsNames.value.set(name, target)
     return true
   }
 
-  function addKeyBindingUP(
-    comp: string,
-    keycode: string,
-    msg: string,
-    callback: keyBindingCallback,
-  ) {
-    if (keyBindingsUP.value.has(keycode)) {
-      console.log(keycode + ' already present', keyBindings.value.get(keycode))
+  function getKeyBinding(keyCode: string): ShortcutTarget | undefined {
+    return keyBindings.value.get(keyCode)
+  }
+
+  function addKeyBinding(keyCode: string, name: string) {
+    if (keyBindings.value.has(keyCode)) {
+      console.log(keyCode + ' already present', keyBindings.value.get(keyCode))
       return false
     }
-    keyBindingsUP.value.set(keycode, new KeyBinding(comp, msg, callback))
+    keyBindings.value.set(keyCode, shortcutTargetsNames.value.get(name)!)
+    return true
+  }
+
+  function addKeyBindingUP(keycode: string, name: string) {
+    if (keyBindingsUP.value.has(keycode)) {
+      console.log(keycode + ' already present', keyBindingsUP.value.get(keycode))
+      return false
+    }
+    keyBindingsUP.value.set(keycode, shortcutTargetsNames.value.get(name)!)
     return true
   }
 
   function removeKeyBinding(keyCode: string) {
+    keyBindings.value.get(keyCode)?.removeShortcut(keyCode)
     keyBindings.value.delete(keyCode)
   }
 
@@ -83,12 +81,13 @@ export const useKeyboardStore = defineStore('keyboard', () => {
 
     console.log('onKeyStroke: event', event)
     const code = transformCodeForSpecialKeys(event.code)
-
+    if (modifierKeys.includes(code)) {
+      activeModifiers.add(code)
+      return
+    }
     if (keyBindings.value.has(code)) {
       event.preventDefault()
-      if (modifierKeys.includes(code)) {
-        activeModifiers.add(code)
-      }
+
       keyBindings.value.get(code)!.callback(code, activeModifiers)
       console.log('onKeyStroke: activeModifiers', activeModifiers)
     } else {
@@ -127,6 +126,7 @@ export const useKeyboardStore = defineStore('keyboard', () => {
     removeKeyBinding,
     removeKeyBindingUP,
     getKeyBinding,
+    registerShortcutTarget,
     activeModifiers,
     userSpecialModifiers,
   }
