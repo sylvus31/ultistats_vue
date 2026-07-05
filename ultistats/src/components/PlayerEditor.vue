@@ -46,6 +46,35 @@ const handleKeyDown = (player, event: KeyboardEvent) => {
     }
   }
 }
+
+const handleModifierChange = (player, event: Event) => {
+  const checkbox = event.target as HTMLInputElement
+  console.log('checkbox checked', checkbox.checked, player.name, player.key_code)
+  if (checkbox.checked) {
+    // check if another player has same key_code with modifiers
+    const otherPlayer = teamStore.getPlayerByKeyCodeAndModifiers(
+      player.key_code,
+      new Set(['NumpadEnter']),
+    )
+    if (otherPlayer && otherPlayer.id !== player.id) {
+      const result = window.confirm(
+        'This key combination is already assigned to ' +
+          otherPlayer.name +
+          '. Do you want to reassign it to ' +
+          player.name +
+          '?',
+      )
+      if (result) {
+        otherPlayer.modifiers = new Set()
+        player.modifiers = new Set(['NumpadEnter'])
+      } else {
+        checkbox.checked = false
+      }
+    } else {
+      player.modifiers = new Set(['NumpadEnter'])
+    }
+  }
+}
 </script>
 
 <template>
@@ -72,7 +101,11 @@ const handleKeyDown = (player, event: KeyboardEvent) => {
           </td>
           <td>
             <label for="option1">
-              <input type="checkbox" />
+              <input
+                type="checkbox"
+                :checked="player.modifiers?.size > 0"
+                @change="handleModifierChange(player, $event)"
+              />
             </label>
           </td>
         </tr>

@@ -28,10 +28,10 @@ const team_0 = new Team('BTR', 't0', [
     // number: 7,
     isActive: false,
     key_code: 'Numpad8',
-    // modifiers: new Set(['NumpadEnter']),
+    modifiers: new Set(['NumpadEnter']),
     playing: false,
   },
-  { id: 'p3', name: 'Clar', isActive: false, key_code: 'Numpad9', playing: false },
+  { id: 'p3', name: 'Clar', isActive: false, key_code: 'Numpad8', playing: false },
   { id: 'p4', name: 'Toto', isActive: false, key_code: 'Numpad4', playing: false },
   { id: 'p5', name: 'Yann', isActive: false, key_code: 'Numpad5', playing: false },
   { id: 'p6', name: 'Matteo', isActive: false, key_code: 'Numpad6', playing: false },
@@ -87,8 +87,11 @@ export const useTeamStore = defineStore('team', () => {
     return players.value.find((p) => p.id === id)
   }
 
-  function getPlayerByKeyCode(keycode: string) {
-    return players.value.find((p) => p.key_code === keycode)
+  function getPlayerByKeyCodeAndModifiers(keycode: string, modifiers: Set<string>) {
+    return players.value.find(
+      (p) =>
+        p.key_code === keycode && haveSameElements(p.modifiers || new Set<string>(), modifiers),
+    )
   }
 
   // Action to remove a player by ID
@@ -150,7 +153,7 @@ export const useTeamStore = defineStore('team', () => {
     activePlayers,
     playingPlayers,
     nonPlayingPlayers,
-    getPlayerByKeyCodeAndModifiers: getPlayerByKeyCode,
+    getPlayerByKeyCodeAndModifiers,
     setPlayingStatus,
     getPlayerByID,
     // Actions

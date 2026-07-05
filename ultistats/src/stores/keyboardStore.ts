@@ -9,7 +9,7 @@ export const useKeyboardStore = defineStore('keyboard', () => {
     key: string
     modifiers: Set<string>
   }
-  const keyBindings = ref<Map<string, ShortcutTarget>>(new Map())
+  const keyBindings = ref<Map<string, string>>(new Map())
   const keyBindingsUP = ref<Map<string, ShortcutTarget>>(new Map())
   const shortcutTargetsNames = ref<Map<string, ShortcutTarget>>(new Map())
 
@@ -35,13 +35,13 @@ export const useKeyboardStore = defineStore('keyboard', () => {
     return true
   }
 
-  function getKeyBinding(keyCode: string): ShortcutTarget | undefined {
+  function getKeyBinding(keyCode: string): string | undefined {
     return keyBindings.value.get(keyCode)
   }
 
   function addKeyBinding(keyCode: string, name: string) {
     if (keyBindings.value.has(keyCode)) {
-      console.log(keyCode + ' already present', keyBindings.value.get(keyCode))
+      console.log(keyCode + ' already assigned', keyBindings.value.get(keyCode))
       return false
     }
     keyBindings.value.set(keyCode, shortcutTargetsNames.value.get(name)!)
