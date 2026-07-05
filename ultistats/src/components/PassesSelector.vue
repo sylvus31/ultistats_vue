@@ -37,6 +37,7 @@ const clickAction = (pass: Pass) => {
 }
 
 const logAction = (eventCode: string, _modifiers: Set<string>) => {
+  void _modifiers
   const action = passesStore.getActionByKey(eventCode)
   if (action) {
     passesStore.selectActivePass(action.id)
@@ -79,7 +80,8 @@ keyboardStore.registerShortcutTarget(
 )
 passes.value.forEach((p) => {
   if (p.key) {
-    keyboardStore.addKeyBinding(p.key_code, passesSelectorShortcutManagerName)
+    console.log('registering key binding for', p.name, p.key)
+    keyboardStore.addKeyBinding(p.key, passesSelectorShortcutManagerName)
   }
 })
 </script>

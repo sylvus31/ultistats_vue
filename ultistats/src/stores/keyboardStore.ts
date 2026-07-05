@@ -50,10 +50,10 @@ export const useKeyboardStore = defineStore('keyboard', () => {
 
   function addKeyBindingUP(keycode: string, name: string) {
     if (keyBindingsUP.value.has(keycode)) {
-      console.log(keycode + ' already present', keyBindingsUP.value.get(keycode))
+      console.log(keycode + ' already assigned', keyBindingsUP.value.get(keycode))
       return false
     }
-    keyBindingsUP.value.set(keycode, shortcutTargetsNames.value.get(name)!)
+    keyBindingsUP.value.set(keycode, name)
     return true
   }
 
@@ -75,7 +75,7 @@ export const useKeyboardStore = defineStore('keyboard', () => {
   onKeyStroke((event) => {
     // Ignore repeated key presses when the key is held down
     if (event.repeat || !shortcutAllowed) {
-      console.log('repeat or allowed', event.repeat, shortcutAllowed)
+      console.log('repeat / allowed', event.repeat, shortcutAllowed)
       return
     }
 
@@ -101,8 +101,9 @@ export const useKeyboardStore = defineStore('keyboard', () => {
     //no need to check if it a modifier or not
     const code = transformCodeForSpecialKeys(event.code)
     activeModifiers.delete(code)
-    keyBindingsUP.value.get(code)?.callback(code, activeModifiers)
     console.log('up', activeModifiers)
+
+    keyBindingsUP.value.get(code)?.callback(code, activeModifiers)
   })
 
   function transformCodeForSpecialKeys(code: string): string {
