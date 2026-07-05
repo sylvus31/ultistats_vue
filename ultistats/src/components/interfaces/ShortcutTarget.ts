@@ -7,3 +7,5 @@ export interface ShortcutTarget {
 
 export const playersSelectorShortcutManagerName: string = 'playersSelectorShortcutManager'
 export const passesSelectorShortcutManagerName: string = 'passesSelectorShortcutManager'
+export const passesModifiersMenuSelectorShortcutManagerName: string =
+  'passesModifiersMenuSelectorShortcutManager'

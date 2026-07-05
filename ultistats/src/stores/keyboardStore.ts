@@ -10,7 +10,20 @@ export const useKeyboardStore = defineStore('keyboard', () => {
     modifiers: Set<string>
   }
   const keyBindings = ref<Map<string, string>>(new Map())
-  const keyBindingsUP = ref<Map<string, ShortcutTarget>>(new Map())
+  const keyBindingsUP = ref<Map<string, KeyBinding>>(new Map())
+
+  type keyBindingCallback = (eventCode: string, modifiers: Set<string>) => void
+  class KeyBinding {
+    msg: string
+    callback: keyBindingCallback
+    component: string
+
+    constructor(component: string, msg: string, callback: keyBindingCallback) {
+      this.msg = msg
+      this.callback = callback
+      this.component = component
+    }
+  }
   const shortcutTargetsNames = ref<Map<string, ShortcutTarget>>(new Map())
 
   let shortcutAllowed = true
@@ -48,12 +61,17 @@ export const useKeyboardStore = defineStore('keyboard', () => {
     return true
   }
 
-  function addKeyBindingUP(keycode: string, name: string) {
+  function addKeyBindingUP(
+    comp: string,
+    keycode: string,
+    msg: string,
+    callback: keyBindingCallback,
+  ) {
     if (keyBindingsUP.value.has(keycode)) {
       console.log(keycode + ' already assigned', keyBindingsUP.value.get(keycode))
       return false
     }
-    keyBindingsUP.value.set(keycode, name)
+    keyBindingsUP.value.set(keycode, new KeyBinding(comp, msg, callback))
     return true
   }
 
@@ -83,7 +101,6 @@ export const useKeyboardStore = defineStore('keyboard', () => {
     const code = transformCodeForSpecialKeys(event.code)
     if (modifierKeys.includes(code)) {
       activeModifiers.add(code)
-      return
     }
     if (keyBindings.value.has(code)) {
       event.preventDefault()

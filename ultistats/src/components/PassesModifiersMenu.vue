@@ -6,6 +6,7 @@ const { passesModifiers } = storeToRefs(passesStore)
 import { useKeyboardStore } from '../stores/keyboardStore'
 import { KeyboardConstants } from '@/types/keyConstants'
 import type { passModifier } from '@/types/Passes'
+import { passesModifiersMenuSelectorShortcutManagerName } from './interfaces/ShortcutTarget'
 
 const keyboardStore = useKeyboardStore()
 const componentId = 'PassesModifiersMenu'
@@ -24,8 +25,31 @@ const clickModifier = (modifier: passModifier) => {
   passesStore.setModifierStatus(modifier, !modifier.isActive)
 }
 
-keyboardStore.addKeyBinding(componentId, KeyboardConstants.SHIFT, 'Shift for passes', logAction)
-keyboardStore.addKeyBinding(componentId, KeyboardConstants.CTRL, 'Ctrl for passes', logAction)
+const passesModifiersMenuSelectorShortcutManager: ShortcutTarget = {
+  message() {
+    const action = passesStore.getActionByKey(eventCode)
+
+    return 'action: ' + (action ? action.name : 'unknown')
+  },
+
+  callback(eventCode: string, activeModifiers: Set<string>) {
+    logAction(eventCode, activeModifiers)
+  },
+
+  setShortcut(eventCode: string) {
+    console.log('set shortcut', eventCode)
+  },
+
+  removeShortcut(eventCode: string, activeModifiers: Set<string>) {
+    console.log('remove shortcut', eventCode, activeModifiers)
+  },
+}
+keyboardStore.registerShortcutTarget(
+  passesModifiersMenuSelectorShortcutManagerName,
+  passesModifiersMenuSelectorShortcutManager,
+)
+keyboardStore.addKeyBinding(KeyboardConstants.SHIFT, passesModifiersMenuSelectorShortcutManagerName)
+keyboardStore.addKeyBinding(KeyboardConstants.CTRL, passesModifiersMenuSelectorShortcutManagerName)
 keyboardStore.addKeyBindingUP(
   componentId,
   KeyboardConstants.SHIFT,
@@ -63,5 +87,4 @@ keyboardStore.addKeyBindingUP(
   min-width: 50px;
   max-width: 100px;
 }
-
 </style>
