@@ -37,7 +37,7 @@ const team_0 = new Team('BTR', 't0', [
   { id: 'p6', name: 'Matteo', isActive: false, key_code: 'Numpad6', playing: false },
   { id: 'p7', name: 'Lucian', isActive: false, key_code: 'Numpad1', playing: false },
   { id: 'p8', name: 'Lyloo', isActive: false, key_code: 'NumpadDivide', playing: false },
-  { id: 'p9', name: 'Salma', isActive: false, key_code: 'NumpadMultiply', playing: false },
+  { id: 'p9', name: 'Salma', isActive: false, playing: false },
 ])
 
 const team_1 = new Team('ADVERSAIRE', 't1')
@@ -58,6 +58,8 @@ export const useTeamStore = defineStore('team', () => {
   const nonPlayingPlayers = computed(() => players.value.filter((player) => !player.playing))
 
   function haveSameElements<T>(ref: Set<T>, comp: Set<T>): boolean {
+    ref = ref ? ref : new Set<T>()
+    comp = comp ? comp : new Set<T>()
     if (ref.size !== comp.size) {
       return false // Different number of elements
     }

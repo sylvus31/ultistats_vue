@@ -35,8 +35,8 @@ export const useKeyboardStore = defineStore('keyboard', () => {
     return true
   }
 
-  function getKeyBinding(keyCode: string): string | undefined {
-    return keyBindings.value.get(keyCode)
+  function getKeyBinding(keyCode: string): string {
+    return keyBindings.value.get(keyCode) ?? ''
   }
 
   function addKeyBinding(keyCode: string, name: string) {
@@ -44,7 +44,7 @@ export const useKeyboardStore = defineStore('keyboard', () => {
       console.log(keyCode + ' already assigned', keyBindings.value.get(keyCode))
       return false
     }
-    keyBindings.value.set(keyCode, shortcutTargetsNames.value.get(name)!)
+    keyBindings.value.set(keyCode, name)
     return true
   }
 
@@ -87,8 +87,8 @@ export const useKeyboardStore = defineStore('keyboard', () => {
     }
     if (keyBindings.value.has(code)) {
       event.preventDefault()
-
-      keyBindings.value.get(code)!.callback(code, activeModifiers)
+      const targetName = keyBindings.value.get(code)!
+      shortcutTargetsNames.value.get(targetName)?.callback(code, activeModifiers)
       console.log('onKeyStroke: activeModifiers', activeModifiers)
     } else {
       console.log('no binding for', event.code)

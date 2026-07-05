@@ -28,23 +28,13 @@ onBeforeUnmount(() => {
 
 const handleKeyDown = (player, event: KeyboardEvent) => {
   event.preventDefault()
-  if (keyboardStore.addKeyBinding(event.code, playersSelectorShortcutManagerName)) {
-    player.key_code = event.code
-  } else {
-    const result = window.confirm(
-      'This key is already assigned to ' +
-        keyboardStore.getKeyBinding(event.code)?.msg +
-        '. Do you want to reassign it to ' +
-        player.name +
-        '?',
-    )
-    if (result) {
-      keyboardStore.removeKeyBinding(event.code, new Set())
-      if (keyboardStore.addKeyBinding(event.code, playersSelectorShortcutManagerName)) {
-        player.key_code = event.code
-      }
-    }
+  const currentTargetName = keyboardStore.getKeyBinding(event.code)
+  if (currentTargetName && currentTargetName !== playersSelectorShortcutManagerName) {
+    window.alert(`This key is already assigned to ${currentTargetName}. Please choose another key.`)
+    return
   }
+  keyboardStore.addKeyBinding(event.code, playersSelectorShortcutManagerName)
+  assignKeyOrModifier(player, event.code, player.modifiers)
 }
 
 const assignKeyOrModifier = (player, keyCode: string, modifiers: Set<string>) => {
@@ -106,7 +96,7 @@ const handleModifierChange = (player, event: Event) => {
             <sl-input v-model="player.key_code" @keydown="handleKeyDown(player, $event)" />
           </td>
           <td>
-            <label for="option1">
+            <label v-if="player.key_code" for="option1">
               <input
                 type="checkbox"
                 :checked="player.modifiers?.size > 0"
