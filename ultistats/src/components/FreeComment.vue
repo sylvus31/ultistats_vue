@@ -29,18 +29,17 @@ import { VTextarea, VTextField } from 'vuetify/components'
 import { useJournalStore } from '@/stores/journal'
 import { ref } from 'vue'
 
-const componentId = 'FreeComment'
 const keyboardStore = useKeyboardStore()
 const journalStore = useJournalStore()
 const title = ref('')
 const description = ref('')
 
 const handleGetFocus = () => {
-  keyboardStore.requestFocus(componentId)
+  keyboardStore.forbidShortcuts()
 }
 
 const handleLosseFocus = () => {
-  keyboardStore.freeFocus()
+  keyboardStore.allowShortcuts()
 }
 
 const addComment = () => {

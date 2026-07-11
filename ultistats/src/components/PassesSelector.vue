@@ -19,13 +19,13 @@ import type { Pass } from '@/types/Passes'
 import '@shoelace-style/shoelace/dist/components/button/button.js'
 import { useKeyboardStore } from '../stores/keyboardStore'
 import { useJournalStore } from '@/stores/journal'
+import type { ShortcutTarget } from './interfaces/ShortcutTarget'
+import { passesSelectorShortcutManagerName } from './interfaces/ShortcutTarget'
 
 const keyboardStore = useKeyboardStore()
 const passesStore = usePassesStore()
 const { passes } = storeToRefs(passesStore)
 const journalStore = useJournalStore()
-
-const componentId = 'PassesSelector'
 
 const clickAction = (pass: Pass) => {
   console.log(pass.name)
@@ -37,6 +37,7 @@ const clickAction = (pass: Pass) => {
 }
 
 const logAction = (eventCode: string, _modifiers: Set<string>) => {
+  void _modifiers
   const action = passesStore.getActionByKey(eventCode)
   if (action) {
     passesStore.selectActivePass(action.id)
@@ -45,9 +46,42 @@ const logAction = (eventCode: string, _modifiers: Set<string>) => {
   }
 }
 
+const passesSelectorShortcutManager: ShortcutTarget = {
+  message() {
+    const action = passesStore.getActionByKey(eventCode)
+
+    return 'action: ' + (action ? action.name : 'unknown')
+  },
+
+  callback(eventCode: string, activeModifiers: Set<string>) {
+    logAction(eventCode, activeModifiers)
+  },
+
+  setShortcut(eventCode: string) {
+    const player = teamStore.getPlayerByKeyCodeAndModifiers(eventCode, activeModifiers)
+    if (player) {
+      player.key_code = eventCode
+      player.modifiers = activeModifiers
+    }
+  },
+
+  removeShortcut(eventCode: string, activeModifiers: Set<string>) {
+    const player = teamStore.getPlayerByKeyCodeAndModifiers(eventCode, activeModifiers)
+    if (player) {
+      player.key_code = ''
+      player.modifiers = new Set()
+    }
+  },
+}
+
+keyboardStore.registerShortcutTarget(
+  passesSelectorShortcutManagerName,
+  passesSelectorShortcutManager,
+)
 passes.value.forEach((p) => {
   if (p.key) {
-    keyboardStore.addKeyBinding(componentId, p.key, 'action: ' + p.name, logAction)
+    console.log('registering key binding for', p.name, p.key)
+    keyboardStore.addKeyBinding(p.key, passesSelectorShortcutManagerName)
   }
 })
 </script>

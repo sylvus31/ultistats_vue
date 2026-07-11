@@ -26,7 +26,6 @@ const videoPlayerRef = ref<VideoPlayerInstance | null>(null)
 const fileInputRef = ref<HTMLInputElement | null>(null) // Ref for the hidden file input
 const journalViewerRef = ref<InstanceType<typeof JournalViewer> | null>(null)
 const statsViewerRef = ref<InstanceType<typeof StatsViewer> | null>(null)
-const statsViewerTeamRef = ref<InstanceType<typeof StatsViewerTeam> | null>(null)
 
 // Method to trigger the hidden file input
 const openFileDialog = () => {
@@ -116,7 +115,7 @@ provide('videoPlayerRef', videoPlayerRef)
       </WindowHolder>
     </div>
     <div slot="end">
-      <WindowHolder title="Players">
+      <WindowHolder title="Players"  editorComponent='./PlayerEditor.vue'>
         <template v-slot:menu><SetLine/></template>
         <template v-slot:main><PlayerSelector/></template>
       </WindowHolder>

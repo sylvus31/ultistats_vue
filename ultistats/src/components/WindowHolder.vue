@@ -17,11 +17,12 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
-import { defineProps } from 'vue'
+import { ref, defineAsyncComponent} from 'vue'
+import { DialogModal } from 'v-dialogs'
 
-defineProps({
+const props = defineProps({
   title: String,
+  editorComponent:String
 })
 
 const isMinimized = ref(false)
@@ -29,8 +30,24 @@ const isMinimized = ref(false)
 const minimize = () => {
   isMinimized.value = !isMinimized.value
 }
-const edit = () => {
-  console.log('edit')
+
+const dynamicComponent = ref(null)
+
+const edit = async() => {
+  console.log('editorComponent a', props.editorComponent)
+  const component = await import(props.editorComponent)
+  dynamicComponent.value = component.default || component
+  DialogModal(
+    component.default,
+    {
+      title: 'Edit ' + props.title,
+    }
+  )
+}
+
+const closeEditor = () => {
+  const dialog = document.getElementById('modal') as HTMLDialogElement
+  dialog.close()
 }
 </script>
 
@@ -60,6 +77,22 @@ const edit = () => {
   font-weight: bold;
 }
 
+.modal {
+  display: none; /* Hidden by default */
+  z-index: 1; /* Sit on top */
+
+  transform: translate(-50%, -50%);
+
+  overflow: auto; /* Enable scroll if needed */
+}
+dialog{
+  top: 50%;
+  left: 50%;
+  position: fixed; /* Stay in place */
+}
+dialog::backdrop {
+  background-color: rgba(0,0,0,0.6); /* Black w/ opacity */
+}
 .actions {
   display: flex;
   gap: 5px;
