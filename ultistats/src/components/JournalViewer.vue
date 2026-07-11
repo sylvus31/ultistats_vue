@@ -252,27 +252,14 @@ defineExpose({
   display: flex;
   flex-wrap: nowrap;
   overflow-x: auto;
-  padding: 10px;
+  padding: var(--spacing-md);
 }
 
 sl-button.ai::part(base) {
   background-color: #686b54;
-  color: #fff; /* White text for active */
+  color: var(--color-text-light);
 }
 
-.slider-container {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  padding: 10px;
-  background-color: #fff;
-  border-top: 1px solid #ddd;
-}
-
-.slider-container input[type='range'] {
-  width: 100%;
-}
 .pass-button {
   display: inline-block;
   width: 1.5em;
@@ -280,9 +267,18 @@ sl-button.ai::part(base) {
   border-radius: 50%;
   border: none;
   margin: 0 0.25em;
+  background-color: var(--color-card-bg);
+  color: var(--color-text-primary);
+  cursor: pointer;
+  transition: color 0.2s ease;
 }
+
 .pass-button.active {
   font-weight: bold;
-  color: #00bcd4;
+  color: var(--color-accent);
+}
+
+.pass-button:hover {
+  background-color: var(--color-border);
 }
 </style>
