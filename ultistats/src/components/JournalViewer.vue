@@ -90,7 +90,7 @@ function getAlternatives(type: JournalEntryType) {
   return alternatives?.map((a) => a.name) ?? []
 }
 function onClickSwap(record: JournalEntry, event: MouseEvent) {
-  const propositions = ['Choisir'].concat(getAlternatives(record.type))
+  const propositions = ['Select'].concat(getAlternatives(record.type))
   const selectDialog = document.createElement('dialog')
   const { clientX, clientY } = event as MouseEvent
   selectDialog.style.position = 'absolute'

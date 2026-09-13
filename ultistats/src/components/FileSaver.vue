@@ -159,7 +159,6 @@ onMounted(() => {
 </script>
 
 <template>
-  <sl-button @click="saveFile">Save File</sl-button>
   <input
     id="teamName_A"
     type="text"
@@ -177,6 +176,7 @@ onMounted(() => {
     @focusout="handleLosseFocus"
     class="input-base input-medium"
   />
+  <sl-button @click="saveFile">Save File</sl-button>
   <sl-button @click="loadFile">Load File</sl-button>
 </template>
 

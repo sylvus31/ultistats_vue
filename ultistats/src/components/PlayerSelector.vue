@@ -116,7 +116,7 @@ sl-button::part(base) {
   height: 50px;
 }
 .buttons {
-  display: flexbox;
+  display: flex;
   flex-wrap: wrap;
 }
 .player-button-content {

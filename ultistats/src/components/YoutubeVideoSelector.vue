@@ -1,22 +1,20 @@
 <template>
-  <div class="input-container">
-    <sl-button @click="triggerLoadVideo">Open</sl-button>
-    <!-- Use standard HTML input for datalist support -->
-    <input
-      ref="youtubeInputRef"
-      id="youtubeInput"
-      type="text"
-      placeholder="https://www.youtube.com/..."
-      @focusin="handleGetFocus"
-      @focusout="handleLosseFocus"
-      list="ytVideosList"
-      class="input-base input-medium"
-    />
-    <datalist id="ytVideosList">
-      <option value="Finale Indoor"></option>
-      <option value="Demi finale indoor"></option>
-    </datalist>
-  </div>
+  <sl-button @click="triggerLoadVideo">Open</sl-button>
+  <!-- Use standard HTML input for datalist support -->
+  <input
+    ref="youtubeInputRef"
+    id="youtubeInput"
+    type="text"
+    placeholder="https://www.youtube.com/..."
+    @focusin="handleGetFocus"
+    @focusout="handleLosseFocus"
+    list="ytVideosList"
+    class="input-base input-medium"
+  />
+  <datalist id="ytVideosList">
+    <option value="Finale Indoor"></option>
+    <option value="Demi finale indoor"></option>
+  </datalist>
 </template>
 
 <script setup lang="ts">
