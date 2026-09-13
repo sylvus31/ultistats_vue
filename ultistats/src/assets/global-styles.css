@@ -198,3 +198,37 @@ sl-split-panel > div[slot='end'] {
   bottom: 35px;
   left: 10px;
 }
+
+.dialog-base {
+  background-color: var(--color-card-bg);
+  color: var(--color-text-primary);
+  border: 2px solid var(--color-border);
+  border-radius: var(--border-radius-md);
+  padding: var(--spacing-md);
+  font-family: var(--font-family-base);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.dialog-base h2 {
+  color: var(--color-text-light);
+  margin-top: 0;
+  margin-bottom: var(--spacing-md);
+  font-size: var(--font-size-base);
+}
+
+.dialog-base select {
+  background-color: var(--color-darker-bg);
+  color: var(--color-text-primary);
+  border: 2px solid var(--color-border);
+  border-radius: var(--border-radius-md);
+  padding: var(--spacing-sm);
+  margin-bottom: var(--spacing-md);
+  width: 100%;
+  font-family: var(--font-family-base);
+  font-size: var(--font-size-base);
+}
+
+.dialog-base select:focus {
+  border-color: var(--color-accent);
+  outline: none;
+}

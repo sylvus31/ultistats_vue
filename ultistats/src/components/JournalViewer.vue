@@ -87,28 +87,39 @@ function getAlternatives(type: JournalEntryType) {
     case jet.PLAYER:
       alternatives = teamStore.players
   }
-  return alternatives?.map((a) => a.name) ?? []
+  console.log(alternatives)
+  console.log(alternatives[0])
+  return alternatives
 }
 function onClickSwap(record: JournalEntry, event: MouseEvent) {
-  const propositions = ['Select'].concat(getAlternatives(record.type))
+  const alternatives = getAlternatives(record.type)
+  const propositions = alternatives?.map((a) => a.name) ?? []
   const selectDialog = document.createElement('dialog')
   const { clientX, clientY } = event as MouseEvent
   selectDialog.style.position = 'absolute'
   selectDialog.style.left = `${clientX}px`
   selectDialog.style.top = `${clientY}px`
+  selectDialog.classList.add('dialog-base')
 
   selectDialog.innerHTML = `
-    <h2>${record.type}</h2>
+      <div style="display: flex; justify-content: space-between; align-items: center;vert">
+      <h2>${record.type}</h2>
+      <button class="close-button" style="background: none; border: none; cursor: pointer; font-size: 1.5em;">&times;</button>
+    </div>
     <select>
-      ${propositions.map((p) => `<option>${p}</option>`).join('')}
+      ${propositions.map((p, index) => `<option value="${index}">${p}</option>`).join('')}
     </select>
   `
   document.body.appendChild(selectDialog)
   selectDialog.showModal()
+  const closeButton = selectDialog.querySelector('.close-button')
+  closeButton!.addEventListener('click', () => {
+    selectDialog.close()
+  })
   const select = selectDialog.querySelector('select')
   select!.addEventListener('change', (e) => {
     const selectedValue = (e.target as HTMLSelectElement).value
-    record.name = selectedValue
+    record.name = alternatives[selectedValue].id
     record.source = src.USER
     selectDialog.close()
   })
