@@ -32,8 +32,6 @@ const openFileDialog = () => {
   fileInputRef.value?.click()
 }
 
-
-
 // Method to handle the file selection
 const handleFileChange = (event: Event) => {
   const target = event.target as HTMLInputElement

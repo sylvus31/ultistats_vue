@@ -1,5 +1,4 @@
 <template>
-  <!-- Add a ref to the root div -->
   <div ref="playerWrapper" tabindex="0">
     <!-- Video Element -->
     <div class="video-container">
@@ -8,24 +7,24 @@
         class="video-js vjs-default-skin"
         @timeupdate="handleTimeUpdate"
       ></video>
-      <div class="overlay"><TimerOverlay ref="timerOverlay" /></div>
+      <div class="overlay overlay-bottom-left"><TimerOverlay ref="timerOverlay" /></div>
     </div>
 
     <!-- Custom Controls -->
-    <div class="custom-controls">
-      <button @click="playPause">
+    <div class="controls-container">
+      <button class="control-button" @click="playPause">
         <span class="mdi" :class="isPlaying ? 'mdi-pause' : 'mdi-play'"></span> [SPACE]
       </button>
-      <button @click="seek(-2)"><span class="mdi" :class="'mdi-rewind'"></span> 2s [←]</button>
-      <button @click="seek(5)"><span class="mdi" :class="'mdi-fast-forward'"></span> 5s [→]</button>
-      <button @click="changeSpeed(false)">
+      <button class="control-button" @click="seek(-2)"><span class="mdi" :class="'mdi-rewind'"></span> 2s [←]</button>
+      <button class="control-button" @click="seek(5)"><span class="mdi" :class="'mdi-fast-forward'"></span> 5s [→]</button>
+      <button class="control-button" @click="changeSpeed(false)">
         <span class="mdi" :class="'mdi-play-speed'"></span> [↓]
       </button>
-      <button @click="changeSpeed(true)">
+      <button class="control-button" @click="changeSpeed(true)">
         <span class="mdi" :class="'mdi-play-speed'"></span> [↑]
       </button>
-      <span>Speed: {{ currentSpeed?.toFixed(2) }}x</span>
-      <span>Time: {{ formattedTime }}</span>
+      <span class="text-sm text-secondary">Speed: {{ currentSpeed?.toFixed(2) }}x</span>
+      <span class="text-sm text-secondary">Time: {{ formattedTime }}</span>
       <ScoreEvolution ref="scoreEvolutionRef" />
     </div>
   </div>
@@ -300,39 +299,7 @@ defineExpose({
 </script>
 
 <style scoped>
-.custom-controls {
-  background-color: #242424; /* Slightly lighter dark background for controls */
-  border-radius: 5px;
-  margin-top: 10px;
-  display: flex;
-  align-items: center;
-  flex-wrap: wrap;
-}
-.custom-controls button {
-  margin: 5px;
-  padding: 5px;
-  cursor: pointer;
-  border: 1px solid #444; /* Darker border */
-  border-radius: 3px;
-  background-color: #333; /* Dark button background */
-  color: #e0e0e0; /* Light text */
-}
-.custom-controls button:hover {
-  background-color: #444; /* Slightly lighter on hover */
-}
-.custom-controls span {
-  font-family: sans-serif;
-  font-size: 0.9em;
-  margin-left: 5px;
-  margin-right: 10px; /* Add some space after the time */
-}
 .video-container {
   position: relative;
-}
-.video-container .timerOverlay {
-  position: absolute;
-  bottom: 35px;
-  left: 10px;
-  z-index: 1; /* Make sure it's on top of the video */
 }
 </style>

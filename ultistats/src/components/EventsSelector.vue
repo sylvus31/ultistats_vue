@@ -23,7 +23,7 @@ sl-button::part(base) {
 }
 
 .buttons {
-  display: flexbox;
+  display: flex;
   flex-wrap: wrap;
 }
 </style>

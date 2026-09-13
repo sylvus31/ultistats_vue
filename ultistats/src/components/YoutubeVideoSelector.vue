@@ -1,22 +1,20 @@
 <template>
-  <div class="input-container">
-    <sl-button @click="triggerLoadVideo">Open</sl-button>
-    <!-- Use standard HTML input for datalist support -->
-    <input
-      ref="youtubeInputRef"
-      id="youtubeInput"
-      type="text"
-      placeholder="https://www.youtube.com/..."
-      @focusin="handleGetFocus"
-      @focusout="handleLosseFocus"
-      list="ytVideosList"
-      class="styled-input"
-    />
-    <datalist id="ytVideosList">
-      <option value="Finale Indoor"></option>
-      <option value="Demi finale indoor"></option>
-    </datalist>
-  </div>
+  <sl-button @click="triggerLoadVideo">Open</sl-button>
+  <!-- Use standard HTML input for datalist support -->
+  <input
+    ref="youtubeInputRef"
+    id="youtubeInput"
+    type="text"
+    placeholder="https://www.youtube.com/..."
+    @focusin="handleGetFocus"
+    @focusout="handleLosseFocus"
+    list="ytVideosList"
+    class="input-base input-medium"
+  />
+  <datalist id="ytVideosList">
+    <option value="Finale Indoor"></option>
+    <option value="Demi finale indoor"></option>
+  </datalist>
 </template>
 
 <script setup lang="ts">
@@ -86,30 +84,5 @@ onMounted(() => {
 </script>
 
 <style scoped>
-.styled-input {
-  /* Base styling */
-  font-family: inherit; /* Inherit font from body */
-  font-size: inherit;
-  line-height: inherit;
-  border: 2px solid #444; /* Match button border */
-  border-radius: 5px; /* Match button radius */
-  background-color: #333; /* Match button background */
-  color: #e0e0e0; /* Match button text color */
-  padding: 5px 10px; /* Match button padding */
-  margin: 5px; /* Match button margin */
-  min-width: 100px; /* Match button min-width */
-  width: 300px; /* Specific width */
-  box-sizing: border-box; /* Include padding and border in the element's total width and height */
-  height: 38px; /* Explicit height to match button - Adjust if needed */
-}
-
-.styled-input:focus {
-  border-color: #00bcd4; /* Accent color on focus */
-  outline: none; /* Remove default browser outline */
-}
-
-.input-container {
-  gap: 10px; /* Add some space between button and input */
-  margin-bottom: 0px;
-}
+/* No component-specific styles needed - using global input-base and input-medium classes */
 </style>

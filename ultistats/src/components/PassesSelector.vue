@@ -96,7 +96,7 @@ sl-button::part(base) {
   width: 150px;
 }
 .buttons {
-  display: flexbox;
+  display: flex;
   flex-wrap: wrap;
 }
 </style>

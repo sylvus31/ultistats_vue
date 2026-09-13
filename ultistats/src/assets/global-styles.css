@@ -1,0 +1,200 @@
+/* Global Reusable Styles */
+
+@import './variables.css';
+
+/* ========== Global Body & Layout ========== */
+body {
+  background-color: var(--color-dark-bg);
+  color: var(--color-text-primary);
+  margin: 0;
+  font-family: var(--font-family-base);
+}
+
+#app {
+  padding: 1rem;
+}
+
+/* ========== Button Styles ========== */
+.btn-base {
+  margin: var(--spacing-sm);
+  padding: var(--button-padding);
+  min-width: var(--button-min-width);
+  background-color: var(--color-card-bg);
+  color: var(--color-text-primary);
+  text-align: center;
+  border-radius: var(--border-radius-md);
+  border: 2px solid var(--color-border);
+  cursor: pointer;
+  font-family: inherit;
+  font-size: var(--font-size-base);
+  transition: background-color 0.2s ease;
+}
+
+.btn-base:hover {
+  background-color: var(--color-border);
+}
+
+.btn-base:focus {
+  outline: none;
+  border-color: var(--color-accent);
+}
+
+.btn-active {
+  border: 2px solid var(--color-accent);
+  color: var(--color-text-light);
+}
+
+/* Shoelace Button Part Styling */
+sl-button::part(base) {
+  margin: var(--spacing-sm);
+  padding: var(--button-padding);
+  min-width: var(--button-min-width);
+  background-color: var(--color-card-bg);
+  color: var(--color-text-primary);
+  text-align: center;
+  border-radius: var(--border-radius-md);
+  border: 2px solid var(--color-border);
+  cursor: pointer;
+}
+
+sl-button::part(base):hover {
+  background-color: var(--color-border);
+}
+
+sl-button.active::part(base) {
+  border: 2px solid var(--color-accent);
+  color: var(--color-text-light);
+}
+
+/* ========== Input Styles ========== */
+.input-base {
+  font-family: inherit;
+  font-size: var(--font-size-base);
+  line-height: inherit;
+  border: 2px solid var(--color-border);
+  border-radius: var(--border-radius-md);
+  background-color: var(--color-card-bg);
+  color: var(--color-text-primary);
+  padding: var(--button-padding);
+  margin: var(--spacing-sm);
+  min-width: var(--input-min-width);
+  box-sizing: border-box;
+  height: var(--input-height);
+  transition: border-color 0.2s ease;
+}
+
+.input-base:focus {
+  border-color: var(--color-accent);
+  outline: none;
+}
+
+.input-medium {
+  width: var(--input-width-medium);
+}
+
+/* ========== Container Styles ========== */
+.input-container {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-lg);
+  margin-bottom: var(--spacing-md);
+}
+
+.controls-container {
+  background-color: var(--color-darker-bg);
+  border-radius: var(--border-radius-md);
+  margin-top: var(--spacing-md);
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+/* ========== Split Panel Styles ========== */
+sl-split-panel::part(divider) {
+  background-color: var(--color-border);
+  transition: background-color 0.2s ease;
+}
+
+sl-split-panel::part(divider):hover {
+  background-color: var(--color-border-hover);
+}
+
+sl-split-panel > div[slot='start'] {
+  padding: var(--spacing-md) var(--spacing-md) var(--spacing-md) var(--spacing-sm);
+}
+
+sl-split-panel > div[slot='end'] {
+  padding: var(--spacing-md);
+}
+
+/* ========== Control Buttons ========== */
+.control-button {
+  margin: var(--spacing-sm);
+  padding: var(--spacing-sm);
+  cursor: pointer;
+  border: 1px solid var(--color-border);
+  border-radius: var(--border-radius-sm);
+  background-color: var(--color-card-bg);
+  color: var(--color-text-primary);
+  transition: background-color 0.2s ease;
+}
+
+.control-button:hover {
+  background-color: var(--color-border);
+}
+
+/* ========== Text & Utility ========== */
+.text-light {
+  color: var(--color-text-light);
+}
+
+.text-secondary {
+  color: var(--color-text-secondary);
+}
+
+.text-sm {
+  font-size: var(--font-size-sm);
+}
+
+.text-center {
+  text-align: center;
+}
+
+.gap-md {
+  gap: var(--spacing-md);
+}
+
+.gap-lg {
+  gap: var(--spacing-lg);
+}
+
+.mb-sm {
+  margin-bottom: var(--spacing-sm);
+}
+
+.mb-md {
+  margin-bottom: var(--spacing-md);
+}
+
+.mt-sm {
+  margin-top: var(--spacing-sm);
+}
+
+.mt-md {
+  margin-top: var(--spacing-md);
+}
+
+.p-md {
+  padding: var(--spacing-md);
+}
+
+/* ========== Overlay Styles ========== */
+.overlay {
+  position: absolute;
+  z-index: 1;
+}
+
+.overlay-bottom-left {
+  bottom: 35px;
+  left: 10px;
+}
