@@ -6,6 +6,8 @@ import { onMounted } from 'vue'
 import { useInitStore } from '@/stores/init'
 import type { Player } from '@/types/Player'
 import { createPlayer } from '@/types/Player'
+import { normalizeShortcutKey } from '@/types/keyConstants'
+import { playersSelectorShortcutManagerName } from './interfaces/ShortcutTarget'
 
 const initStore = useInitStore()
 
@@ -31,6 +33,7 @@ const saveFile = () => {
   const data = {
     version: version,
     videoSrc: videoSrc,
+    playerModifierKey: keyboardStore.playerModifierKey,
     teams: [
       { name: teamName_A.value, id: teamStore.teams[0].id, players: teamStore.teams[0].players },
       { name: teamName_B.value, id: teamStore.teams[1].id, players: teamStore.teams[1].players },
@@ -96,16 +99,38 @@ const importData = (data: string) => {
   let timOffset = 0
 
   function setData() {
+    keyboardStore.setPlayerModifierKey(jsonData.playerModifierKey ?? 'NumpadEnter')
+
     for (let index = 0; index < 2; index++) {
       teamStore.setTeamNameAndID(index, jsonData.teams[index].name, jsonData.teams[index].id)
 
       const players: Array<Player> = []
       jsonData.teams[index].players?.forEach((playerData: any) => {
-        players.push(createPlayer(playerData['id'], playerData['name'], playerData['key_code']))
+        const keyCode = playerData['key_code']
+          ? normalizeShortcutKey(playerData['key_code'])
+          : undefined
+        const modifiers = (playerData['modifiers'] ?? []).map((modifier: string) =>
+          modifier === 'NumpadEnter' ? keyboardStore.playerModifierKey : modifier,
+        )
+        players.push(
+          createPlayer(
+            playerData['id'],
+            playerData['name'],
+            keyCode,
+            new Set(modifiers),
+          ),
+        )
       })
 
       teamStore.setPlayersOfTeam(index, players)
     }
+
+    keyboardStore.removeKeyBindingsFor(playersSelectorShortcutManagerName)
+    teamStore.players.forEach((player) => {
+      if (player.key_code) {
+        keyboardStore.addKeyBinding(player.key_code, playersSelectorShortcutManagerName)
+      }
+    })
 
     addRecords(jsonData, timOffset)
 

@@ -3,7 +3,6 @@ export interface Pass {
   name: string
   isActive: boolean
   key?: string
-  legend?: string
   modifiers?: Set<passModifier>
 }
 

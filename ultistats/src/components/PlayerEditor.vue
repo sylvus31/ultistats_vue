@@ -5,6 +5,7 @@ import '@shoelace-style/shoelace/dist/components/input/input.js'
 import { useKeyboardStore } from '../stores/keyboardStore'
 import { onMounted, onBeforeUnmount } from 'vue'
 import { playersSelectorShortcutManagerName } from './interfaces/ShortcutTarget'
+import { formatShortcutKey, getKeyboardShortcutKey } from '@/types/keyConstants'
 
 const teamStore = useTeamStore()
 const { players } = storeToRefs(teamStore)
@@ -28,13 +29,47 @@ onBeforeUnmount(() => {
 
 const handleKeyDown = (player, event: KeyboardEvent) => {
   event.preventDefault()
-  const currentTargetName = keyboardStore.getKeyBinding(event.code)
+  const key = getKeyboardShortcutKey(event)
+  if (keyboardStore.isReservedShortcutKey(key)) {
+    window.alert(`${formatShortcutKey(key)} is reserved for video controls.`)
+    return
+  }
+  const currentTargetName = keyboardStore.getKeyBinding(key)
   if (currentTargetName && currentTargetName !== playersSelectorShortcutManagerName) {
     window.alert(`This key is already assigned to ${currentTargetName}. Please choose another key.`)
     return
   }
-  keyboardStore.addKeyBinding(event.code, playersSelectorShortcutManagerName)
-  assignKeyOrModifier(player, event.code, player.modifiers)
+  keyboardStore.addKeyBinding(key, playersSelectorShortcutManagerName)
+  assignKeyOrModifier(player, key, player.modifiers)
+}
+
+const handlePlayerModifierKeyDown = (event: KeyboardEvent) => {
+  event.preventDefault()
+  const key = getKeyboardShortcutKey(event)
+  if (key === keyboardStore.playerModifierKey) {
+    return
+  }
+
+  if (keyboardStore.isReservedShortcutKey(key)) {
+    window.alert(`${formatShortcutKey(key)} is reserved for video controls.`)
+    return
+  }
+
+  const assignedTarget = keyboardStore.getKeyBinding(key)
+  if (assignedTarget) {
+    window.alert(`This key is already assigned to ${assignedTarget}. Please choose another key.`)
+    return
+  }
+
+  const previousKey = keyboardStore.playerModifierKey
+  keyboardStore.setPlayerModifierKey(key)
+  players.value.forEach((player) => {
+    if (player.modifiers?.has(previousKey)) {
+      player.modifiers = new Set(
+        [...player.modifiers].map((modifier) => (modifier === previousKey ? key : modifier)),
+      )
+    }
+  })
 }
 
 const assignKeyOrModifier = (player, keyCode: string, modifiers: Set<string>) => {
@@ -64,7 +99,7 @@ const handleModifierChange = (player, event: Event) => {
   const checkbox = event.target as HTMLInputElement
   console.log('checkbox checked', checkbox.checked, player.name, player.key_code)
 
-  const newModifiers = checkbox.checked ? new Set(['NumpadEnter']) : new Set()
+  const newModifiers = checkbox.checked ? new Set([keyboardStore.playerModifierKey]) : new Set()
 
   const success = assignKeyOrModifier(player, player.key_code, newModifiers)
   if (!success) {
@@ -75,12 +110,20 @@ const handleModifierChange = (player, event: Event) => {
 
 <template>
   <form>
+    <div class="modifier-shortcut">
+      <label for="player-modifier-key">Player modifier key:</label>
+      <sl-input
+        id="player-modifier-key"
+        :value="formatShortcutKey(keyboardStore.playerModifierKey)"
+        @keydown="handlePlayerModifierKeyDown"
+      />
+    </div>
     <table>
       <thead>
         <tr>
           <th>Name</th>
           <th>Number</th>
-          <th>Key Code</th>
+          <th>Shortcut</th>
           <th>Modifiers</th>
         </tr>
       </thead>
@@ -93,7 +136,10 @@ const handleModifierChange = (player, event: Event) => {
             <sl-input v-model="player.number" type="number" />
           </td>
           <td>
-            <sl-input v-model="player.key_code" @keydown="handleKeyDown(player, $event)" />
+            <sl-input
+              :value="formatShortcutKey(player.key_code)"
+              @keydown="handleKeyDown(player, $event)"
+            />
           </td>
           <td>
             <label v-if="player.key_code" for="option1">
@@ -119,6 +165,18 @@ form {
 
 .sl-input {
   margin-bottom: 10px;
+}
+
+.modifier-shortcut {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+  margin-bottom: var(--spacing-md);
+}
+
+.modifier-shortcut .sl-input {
+  width: 180px;
+  margin-bottom: 0;
 }
 
 table {
