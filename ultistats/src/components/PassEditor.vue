@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onBeforeUnmount, onMounted } from 'vue'
+import { computed, nextTick, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import { storeToRefs } from 'pinia'
 import '@shoelace-style/shoelace/dist/components/input/input.js'
 import { usePassesStore } from '@/stores/passesStore'
@@ -10,6 +10,7 @@ import {
   normalizeShortcutKey,
 } from '@/types/keyConstants'
 import type { passModifier } from '@/types/Passes'
+import type { Pass } from '@/types/Passes'
 import {
   passesModifiersMenuSelectorShortcutManagerName,
   passesSelectorShortcutManagerName,
@@ -18,6 +19,35 @@ import {
 const passesStore = usePassesStore()
 const { passes, passesModifiers } = storeToRefs(passesStore)
 const keyboardStore = useKeyboardStore()
+let nextPassId = 1
+
+const createNewPassId = () => {
+  let id = ''
+  do {
+    id = `new-pass-${nextPassId++}`
+  } while (passes.value.some((pass) => pass.id === id))
+  return id
+}
+
+const createPassDraft = (): Pass => ({
+  id: createNewPassId(),
+  name: '',
+  isActive: false,
+})
+const newPassDraft = ref<Pass>(createPassDraft())
+const editorPasses = computed(() => [...passes.value, newPassDraft.value])
+
+watch(
+  () => newPassDraft.value.name,
+  async (name) => {
+    if (!name.trim()) return
+    const promotedPass = newPassDraft.value
+    passes.value.push(promotedPass)
+    newPassDraft.value = createPassDraft()
+    await nextTick()
+    document.querySelector<HTMLElement>(`sl-input[data-pass-id="${promotedPass.id}"]`)?.focus()
+  },
+)
 
 const synchronizePassBindings = () => {
   keyboardStore.removeKeyBindingsFor(passesSelectorShortcutManagerName)
@@ -58,6 +88,14 @@ const handleKeyDown = (pass: (typeof passes.value)[number], event: KeyboardEvent
 const clearShortcut = (pass: (typeof passes.value)[number]) => {
   pass.key = ''
   synchronizePassBindings()
+}
+
+const removeEmptyPass = (pass: Pass) => {
+  const passIndex = passes.value.findIndex((candidate) => candidate.id === pass.id)
+  if (passIndex !== -1) {
+    passes.value.splice(passIndex, 1)
+    synchronizePassBindings()
+  }
 }
 
 const handleModifierKeyDown = (modifier: passModifier, event: KeyboardEvent) => {
@@ -159,12 +197,17 @@ onBeforeUnmount(() => {
             <th>Name</th>
             <th>Shortcut</th>
             <th>Clear</th>
+            <th>Remove</th>
           </tr>
         </thead>
         <tbody>
-          <tr v-for="pass in passes" :key="pass.id">
+          <tr v-for="pass in editorPasses" :key="pass.id">
             <td>
-              <sl-input v-model="pass.name" />
+              <sl-input
+                v-model="pass.name"
+                :data-pass-id="pass.id"
+                :placeholder="pass.id === newPassDraft.id ? 'new...' : ''"
+              />
             </td>
             <td>
               <sl-input
@@ -182,6 +225,18 @@ onBeforeUnmount(() => {
                 @click="clearShortcut(pass)"
               >
                 Clear
+              </button>
+            </td>
+            <td>
+              <button
+                v-if="!pass.name.trim() && pass.id !== newPassDraft.id"
+                type="button"
+                class="remove-entry"
+                aria-label="Remove empty pass entry"
+                title="Remove empty pass entry"
+                @click="removeEmptyPass(pass)"
+              >
+                <span class="mdi mdi-delete-outline" aria-hidden="true"></span>
               </button>
             </td>
           </tr>
@@ -255,5 +310,18 @@ tbody tr:hover {
 .clear-shortcut:disabled {
   cursor: default;
   opacity: 0.5;
+}
+
+.remove-entry {
+  padding: var(--spacing-sm);
+  color: var(--color-text-primary);
+  background: transparent;
+  border: 0;
+  cursor: pointer;
+  font-size: 1.1rem;
+}
+
+.remove-entry:hover {
+  color: var(--color-accent);
 }
 </style>

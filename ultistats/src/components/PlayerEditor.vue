@@ -1,16 +1,41 @@
 <script setup lang="ts">
 import { useTeamStore } from '@/stores/Team'
 import { storeToRefs } from 'pinia'
+import { computed, nextTick, onMounted, onBeforeUnmount, ref, watch } from 'vue'
 import '@shoelace-style/shoelace/dist/components/input/input.js'
-import type { Player } from '@/types/Player'
+import { createPlayer, type Player } from '@/types/Player'
 import { useKeyboardStore } from '../stores/keyboardStore'
-import { onMounted, onBeforeUnmount } from 'vue'
 import { playersSelectorShortcutManagerName } from './interfaces/ShortcutTarget'
 import { formatShortcutKey, getKeyboardShortcutKey } from '@/types/keyConstants'
 
 const teamStore = useTeamStore()
 const { players } = storeToRefs(teamStore)
 const keyboardStore = useKeyboardStore()
+let nextPlayerId = 1
+
+const createNewPlayerId = () => {
+  let id = ''
+  do {
+    id = `new-player-${nextPlayerId++}`
+  } while (players.value.some((player) => player.id === id))
+  return id
+}
+
+const createPlayerDraft = () => createPlayer(createNewPlayerId(), '', undefined, new Set<string>())
+const newPlayerDraft = ref<Player>(createPlayerDraft())
+const editorPlayers = computed(() => [...players.value, newPlayerDraft.value])
+
+watch(
+  () => newPlayerDraft.value.name,
+  async (name) => {
+    if (!name.trim()) return
+    const promotedPlayer = newPlayerDraft.value
+    teamStore.teams[0].players.push(promotedPlayer)
+    newPlayerDraft.value = createPlayerDraft()
+    await nextTick()
+    document.querySelector<HTMLElement>(`sl-input[data-player-id="${promotedPlayer.id}"]`)?.focus()
+  },
+)
 
 const handleGetFocus = () => {
   keyboardStore.forbidShortcuts()
@@ -128,6 +153,14 @@ const clearShortcut = (player: Player) => {
   player.modifiers = new Set()
   synchronizePlayerBindings()
 }
+
+const removeEmptyPlayer = (player: Player) => {
+  teamStore.removePlayer(player.id)
+  synchronizePlayerBindings()
+}
+
+const isRosterPlayer = (player: Player) =>
+  teamStore.teams.some((team) => team.players.some((rosterPlayer) => rosterPlayer.id === player.id))
 </script>
 
 <template>
@@ -147,13 +180,21 @@ const clearShortcut = (player: Player) => {
           <th>Number</th>
           <th>Shortcut</th>
           <th>Clear</th>
+          <th>Remove</th>
           <th>Modifiers</th>
         </tr>
       </thead>
       <tbody>
-        <tr v-for="player in players" :key="player.id">
+        <tr v-for="player in editorPlayers" :key="player.id">
           <td>
-            <sl-input v-model="player.name" />
+            <sl-input
+              v-model="player.name"
+              :data-player-id="player.id"
+              :placeholder="player.id === newPlayerDraft.id ? 'new...' : ''"
+              :aria-label="
+                player.id === newPlayerDraft.id ? 'New player name' : `${player.name} name`
+              "
+            />
           </td>
           <td>
             <sl-input v-model="player.number" type="number" />
@@ -173,6 +214,20 @@ const clearShortcut = (player: Player) => {
               @click="clearShortcut(player)"
             >
               Clear
+            </button>
+          </td>
+          <td>
+            <button
+              v-if="
+                !player.name.trim() && player.id !== newPlayerDraft.id && isRosterPlayer(player)
+              "
+              type="button"
+              class="remove-entry"
+              :aria-label="`Remove empty player entry`"
+              title="Remove empty player entry"
+              @click="removeEmptyPlayer(player)"
+            >
+              <span class="mdi mdi-delete-outline" aria-hidden="true"></span>
             </button>
           </td>
           <td>
@@ -264,5 +319,18 @@ input[type='checkbox'] {
 .clear-shortcut:disabled {
   cursor: default;
   opacity: 0.5;
+}
+
+.remove-entry {
+  padding: var(--spacing-sm);
+  color: var(--color-text-primary);
+  background: transparent;
+  border: 0;
+  cursor: pointer;
+  font-size: 1.1rem;
+}
+
+.remove-entry:hover {
+  color: var(--color-accent);
 }
 </style>
