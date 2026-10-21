@@ -162,6 +162,12 @@ function getRecordName(record: JournalEntry): string {
   }
 }
 
+function getLinePlayersLabel(players: Set<string>): string {
+  return Array.from(players)
+    .map((playerId) => teamStore.getPlayerByID(playerId)?.name ?? playerId)
+    .join(', ')
+}
+
 onUpdated(() => {
   const buttonContainer = document.querySelector('.button-container')
   if (buttonContainer) {
@@ -221,7 +227,7 @@ defineExpose({
         >
         <span
           v-if="record.type === jet.LINE && 'players' in record"
-          :title="Array.from(record.players).join(', ')"
+          :title="getLinePlayersLabel(record.players)"
         >
           ({{ record.players.size }})
         </span>
