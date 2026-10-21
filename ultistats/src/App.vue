@@ -117,7 +117,7 @@ provide('videoPlayerRef', videoPlayerRef)
         <template v-slot:menu><SetLine/></template>
         <template v-slot:main><PlayerSelector/></template>
       </WindowHolder>
-      <WindowHolder title="Passes">
+      <WindowHolder title="Passes" editorComponent='./PassEditor.vue'>
         <template v-slot:menu><PassesModifiersMenu/></template>
         <template v-slot:main><PassesSelector /></template>
       </WindowHolder>
