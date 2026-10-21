@@ -13,25 +13,15 @@
       </div>
     </div>
     <div v-show="!isMinimized"><slot name="main" /></div>
-    <dialog
-      ref="editorDialog"
-      class="editor-dialog dialog-base"
-      :aria-labelledby="editorDialogTitleId"
-      @close="closeEditor"
-    >
-      <div class="editor-dialog-header">
-        <h2 :id="editorDialogTitleId">Edit {{ title }}</h2>
-        <button class="close-button" type="button" aria-label="Close" @click="editorDialog?.close()">
-          &times;
-        </button>
-      </div>
+    <ModalDialog ref="editorDialog" :title="`Edit ${title}`" :width="760">
       <component :is="editorComponentToShow" v-if="editorComponentToShow" />
-    </dialog>
+    </ModalDialog>
   </div>
 </template>
 
 <script setup lang="ts">
-import { nextTick, ref, shallowRef, useId, type Component } from 'vue'
+import { nextTick, ref, shallowRef, type Component } from 'vue'
+import ModalDialog from './ModalDialog.vue'
 
 const props = defineProps({
   title: String,
@@ -39,8 +29,7 @@ const props = defineProps({
 })
 
 const isMinimized = ref(false)
-const editorDialogTitleId = useId()
-const editorDialog = ref<HTMLDialogElement | null>(null)
+const editorDialog = ref<InstanceType<typeof ModalDialog> | null>(null)
 const editorComponentToShow = shallowRef<Component | null>(null)
 
 const minimize = () => {
@@ -53,11 +42,7 @@ const edit = async () => {
   const component = await import(props.editorComponent)
   editorComponentToShow.value = component.default || component
   await nextTick()
-  editorDialog.value?.showModal()
-}
-
-const closeEditor = () => {
-  editorComponentToShow.value = null
+  editorDialog.value?.open()
 }
 </script>
 
@@ -86,46 +71,6 @@ const closeEditor = () => {
 
 .title {
   font-weight: bold;
-}
-
-.editor-dialog {
-  position: fixed;
-  inset: 50% auto auto 50%;
-  margin: 0;
-  transform: translate(-50%, -50%);
-  width: min(760px, calc(100vw - 40px));
-  max-height: calc(100vh - 40px);
-  overflow: auto;
-}
-
-.editor-dialog::backdrop {
-  background-color: rgb(0 0 0 / 60%);
-}
-
-.editor-dialog-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin: 0 0 var(--spacing-md);
-  padding: var(--button-padding);
-  background-color: var(--color-darker-bg);
-  border: 2px solid var(--color-border);
-  border-radius: var(--border-radius-md);
-}
-
-.editor-dialog-header h2 {
-  margin: 0;
-  color: var(--color-text-light);
-  font-size: 1rem;
-}
-
-.close-button {
-  background: none;
-  border: none;
-  color: var(--color-text-primary);
-  cursor: pointer;
-  font-size: 1.5rem;
-  line-height: 1;
 }
 
 .actions {
