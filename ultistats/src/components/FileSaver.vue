@@ -6,6 +6,8 @@ import { onMounted } from 'vue'
 import { useInitStore } from '@/stores/init'
 import type { Player } from '@/types/Player'
 import { createPlayer } from '@/types/Player'
+import { normalizeShortcutKey } from '@/types/keyConstants'
+import { playersSelectorShortcutManagerName } from './interfaces/ShortcutTarget'
 
 const initStore = useInitStore()
 
@@ -101,11 +103,28 @@ const importData = (data: string) => {
 
       const players: Array<Player> = []
       jsonData.teams[index].players?.forEach((playerData: any) => {
-        players.push(createPlayer(playerData['id'], playerData['name'], playerData['key_code']))
+        const keyCode = playerData['key_code']
+          ? normalizeShortcutKey(playerData['key_code'])
+          : undefined
+        players.push(
+          createPlayer(
+            playerData['id'],
+            playerData['name'],
+            keyCode,
+            new Set(playerData['modifiers'] ?? []),
+          ),
+        )
       })
 
       teamStore.setPlayersOfTeam(index, players)
     }
+
+    keyboardStore.removeKeyBindingsFor(playersSelectorShortcutManagerName)
+    teamStore.players.forEach((player) => {
+      if (player.key_code) {
+        keyboardStore.addKeyBinding(player.key_code, playersSelectorShortcutManagerName)
+      }
+    })
 
     addRecords(jsonData, timOffset)
 

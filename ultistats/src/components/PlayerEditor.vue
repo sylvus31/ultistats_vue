@@ -5,6 +5,7 @@ import '@shoelace-style/shoelace/dist/components/input/input.js'
 import { useKeyboardStore } from '../stores/keyboardStore'
 import { onMounted, onBeforeUnmount } from 'vue'
 import { playersSelectorShortcutManagerName } from './interfaces/ShortcutTarget'
+import { formatShortcutKey, getKeyboardShortcutKey } from '@/types/keyConstants'
 
 const teamStore = useTeamStore()
 const { players } = storeToRefs(teamStore)
@@ -28,13 +29,14 @@ onBeforeUnmount(() => {
 
 const handleKeyDown = (player, event: KeyboardEvent) => {
   event.preventDefault()
-  const currentTargetName = keyboardStore.getKeyBinding(event.code)
+  const key = getKeyboardShortcutKey(event)
+  const currentTargetName = keyboardStore.getKeyBinding(key)
   if (currentTargetName && currentTargetName !== playersSelectorShortcutManagerName) {
     window.alert(`This key is already assigned to ${currentTargetName}. Please choose another key.`)
     return
   }
-  keyboardStore.addKeyBinding(event.code, playersSelectorShortcutManagerName)
-  assignKeyOrModifier(player, event.code, player.modifiers)
+  keyboardStore.addKeyBinding(key, playersSelectorShortcutManagerName)
+  assignKeyOrModifier(player, key, player.modifiers)
 }
 
 const assignKeyOrModifier = (player, keyCode: string, modifiers: Set<string>) => {
@@ -80,7 +82,7 @@ const handleModifierChange = (player, event: Event) => {
         <tr>
           <th>Name</th>
           <th>Number</th>
-          <th>Key Code</th>
+          <th>Shortcut</th>
           <th>Modifiers</th>
         </tr>
       </thead>
@@ -93,7 +95,10 @@ const handleModifierChange = (player, event: Event) => {
             <sl-input v-model="player.number" type="number" />
           </td>
           <td>
-            <sl-input v-model="player.key_code" @keydown="handleKeyDown(player, $event)" />
+            <sl-input
+              :value="formatShortcutKey(player.key_code)"
+              @keydown="handleKeyDown(player, $event)"
+            />
           </td>
           <td>
             <label v-if="player.key_code" for="option1">

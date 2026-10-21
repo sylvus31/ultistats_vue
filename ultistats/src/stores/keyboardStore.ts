@@ -1,7 +1,12 @@
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
 import { onKeyStroke, onKeyUp } from '@vueuse/core'
-import { KeyboardConstants } from '@/types/keyConstants'
+import {
+  getKeyboardShortcutKey,
+  KeyboardConstants,
+  normalizeShortcutKey,
+  transformCodeForSpecialKeys,
+} from '@/types/keyConstants'
 import type { ShortcutTarget } from '@/components/interfaces/ShortcutTarget'
 
 export const useKeyboardStore = defineStore('keyboard', () => {
@@ -49,15 +54,16 @@ export const useKeyboardStore = defineStore('keyboard', () => {
   }
 
   function getKeyBinding(keyCode: string): string {
-    return keyBindings.value.get(keyCode) ?? ''
+    return keyBindings.value.get(normalizeShortcutKey(keyCode)) ?? ''
   }
 
   function addKeyBinding(keyCode: string, name: string) {
-    if (keyBindings.value.has(keyCode)) {
-      console.log(keyCode + ' already assigned', keyBindings.value.get(keyCode))
+    const normalizedKey = normalizeShortcutKey(keyCode)
+    if (keyBindings.value.has(normalizedKey)) {
+      console.log(normalizedKey + ' already assigned', keyBindings.value.get(normalizedKey))
       return false
     }
-    keyBindings.value.set(keyCode, name)
+    keyBindings.value.set(normalizedKey, name)
     return true
   }
 
@@ -67,21 +73,34 @@ export const useKeyboardStore = defineStore('keyboard', () => {
     msg: string,
     callback: keyBindingCallback,
   ) {
-    if (keyBindingsUP.value.has(keycode)) {
-      console.log(keycode + ' already assigned', keyBindingsUP.value.get(keycode))
+    const normalizedKey = normalizeShortcutKey(keycode)
+    if (keyBindingsUP.value.has(normalizedKey)) {
+      console.log(normalizedKey + ' already assigned', keyBindingsUP.value.get(normalizedKey))
       return false
     }
-    keyBindingsUP.value.set(keycode, new KeyBinding(comp, msg, callback))
+    keyBindingsUP.value.set(normalizedKey, new KeyBinding(comp, msg, callback))
     return true
   }
 
   function removeKeyBinding(keyCode: string) {
-    keyBindings.value.get(keyCode)?.removeShortcut(keyCode)
-    keyBindings.value.delete(keyCode)
+    const normalizedKey = normalizeShortcutKey(keyCode)
+    const targetName = keyBindings.value.get(normalizedKey)
+    if (targetName) {
+      shortcutTargetsNames.value.get(targetName)?.removeShortcut(normalizedKey)
+    }
+    keyBindings.value.delete(normalizedKey)
   }
 
   function removeKeyBindingUP(keyCode: string) {
-    keyBindingsUP.value.delete(keyCode)
+    keyBindingsUP.value.delete(normalizeShortcutKey(keyCode))
+  }
+
+  function removeKeyBindingsFor(targetName: string) {
+    for (const [key, name] of keyBindings.value) {
+      if (name === targetName) {
+        keyBindings.value.delete(key)
+      }
+    }
   }
 
   const modifierKeys: string[] = ['NumpadEnter', KeyboardConstants.SHIFT, KeyboardConstants.CTRL] //['ControlRight', 'ShiftRight', 'ShiftLeft'] // AltxxKey
@@ -99,16 +118,17 @@ export const useKeyboardStore = defineStore('keyboard', () => {
 
     console.log('onKeyStroke: event', event)
     const code = transformCodeForSpecialKeys(event.code)
+    const key = getKeyboardShortcutKey(event)
     if (modifierKeys.includes(code)) {
       activeModifiers.add(code)
     }
-    if (keyBindings.value.has(code)) {
+    if (keyBindings.value.has(key)) {
       event.preventDefault()
-      const targetName = keyBindings.value.get(code)!
-      shortcutTargetsNames.value.get(targetName)?.callback(code, activeModifiers)
+      const targetName = keyBindings.value.get(key)!
+      shortcutTargetsNames.value.get(targetName)?.callback(key, activeModifiers)
       console.log('onKeyStroke: activeModifiers', activeModifiers)
     } else {
-      console.log('no binding for', event.code)
+      console.log('no binding for', key)
     }
   })
 
@@ -120,21 +140,9 @@ export const useKeyboardStore = defineStore('keyboard', () => {
     activeModifiers.delete(code)
     console.log('up', activeModifiers)
 
-    keyBindingsUP.value.get(code)?.callback(code, activeModifiers)
+    const key = getKeyboardShortcutKey(event)
+    keyBindingsUP.value.get(key)?.callback(key, activeModifiers)
   })
-
-  function transformCodeForSpecialKeys(code: string): string {
-    if (code === 'ShiftLeft' || code === 'ShiftRight') {
-      return KeyboardConstants.SHIFT
-    }
-    if (code === 'AltLeft' || code === 'AltRight') {
-      return KeyboardConstants.ALT
-    }
-    if (code === 'ControlLeft' || code === 'ControlRight') {
-      return KeyboardConstants.CTRL
-    }
-    return code
-  }
 
   return {
     forbidShortcuts,
@@ -143,6 +151,7 @@ export const useKeyboardStore = defineStore('keyboard', () => {
     addKeyBindingUP,
     removeKeyBinding,
     removeKeyBindingUP,
+    removeKeyBindingsFor,
     getKeyBinding,
     registerShortcutTarget,
     activeModifiers,

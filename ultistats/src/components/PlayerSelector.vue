@@ -7,6 +7,7 @@ import { useJournalStore } from '@/stores/journal'
 import type { ShortcutTarget } from './interfaces/ShortcutTarget'
 import { playersSelectorShortcutManagerName } from './interfaces/ShortcutTarget'
 import { useTeamStore } from '@/stores/Team'
+import { formatShortcutKey } from '@/types/keyConstants'
 
 const teamStore = useTeamStore()
 const { players } = storeToRefs(teamStore)
@@ -91,7 +92,9 @@ defineExpose({ playersSelectorShortcutManager })
           <span class="player-key" v-if="player.modifiers?.size > 0">
             [{{ Array.from(player.modifiers).join(',') }}]</span
           >
-          <span class="player-key" v-if="player.key_code"> [{{ player.key_code }}]</span>
+          <span class="player-key" v-if="player.key_code">
+            [{{ formatShortcutKey(player.key_code) }}]</span
+          >
         </div>
       </div>
     </sl-button>

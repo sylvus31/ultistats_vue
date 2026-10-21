@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
 import type { Pass, passModifier } from '@/types/Passes'
-import { KeyboardConstants } from '@/types/keyConstants'
+import { KeyboardConstants, normalizeShortcutKey } from '@/types/keyConstants'
 
 export const usePassesStore = defineStore('passesStore', () => {
   // Use ref to hold the array of Player objects
@@ -10,12 +10,12 @@ export const usePassesStore = defineStore('passesStore', () => {
     { id: 'pm2', name: 'break', isActive: false, key: KeyboardConstants.CTRL },
   ])
   const passes = ref<Pass[]>([
-    { id: 'a6', name: 'Hammer', isActive: false, key: 'KeyQ', legend: 'A' },
-    { id: 'a2', name: 'Avant', isActive: false, key: 'KeyW', legend: 'Z' },
-    { id: 'a5', name: 'Knife', isActive: false, key: 'KeyE', legend: 'E' },
-    { id: 'a7', name: 'Skoober', isActive: false, key: 'KeyR', legend: 'R' },
-    { id: 'a3', name: 'Dump', isActive: false, key: 'KeyD', legend: 'D' },
-    { id: 'a4', name: 'Swing', isActive: false, key: 'KeyA', legend: 'Q' },
+    { id: 'a6', name: 'Hammer', isActive: false, key: 'q' },
+    { id: 'a2', name: 'Avant', isActive: false, key: 'w' },
+    { id: 'a5', name: 'Knife', isActive: false, key: 'e' },
+    { id: 'a7', name: 'Skoober', isActive: false, key: 'r' },
+    { id: 'a3', name: 'Dump', isActive: false, key: 'd' },
+    { id: 'a4', name: 'Swing', isActive: false, key: 'a' },
   ])
 
   // --- Getters ---
@@ -40,7 +40,8 @@ export const usePassesStore = defineStore('passesStore', () => {
   }
 
   function getActionByKey(key: string) {
-    return passes.value.find((action) => action.key === key)
+    const normalizedKey = normalizeShortcutKey(key)
+    return passes.value.find((action) => action.key === normalizedKey)
   }
 
   function getModifierByKey(key: string) {

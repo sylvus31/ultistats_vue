@@ -2,6 +2,7 @@
 import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
 import { createPlayer, type Player } from '@/types/Player'
+import { normalizeShortcutKey } from '@/types/keyConstants'
 
 class Team {
   players: Player[]
@@ -46,8 +47,8 @@ export const useTeamStore = defineStore('team', () => {
   const teams = ref<[Team, Team]>([team_0, team_1])
   const players = computed(() => {
     const p = [...teams.value[0].players, ...teams.value[1].players]
-    p.push(createPlayer('t0', teams.value[0].name, 'KeyT'))
-    p.push(createPlayer('t1', teams.value[1].name, 'KeyH'))
+    p.push(createPlayer('t0', teams.value[0].name, 't'))
+    p.push(createPlayer('t1', teams.value[1].name, 'h'))
     return p
   })
 
@@ -90,9 +91,11 @@ export const useTeamStore = defineStore('team', () => {
   }
 
   function getPlayerByKeyCodeAndModifiers(keycode: string, modifiers: Set<string>) {
+    const normalizedKey = normalizeShortcutKey(keycode)
     return players.value.find(
       (p) =>
-        p.key_code === keycode && haveSameElements(p.modifiers || new Set<string>(), modifiers),
+        (p.key_code && normalizeShortcutKey(p.key_code)) === normalizedKey &&
+        haveSameElements(p.modifiers || new Set<string>(), modifiers),
     )
   }
 

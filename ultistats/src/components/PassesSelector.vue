@@ -7,7 +7,7 @@
       :class="{ active: action.isActive }"
     >
       <span class="pass-name">{{ action.name }}</span>
-      <span v-if="action.legend"> [{{ action.legend }}]</span>
+      <span v-if="action.key"> [{{ formatShortcutKey(action.key) }}]</span>
     </sl-button>
   </div>
 </template>
@@ -21,6 +21,7 @@ import { useKeyboardStore } from '../stores/keyboardStore'
 import { useJournalStore } from '@/stores/journal'
 import type { ShortcutTarget } from './interfaces/ShortcutTarget'
 import { passesSelectorShortcutManagerName } from './interfaces/ShortcutTarget'
+import { formatShortcutKey } from '@/types/keyConstants'
 
 const keyboardStore = useKeyboardStore()
 const passesStore = usePassesStore()
