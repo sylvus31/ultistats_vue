@@ -114,51 +114,49 @@ const handleModifierChange = (player, event: Event) => {
 form {
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: stretch;
 }
 
 .sl-input {
   margin-bottom: 10px;
 }
+
 table {
   width: 100%;
   border-collapse: collapse;
-  margin: 25px 0;
-  font-size: 0.9em;
-  font-family: sans-serif;
+  font-size: var(--font-size-sm);
   min-width: 400px;
-  box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
-  color: #615555;
+  color: var(--color-text-primary);
 }
 
 thead tr {
-  background-color: #009879;
-  color: #ffffff;
+  background-color: var(--color-darker-bg);
+  color: var(--color-text-light);
   text-align: left;
 }
 
 thead th {
-  position: sticky;
-  top: 0;
-  z-index: 1;
+  border-bottom: 2px solid var(--color-border);
 }
 
 th,
 td {
-  padding: 12px 15px;
+  padding: var(--spacing-sm) var(--spacing-md);
 }
 
 tbody tr {
-  border-bottom: 1px solid #dddddd;
+  border-bottom: 1px solid var(--color-border);
 }
 
 tbody tr:nth-of-type(even) {
-  background-color: #f3f3f3;
+  background-color: var(--color-darker-bg);
 }
 
 tbody tr:hover {
-  border-color: #615555;
-  cursor: pointer;
-  font: bolder;
+  background-color: var(--color-border);
+}
+
+input[type='checkbox'] {
+  accent-color: var(--color-accent);
 }
 </style>
