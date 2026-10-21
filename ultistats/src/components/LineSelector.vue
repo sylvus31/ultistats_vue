@@ -2,14 +2,27 @@
 import { computed } from 'vue'
 import { useTeamStore } from '../stores/Team'
 
+const selectedPlayers = defineModel<Set<string>>({ required: true })
 const playerStore = useTeamStore()
 const fieldPlayers = computed(() =>
-  playerStore.players.filter(
-    (player) => !playerStore.teams.some((team) => team.id === player.id),
-  ),
+  playerStore.players.filter((player) => !playerStore.teams.some((team) => team.id === player.id)),
 )
-const playingPlayers = computed(() => fieldPlayers.value.filter((player) => player.playing))
-const nonPlayingPlayers = computed(() => fieldPlayers.value.filter((player) => !player.playing))
+const playingPlayers = computed(() =>
+  fieldPlayers.value.filter((player) => selectedPlayers.value.has(player.id)),
+)
+const nonPlayingPlayers = computed(() =>
+  fieldPlayers.value.filter((player) => !selectedPlayers.value.has(player.id)),
+)
+
+const setPlaying = (playerId: string, playing: boolean) => {
+  const players = new Set(selectedPlayers.value)
+  if (playing) {
+    players.add(playerId)
+  } else {
+    players.delete(playerId)
+  }
+  selectedPlayers.value = players
+}
 </script>
 
 <template>
@@ -20,7 +33,7 @@ const nonPlayingPlayers = computed(() => fieldPlayers.value.filter((player) => !
         <li
           v-for="player in playingPlayers"
           :key="player.id"
-          @click="playerStore.setPlayingStatus(player.id, false)"
+          @click="setPlaying(player.id, false)"
         >
           {{ player.name }}
         </li>
@@ -32,7 +45,7 @@ const nonPlayingPlayers = computed(() => fieldPlayers.value.filter((player) => !
         <li
           v-for="player in nonPlayingPlayers"
           :key="player.id"
-          @click="playerStore.setPlayingStatus(player.id, true)"
+          @click="setPlaying(player.id, true)"
         >
           {{ player.name }}
         </li>

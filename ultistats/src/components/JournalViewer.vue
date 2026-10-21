@@ -13,6 +13,8 @@ import { useTeamStore } from '@/stores/Team'
 import { usePassesStore } from '@/stores/passesStore'
 import { useEventsStore } from '@/stores/EventsStore'
 import type { VideoPlayerInstance } from '@/components/VideoPlayer.vue'
+import LineEditorDialog from './LineEditorDialog.vue'
+import type { journalLine } from '@/types/journaltypes'
 
 const videoPlayerRef = ref<VideoPlayerInstance | null>(null)
 const setVideoPlayerRef = (ref: Ref<VideoPlayerInstance | null>) => {
@@ -25,6 +27,8 @@ const teamStore = useTeamStore()
 const actionsStore = useActionsStore()
 const passesStore = usePassesStore()
 const eventsStore = useEventsStore()
+const lineEditor = ref<InstanceType<typeof LineEditorDialog> | null>(null)
+const lineEntryToEdit = ref<journalLine | null>(null)
 const journalEventsToShow = computed(() => {
   if (!videoPlayerRef.value) return sortedJournalRecords
   const ts = videoPlayerRef.value.elapsedTimeValue
@@ -92,6 +96,12 @@ function getAlternatives(type: JournalEntryType) {
   return alternatives
 }
 function onClickSwap(record: JournalEntry, event: MouseEvent) {
+  if (record.type === jet.LINE && 'players' in record) {
+    lineEntryToEdit.value = record
+    lineEditor.value?.open(record.players)
+    return
+  }
+
   const alternatives = getAlternatives(record.type)
   const propositions = alternatives?.map((a) => a.name) ?? []
   const selectDialog = document.createElement('dialog')
@@ -123,6 +133,14 @@ function onClickSwap(record: JournalEntry, event: MouseEvent) {
     record.source = src.USER
     selectDialog.close()
   })
+}
+
+function updateLineEntry(players: Set<string>) {
+  if (lineEntryToEdit.value) {
+    lineEntryToEdit.value.players = players
+    lineEntryToEdit.value.source = src.USER
+    lineEntryToEdit.value = null
+  }
 }
 
 function scrollToLastActiveButtons() {
@@ -166,6 +184,11 @@ function getLinePlayersLabel(players: Set<string>): string {
   return Array.from(players)
     .map((playerId) => teamStore.getPlayerByID(playerId)?.name ?? playerId)
     .join(', ')
+}
+
+function getLinePlayerCount(players: Set<string>): number {
+  const teamIdentifiers = new Set(teamStore.teams.flatMap((team) => [team.id, team.name]))
+  return Array.from(players).filter((player) => !teamIdentifiers.has(player)).length
 }
 
 onUpdated(() => {
@@ -229,7 +252,7 @@ defineExpose({
           v-if="record.type === jet.LINE && 'players' in record"
           :title="getLinePlayersLabel(record.players)"
         >
-          ({{ record.players.size }})
+          ({{ getLinePlayerCount(record.players) }})
         </span>
         <span
           v-if="record.type === jet.COMMENT && record.details"
@@ -256,6 +279,7 @@ defineExpose({
       </sl-button>
     </div>
   </div>
+  <LineEditorDialog ref="lineEditor" @save="updateLineEntry" />
 </template>
 
 <style scoped>
