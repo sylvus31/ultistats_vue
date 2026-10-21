@@ -4,6 +4,18 @@ export enum KeyboardConstants {
   ALT = 'Alt',
 }
 
+export const VIDEO_PLAYER_SHORTCUTS = [
+  'Space',
+  'ArrowUp',
+  'ArrowDown',
+  'ArrowLeft',
+  'ArrowRight',
+]
+
+export function isReservedShortcutKey(key: string): boolean {
+  return VIDEO_PLAYER_SHORTCUTS.includes(normalizeShortcutKey(key))
+}
+
 export function normalizeShortcutKey(key: string): string {
   const legacyLetterCode = /^Key([A-Z])$/.exec(key)
   if (legacyLetterCode) {
@@ -26,8 +38,12 @@ export function transformCodeForSpecialKeys(code: string): string {
 }
 
 export function getKeyboardShortcutKey(event: Pick<KeyboardEvent, 'code' | 'key'>): string {
-  if (/^Key[A-Z]$/.test(event.code)) {
-    return normalizeShortcutKey(event.key.length === 1 ? event.key : event.code)
+  if (
+    event.key.length === 1 &&
+    event.code !== 'Space' &&
+    !event.code.startsWith('Numpad')
+  ) {
+    return normalizeShortcutKey(event.key)
   }
   return transformCodeForSpecialKeys(event.code)
 }

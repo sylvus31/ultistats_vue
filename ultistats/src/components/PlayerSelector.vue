@@ -13,13 +13,6 @@ const teamStore = useTeamStore()
 const { players } = storeToRefs(teamStore)
 
 const keyboardStore = useKeyboardStore()
-const componentId = 'PlayerSelector'
-
-keyboardStore.addKeyBinding(componentId, 'NumpadEnter', 'modifier for players', noAction)
-
-function noAction(event: string, activeModifiers: Set<string>) {
-  console.log('no action', event, activeModifiers)
-}
 
 const selectPlayer = (player: Player) => {
   useTeamStore().selectActivePlayer(player.id)

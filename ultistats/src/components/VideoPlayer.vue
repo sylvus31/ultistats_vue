@@ -37,6 +37,7 @@ import videojs from 'video.js'
 import type Player from 'video.js/dist/types/player'
 import 'video.js/dist/video-js.css'
 import { useKeyboardStore } from '../stores/keyboardStore'
+import type { ShortcutTarget } from './interfaces/ShortcutTarget'
 import ScoreEvolution from './ScoreEvolution.vue'
 import TimerOverlay from './TimerOverlay.vue'
 const scoreEvolutionRef = ref<InstanceType<typeof ScoreEvolution> | null>(null)
@@ -44,7 +45,6 @@ const scoreEvolutionRef = ref<InstanceType<typeof ScoreEvolution> | null>(null)
 const keyboardStore = useKeyboardStore()
 const componentId = 'VideoPlayer'
 
-const videoPlayerKeys = [' ', 'ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight']
 // --- Props ---
 interface Props {
   options?: object
@@ -215,14 +215,23 @@ const loadVideo = (source: { src: string; type: string }) => {
   }
 }
 
-keyboardStore.addKeyBinding(componentId, 'ArrowUp', 'Speed up video', keyStrokeCallBack)
-keyboardStore.addKeyBinding(componentId, 'ArrowDown', 'Slow down video', keyStrokeCallBack)
-keyboardStore.addKeyBinding(componentId, 'ArrowLeft', 'Seek backward', keyStrokeCallBack)
-keyboardStore.addKeyBinding(componentId, 'ArrowRight', 'Seek forward', keyStrokeCallBack)
-keyboardStore.addKeyBinding(componentId, 'Space', 'Toggle play/pause', keyStrokeCallBack)
+const videoPlayerShortcutTarget: ShortcutTarget = {
+  message: (key) => `VideoPlayer: ${key}`,
+  callback: keyStrokeCallBack,
+  setShortcut: () => {},
+  removeShortcut: () => {},
+}
+
+keyboardStore.registerShortcutTarget(componentId, videoPlayerShortcutTarget)
+keyboardStore.addKeyBinding('ArrowUp', componentId)
+keyboardStore.addKeyBinding('ArrowDown', componentId)
+keyboardStore.addKeyBinding('ArrowLeft', componentId)
+keyboardStore.addKeyBinding('ArrowRight', componentId)
+keyboardStore.addKeyBinding('Space', componentId)
 
 // --- Keyboard Shortcuts ---
-function keyStrokeCallBack(event: string, activeModifiers: Set<string>) {
+function keyStrokeCallBack(event: string, activeModifiers: Set<string> = new Set()) {
+  void activeModifiers
   switch (event) {
     case 'ArrowUp':
       changeSpeed(true)

@@ -3,6 +3,7 @@ import { ref } from 'vue'
 import { onKeyStroke, onKeyUp } from '@vueuse/core'
 import {
   getKeyboardShortcutKey,
+  isReservedShortcutKey,
   KeyboardConstants,
   normalizeShortcutKey,
   transformCodeForSpecialKeys,
@@ -16,6 +17,7 @@ export const useKeyboardStore = defineStore('keyboard', () => {
   }
   const keyBindings = ref<Map<string, string>>(new Map())
   const keyBindingsUP = ref<Map<string, KeyBinding>>(new Map())
+  const playerModifierKey = ref('NumpadEnter')
 
   type keyBindingCallback = (eventCode: string, modifiers: Set<string>) => void
   class KeyBinding {
@@ -59,6 +61,10 @@ export const useKeyboardStore = defineStore('keyboard', () => {
 
   function addKeyBinding(keyCode: string, name: string) {
     const normalizedKey = normalizeShortcutKey(keyCode)
+    if (isReservedShortcutKey(normalizedKey) && name !== 'VideoPlayer') {
+      console.warn(`${normalizedKey} is reserved for the VideoPlayer`)
+      return false
+    }
     if (keyBindings.value.has(normalizedKey)) {
       console.log(normalizedKey + ' already assigned', keyBindings.value.get(normalizedKey))
       return false
@@ -103,11 +109,20 @@ export const useKeyboardStore = defineStore('keyboard', () => {
     }
   }
 
-  const modifierKeys: string[] = ['NumpadEnter', KeyboardConstants.SHIFT, KeyboardConstants.CTRL] //['ControlRight', 'ShiftRight', 'ShiftLeft'] // AltxxKey
-  // const forbiddenKeys = ['MetaLeft', 'MetaRight', 'NumLock']
   const activeModifiers: Set<string> = new Set()
 
   const userSpecialModifiers = [KeyboardConstants.SHIFT, KeyboardConstants.CTRL]
+
+  function setPlayerModifierKey(key: string) {
+    const normalizedKey = normalizeShortcutKey(key)
+    if (isReservedShortcutKey(normalizedKey)) {
+      console.warn(`${normalizedKey} is reserved for the VideoPlayer`)
+      return false
+    }
+    playerModifierKey.value = normalizedKey
+    activeModifiers.clear()
+    return true
+  }
 
   onKeyStroke((event) => {
     // Ignore repeated key presses when the key is held down
@@ -119,8 +134,11 @@ export const useKeyboardStore = defineStore('keyboard', () => {
     console.log('onKeyStroke: event', event)
     const code = transformCodeForSpecialKeys(event.code)
     const key = getKeyboardShortcutKey(event)
-    if (modifierKeys.includes(code)) {
+    if (userSpecialModifiers.includes(code)) {
       activeModifiers.add(code)
+    }
+    if (key === playerModifierKey.value) {
+      activeModifiers.add(playerModifierKey.value)
     }
     if (keyBindings.value.has(key)) {
       event.preventDefault()
@@ -138,6 +156,7 @@ export const useKeyboardStore = defineStore('keyboard', () => {
     //no need to check if it a modifier or not
     const code = transformCodeForSpecialKeys(event.code)
     activeModifiers.delete(code)
+    activeModifiers.delete(getKeyboardShortcutKey(event))
     console.log('up', activeModifiers)
 
     const key = getKeyboardShortcutKey(event)
@@ -154,6 +173,9 @@ export const useKeyboardStore = defineStore('keyboard', () => {
     removeKeyBindingsFor,
     getKeyBinding,
     registerShortcutTarget,
+    playerModifierKey,
+    setPlayerModifierKey,
+    isReservedShortcutKey,
     activeModifiers,
     userSpecialModifiers,
   }
