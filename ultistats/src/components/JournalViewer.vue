@@ -65,6 +65,11 @@ function onClickBreak(record: JournalEntry) {
   record.source = src.USER
 }
 
+function onClickOffHans(record: JournalEntry) {
+  journalStore.toggleModifier(record, 'Off-hand')
+  record.source = src.USER
+}
+
 function onClickDelete(record: JournalEntry) {
   journalStore.deleteRecord(record)
 }
@@ -232,8 +237,8 @@ defineExpose({
           title="Supprimer l'action"
         ></span>
         {{ getRecordName(record) }}
-        <span v-if="record.type === jet.PASS && 'modifiers' in record"
-          ><button
+        <span v-if="record.type === jet.PASS && 'modifiers' in record">
+          <button
             class="pass-button"
             :class="{ active: record.modifiers.has('longue') }"
             @click.stop="onClickLongue(record)"
@@ -246,8 +251,15 @@ defineExpose({
             @click.stop="onClickBreak(record)"
           >
             B
-          </button></span
-        >
+          </button>
+          <button
+            class="pass-button"
+            :class="{ active: record.modifiers.has('Off-hand') }"
+            @click.stop="onClickOffHans(record)"
+          >
+            O
+          </button>
+        </span>
         <span
           v-if="record.type === jet.LINE && 'players' in record"
           :title="getLinePlayersLabel(record.players)"

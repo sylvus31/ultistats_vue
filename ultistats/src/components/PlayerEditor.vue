@@ -2,6 +2,7 @@
 import { useTeamStore } from '@/stores/Team'
 import { storeToRefs } from 'pinia'
 import '@shoelace-style/shoelace/dist/components/input/input.js'
+import type { Player } from '@/types/Player'
 import { useKeyboardStore } from '../stores/keyboardStore'
 import { onMounted, onBeforeUnmount } from 'vue'
 import { playersSelectorShortcutManagerName } from './interfaces/ShortcutTarget'
@@ -19,15 +20,25 @@ const handleLosseFocus = () => {
   keyboardStore.allowShortcuts()
 }
 
+const synchronizePlayerBindings = () => {
+  keyboardStore.removeKeyBindingsFor(playersSelectorShortcutManagerName)
+  players.value.forEach((player) => {
+    if (player.key_code) {
+      keyboardStore.addKeyBinding(player.key_code, playersSelectorShortcutManagerName)
+    }
+  })
+}
+
 onMounted(() => {
   handleGetFocus()
+  synchronizePlayerBindings()
 })
 
 onBeforeUnmount(() => {
   handleLosseFocus()
 })
 
-const handleKeyDown = (player, event: KeyboardEvent) => {
+const handleKeyDown = (player: Player, event: KeyboardEvent) => {
   event.preventDefault()
   const key = getKeyboardShortcutKey(event)
   if (keyboardStore.isReservedShortcutKey(key)) {
@@ -39,8 +50,9 @@ const handleKeyDown = (player, event: KeyboardEvent) => {
     window.alert(`This key is already assigned to ${currentTargetName}. Please choose another key.`)
     return
   }
-  keyboardStore.addKeyBinding(key, playersSelectorShortcutManagerName)
-  assignKeyOrModifier(player, key, player.modifiers)
+  if (assignKeyOrModifier(player, key, player.modifiers ?? new Set())) {
+    synchronizePlayerBindings()
+  }
 }
 
 const handlePlayerModifierKeyDown = (event: KeyboardEvent) => {
@@ -72,7 +84,7 @@ const handlePlayerModifierKeyDown = (event: KeyboardEvent) => {
   })
 }
 
-const assignKeyOrModifier = (player, keyCode: string, modifiers: Set<string>) => {
+const assignKeyOrModifier = (player: Player, keyCode: string, modifiers: Set<string>) => {
   console.log('assignKeyOrModifier', player.name, keyCode, modifiers)
   const otherPlayer = teamStore.getPlayerByKeyCodeAndModifiers(keyCode, modifiers)
 
@@ -95,16 +107,26 @@ const assignKeyOrModifier = (player, keyCode: string, modifiers: Set<string>) =>
   }
 }
 
-const handleModifierChange = (player, event: Event) => {
+const handleModifierChange = (player: Player, event: Event) => {
   const checkbox = event.target as HTMLInputElement
   console.log('checkbox checked', checkbox.checked, player.name, player.key_code)
 
-  const newModifiers = checkbox.checked ? new Set([keyboardStore.playerModifierKey]) : new Set()
+  const newModifiers = checkbox.checked
+    ? new Set([keyboardStore.playerModifierKey])
+    : new Set<string>()
 
-  const success = assignKeyOrModifier(player, player.key_code, newModifiers)
-  if (!success) {
+  const success = assignKeyOrModifier(player, player.key_code ?? '', newModifiers)
+  if (success) {
+    synchronizePlayerBindings()
+  } else {
     checkbox.checked = !checkbox.checked
   }
+}
+
+const clearShortcut = (player: Player) => {
+  player.key_code = ''
+  player.modifiers = new Set()
+  synchronizePlayerBindings()
 }
 </script>
 
@@ -124,6 +146,7 @@ const handleModifierChange = (player, event: Event) => {
           <th>Name</th>
           <th>Number</th>
           <th>Shortcut</th>
+          <th>Clear</th>
           <th>Modifiers</th>
         </tr>
       </thead>
@@ -142,10 +165,21 @@ const handleModifierChange = (player, event: Event) => {
             />
           </td>
           <td>
+            <button
+              type="button"
+              class="clear-shortcut"
+              :disabled="!player.key_code"
+              :aria-label="`Clear ${player.name} shortcut`"
+              @click="clearShortcut(player)"
+            >
+              Clear
+            </button>
+          </td>
+          <td>
             <label v-if="player.key_code" for="option1">
               <input
                 type="checkbox"
-                :checked="player.modifiers?.size > 0"
+                :checked="(player.modifiers?.size ?? 0) > 0"
                 @change="handleModifierChange(player, $event)"
               />
             </label>
@@ -216,5 +250,19 @@ tbody tr:hover {
 
 input[type='checkbox'] {
   accent-color: var(--color-accent);
+}
+
+.clear-shortcut {
+  padding: var(--spacing-sm) var(--spacing-md);
+  color: var(--color-text-primary);
+  background: transparent;
+  border: 1px solid var(--color-border);
+  border-radius: var(--border-radius-sm);
+  cursor: pointer;
+}
+
+.clear-shortcut:disabled {
+  cursor: default;
+  opacity: 0.5;
 }
 </style>

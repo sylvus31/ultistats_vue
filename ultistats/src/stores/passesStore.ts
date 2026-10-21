@@ -8,6 +8,7 @@ export const usePassesStore = defineStore('passesStore', () => {
   const passesModifiers = ref<passModifier[]>([
     { id: 'pm1', name: 'longue', isActive: false, key: KeyboardConstants.SHIFT },
     { id: 'pm2', name: 'break', isActive: false, key: KeyboardConstants.CTRL },
+    { id: 'pm3', name: 'Off-hand', isActive: false, key: KeyboardConstants.ALT },
   ])
   const passes = ref<Pass[]>([
     { id: 'a6', name: 'Hammer', isActive: false, key: 'q' },
