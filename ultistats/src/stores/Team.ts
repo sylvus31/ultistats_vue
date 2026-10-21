@@ -1,6 +1,6 @@
 // src/stores/Team.ts
 import { defineStore } from 'pinia'
-import { ref, computed } from 'vue'
+import { ref, computed, watch } from 'vue'
 import { createPlayer, type Player } from '@/types/Player'
 import { normalizeShortcutKey } from '@/types/keyConstants'
 
@@ -45,11 +45,24 @@ const team_1 = new Team('ADVERSAIRE', 't1')
 // Define the store with the ID 'team'
 export const useTeamStore = defineStore('team', () => {
   const teams = ref<[Team, Team]>([team_0, team_1])
+  const teamShortcutPlayers = ref<[Player, Player]>([
+    createPlayer('t0', team_0.name, 't'),
+    createPlayer('t1', team_1.name, 'h'),
+  ])
+  watch(
+    () => teams.value.map((team) => team.name),
+    ([team0Name, team1Name]) => {
+      teamShortcutPlayers.value[0].name = team0Name
+      teamShortcutPlayers.value[1].name = team1Name
+    },
+    { immediate: true },
+  )
   const players = computed(() => {
-    const p = [...teams.value[0].players, ...teams.value[1].players]
-    p.push(createPlayer('t0', teams.value[0].name, 't'))
-    p.push(createPlayer('t1', teams.value[1].name, 'h'))
-    return p
+    return [
+      ...teams.value[0].players,
+      ...teams.value[1].players,
+      ...teamShortcutPlayers.value,
+    ]
   })
 
   // --- Getters ---
