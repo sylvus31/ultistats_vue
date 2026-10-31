@@ -5,49 +5,49 @@
     "players": [
       {
         "id": "p1",
-        "name": "Thomas",
+        "name": "Alice",
+        "number": 1,
         "key_code": "Numpad7"
       },
       {
         "id": "p2",
-        "name": "Guimsou",
+        "name": "Bob",
+        "number": 24,
         "key_code": "Numpad8",
         "modifiers": ["NumpadEnter"]
       },
       {
         "id": "p3",
-        "name": "Clar",
+        "name": "Chris",
         "key_code": "Numpad8"
       },
       {
         "id": "p4",
-        "name": "Toto",
+        "name": "Dan",
         "key_code": "Numpad4"
       },
       {
         "id": "p5",
-        "name": "Yann",
+        "name": "Emily",
         "key_code": "Numpad5"
       },
       {
         "id": "p6",
-        "name": "Matteo",
+        "name": "Frank",
         "key_code": "Numpad6"
       },
       {
         "id": "p7",
-        "name": "Lucian",
+        "name": "Gustave",
         "key_code": "Numpad1"
       },
       {
         "id": "p8",
-        "name": "Lyloo",
-        "key_code": "NumpadDivide"
+        "name": "Howard"
       },
       {
         "id": "p9",
-        "name": "Salma"
-      }
+        "name": "Irene"      }
     ]
   },
   {
