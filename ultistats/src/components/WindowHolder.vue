@@ -1,10 +1,24 @@
 <template>
-  <div class="window-container">
+  <div class="window-container" :class="{ 'window-container-fullscreen': isFullscreen }">
     <div class="title-bar">
       <div class="title">{{ title }}</div>
       <div><slot name="menu" /></div>
       <div class="actions">
-        <button class="icon-button" @click="edit" title="Edit">
+        <button
+          v-if="allowFullscreen"
+          class="icon-button"
+          type="button"
+          :title="isFullscreen ? 'Restore' : 'Open full window'"
+          :aria-label="isFullscreen ? 'Restore window' : 'Open full window'"
+          @click="toggleFullscreen"
+        >
+          <span
+            class="mdi"
+            :class="isFullscreen ? 'mdi-window-restore' : 'mdi-window-maximize'"
+            aria-hidden="true"
+          ></span>
+        </button>
+        <button v-if="allowEdit" class="icon-button" @click="edit" title="Edit">
           <span class="mdi mdi-pencil"></span>
         </button>
         <button class="icon-button" @click="minimize" :title="isMinimized ? 'Expand' : 'Collapse'">
@@ -12,7 +26,7 @@
         </button>
       </div>
     </div>
-    <div v-show="!isMinimized"><slot name="main" /></div>
+    <div v-show="!isMinimized" class="window-content"><slot name="main" /></div>
     <ModalDialog ref="editorDialog" :title="`Edit ${title}`" :width="760">
       <component :is="editorComponentToShow" v-if="editorComponentToShow" />
     </ModalDialog>
@@ -23,14 +37,27 @@
 import { nextTick, ref, shallowRef, type Component } from 'vue'
 import ModalDialog from './ModalDialog.vue'
 
-const props = defineProps({
-  title: String,
-  editorComponent: String,
-})
+const props = withDefaults(
+  defineProps<{
+    title: string
+    editorComponent?: string
+    allowEdit?: boolean
+    allowFullscreen?: boolean
+  }>(),
+  {
+    allowEdit: false,
+    allowFullscreen: false,
+  },
+)
 
 const isMinimized = ref(false)
+const isFullscreen = ref(false)
 const editorDialog = ref<InstanceType<typeof ModalDialog> | null>(null)
 const editorComponentToShow = shallowRef<Component | null>(null)
+
+const toggleFullscreen = () => {
+  isFullscreen.value = !isFullscreen.value
+}
 
 const minimize = () => {
   isMinimized.value = !isMinimized.value
@@ -55,6 +82,25 @@ const edit = async () => {
   background-color: var(--color-dark-bg);
 }
 
+.window-container-fullscreen {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  width: 100vw;
+  height: 100vh;
+  margin: 0;
+  border-radius: 0;
+}
+
+.window-container-fullscreen .window-content {
+  min-height: 0;
+  flex: 1;
+  overflow: auto;
+}
+
 .title-bar {
   display: flex;
   justify-content: space-between;
@@ -75,6 +121,7 @@ const edit = async () => {
 
 .actions {
   display: flex;
+  align-items: center;
   gap: var(--spacing-sm);
 }
 
