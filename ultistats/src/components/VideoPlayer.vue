@@ -12,20 +12,30 @@
 
     <!-- Custom Controls -->
     <div class="controls-container">
-      <button class="control-button" @click="playPause">
-        <span class="mdi" :class="isPlaying ? 'mdi-pause' : 'mdi-play'"></span> [SPACE]
-      </button>
-      <button class="control-button" @click="seek(-2)"><span class="mdi" :class="'mdi-rewind'"></span> 2s [←]</button>
-      <button class="control-button" @click="seek(5)"><span class="mdi" :class="'mdi-fast-forward'"></span> 5s [→]</button>
-      <button class="control-button" @click="changeSpeed(false)">
-        <span class="mdi" :class="'mdi-play-speed'"></span> [↓]
-      </button>
-      <button class="control-button" @click="changeSpeed(true)">
-        <span class="mdi" :class="'mdi-play-speed'"></span> [↑]
-      </button>
-      <span class="text-sm text-secondary">Speed: {{ currentSpeed?.toFixed(2) }}x</span>
-      <span class="text-sm text-secondary">Time: {{ formattedTime }}</span>
-      <ScoreEvolution ref="scoreEvolutionRef" />
+      <div class="playback-controls">
+        <button class="control-button" @click="playPause">
+          <span class="mdi" :class="isPlaying ? 'mdi-pause' : 'mdi-play'"></span> [SPACE]
+        </button>
+        <button class="control-button" @click="seek(-2)">
+          <span class="mdi mdi-rewind"></span> 2s [←]
+        </button>
+        <button class="control-button" @click="seek(5)">
+          <span class="mdi mdi-fast-forward"></span> 5s [→]
+        </button>
+        <button class="control-button" @click="changeSpeed(false)">
+          <span class="mdi mdi-play-speed"></span> [↓]
+        </button>
+        <button class="control-button" @click="changeSpeed(true)">
+          <span class="mdi mdi-play-speed"></span> [↑]
+        </button>
+      </div>
+      <div class="playback-status">
+        <span class="text-sm text-secondary">Speed: {{ currentSpeed?.toFixed(2) }}x</span>
+        <span class="text-sm text-secondary">Time: {{ formattedTime }}</span>
+      </div>
+      <div class="score-evolution">
+        <ScoreEvolution ref="scoreEvolutionRef" />
+      </div>
     </div>
   </div>
 </template>
@@ -209,7 +219,6 @@ const loadVideo = (source: { src: string; type: string }) => {
   if (player.value) {
     console.log('Loading new video source:', source)
     player.value.src(source)
-
   } else {
     console.error('Video player not available to load new source.')
   }
@@ -310,5 +319,40 @@ defineExpose({
 <style scoped>
 .video-container {
   position: relative;
+}
+
+.controls-container {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.playback-controls {
+  display: flex;
+  align-items: center;
+}
+
+.playback-status {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-lg);
+  min-width: max-content;
+}
+
+.score-evolution {
+  display: flex;
+  align-items: center;
+  margin-left: auto;
+  margin-right: var(--spacing-md);
+}
+
+@media (max-width: 700px) {
+  .playback-status {
+    order: 1;
+    flex-basis: 100%;
+    padding: var(--spacing-sm) 0;
+  }
 }
 </style>

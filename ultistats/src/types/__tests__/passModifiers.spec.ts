@@ -1,25 +1,19 @@
 import { describe, expect, it } from 'vitest'
-import { getConfiguredPassModifierName, hasPassModifier } from '../passModifiers'
+import { PASS_MODIFIER_IDS } from '../catalogIds'
+import { getPassModifierId, hasPassModifier } from '../passModifiers'
 
-describe('pass modifier names', () => {
-  it.each(['Long', 'long', 'longue', 'LONGUE'])('recognizes %s as the long modifier', (name) => {
-    expect(hasPassModifier(new Set([name]), 'long')).toBe(true)
+describe('pass modifier IDs', () => {
+  it('recognizes the long modifier by ID only', () => {
+    expect(hasPassModifier(new Set([PASS_MODIFIER_IDS.LONG]), 'long')).toBe(true)
+    expect(hasPassModifier(new Set(['Long']), 'long')).toBe(false)
   })
 
-  it.each(['Break', 'break', 'BREAK'])('recognizes %s as the break modifier', (name) => {
-    expect(hasPassModifier(new Set([name]), 'break')).toBe(true)
+  it('recognizes the break modifier by ID', () => {
+    expect(hasPassModifier(new Set([PASS_MODIFIER_IDS.BREAK]), 'break')).toBe(true)
   })
 
-  it('uses the configured modifier name and supports legacy save names', () => {
-    expect(
-      getConfiguredPassModifierName(
-        [
-          { id: 'long', name: 'Long', isActive: false },
-          { id: 'break', name: 'Break', isActive: false },
-        ],
-        'long',
-      ),
-    ).toBe('Long')
-    expect(hasPassModifier(new Set(['longue', 'break']), 'long')).toBe(true)
+  it('returns the configured modifier ID for journal toggles', () => {
+    expect(getPassModifierId('long')).toBe('pm1')
+    expect(getPassModifierId('off-hand')).toBe('pm3')
   })
 })

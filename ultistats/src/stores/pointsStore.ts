@@ -2,17 +2,21 @@ import { computed } from 'vue'
 import type { JournalEntry } from '@/stores/journal'
 import { JournalEntryType as jet } from '@/types/journaltypes'
 import { useTeamStore } from './Team'
+import { isScoreActionRecord } from '@/types/scoreAction'
+import { EVENT_IDS } from '@/types/catalogIds'
 
 export class Point {
   startTime: number
   pullTime: number
-  endTime = computed(() =>
-    this.records[this.records.length - 1]?.name == 'score'
-      ? this.records[this.records.length - 1].ts
-      : Number.MAX_SAFE_INTEGER,
-  )
+  endTime = computed(() => {
+    const lastRecord = this.records[this.records.length - 1]
+    return lastRecord && isScoreActionRecord(lastRecord) ? lastRecord.ts : Number.MAX_SAFE_INTEGER
+  })
   records: JournalEntry[] = []
-  isFinished = computed(() => Boolean(this.records[this.records.length - 1].name == 'score'))
+  isFinished = computed(() => {
+    const lastRecord = this.records[this.records.length - 1]
+    return lastRecord ? isScoreActionRecord(lastRecord) : false
+  })
   attackingTeam: number = -1
   scoringTeam: number = -1
   hasPull = false
@@ -32,7 +36,7 @@ export const separateRecordsInPoints = (records: JournalEntry[]) => {
 
   records.forEach((record, i) => {
     tmp_points[tmp_points.length - 1].addRecord(record)
-    if (record.name === 'pull') {
+    if (record.type === jet.EVENT && record.name === EVENT_IDS.PULL) {
       tmp_points[tmp_points.length - 1].pullTime = record.ts
       tmp_points[tmp_points.length - 1].hasPull = true
       for (let j = i; j < records.length; j++) {
@@ -44,7 +48,7 @@ export const separateRecordsInPoints = (records: JournalEntry[]) => {
           break
         }
       }
-    } else if (record.name === 'score') {
+    } else if (isScoreActionRecord(record)) {
       for (let j = i - 1; j > 0; j--) {
         if (records[j].type == jet.PLAYER) {
           const teamStore = useTeamStore()

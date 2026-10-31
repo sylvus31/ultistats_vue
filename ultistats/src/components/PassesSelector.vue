@@ -34,7 +34,7 @@ const journalStore = useJournalStore()
 const clickAction = (pass: Pass) => {
   console.log(pass.name)
   passesStore.selectActivePass(pass.id)
-  const modifiers = passesStore.getActiveModifiers().map((m) => m.name)
+  const modifiers = passesStore.getActiveModifiers().map((m) => m.id)
 
   journalStore.addPassEntry(pass.id, new Set(modifiers))
   passesStore.resetModifiers()
@@ -45,7 +45,7 @@ const logAction = (eventCode: string, _modifiers: Set<string>) => {
   const action = passesStore.getActionByKey(eventCode)
   if (action) {
     passesStore.selectActivePass(action.id)
-    const modifiers = passesStore.getActiveModifiers().map((m) => m.name)
+    const modifiers = passesStore.getActiveModifiers().map((m) => m.id)
     journalStore.addPassEntry(action.id, new Set(modifiers))
   }
 }

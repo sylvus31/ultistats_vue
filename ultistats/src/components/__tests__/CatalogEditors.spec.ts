@@ -15,10 +15,10 @@ describe('catalog editors', () => {
       vi.fn((url: string) => {
         const data =
           url === '/events.json'
-            ? [{ name: 'Pull', description: 'Start a point.' }]
+            ? [{ id: 'e1', name: 'Pull', description: 'Start a point.' }]
             : url === '/actions/positive_actions.json'
-              ? [{ name: 'Score', terminal: true }]
-              : [{ name: '', terminal: false }]
+              ? [{ id: 'pa4', name: 'Score', terminal: true }]
+              : [{ id: 'na1', name: '', terminal: false }]
 
         return Promise.resolve({
           ok: true,
@@ -41,7 +41,7 @@ describe('catalog editors', () => {
     expect(actionsStore.negativeActions).toHaveLength(0)
 
     const draftInput = wrapper.findAll('section')[0].findAll('sl-input')[1]
-    ;(draftInput.element as HTMLInputElement).value = 'Interception'
+    draftInput.element.value = 'Interception'
     await draftInput.trigger('input')
 
     await vi.waitFor(() => expect(actionsStore.positiveActions).toHaveLength(2))
@@ -64,7 +64,7 @@ describe('catalog editors', () => {
     expect(eventsStore.events.map((event) => event.id)).toEqual(['e1'])
 
     const draftInput = wrapper.findAll('sl-input').at(-1)!
-    ;(draftInput.element as HTMLInputElement).value = 'Timeout'
+    draftInput.element.value = 'Timeout'
     await draftInput.trigger('input')
 
     await vi.waitFor(() => expect(eventsStore.events).toHaveLength(2))
