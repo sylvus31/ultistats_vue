@@ -18,10 +18,11 @@ export const useEventsStore = defineStore('eventsStore', () => {
       if (hasImportedEvents) return
       let nb = 1
       events.value = []
-      data.forEach((event: { name: string }) => {
+      data.forEach((event: { name: string; description?: string }) => {
         events.value?.push({
           id: 'e' + nb,
           name: event.name,
+          description: event.description,
         })
         nb++
       })

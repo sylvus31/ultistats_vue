@@ -5,17 +5,17 @@
     "terminal": false
   },
   {
-    "name": "drop",
+    "name": "Drop",
     "description": "The disc is dropped by the player.",
     "terminal": true
   },
   {
-    "name": "break throw allowed",
+    "name": "Got broken",
     "description": "The player guarding a thrower allows a break throw to be completed.",
     "terminal": true
   },
   {
-    "name": "allow cut on open side",
+    "name": "Got run",
     "description": "The player is beaten on the open side by a cutter.",
     "terminal": true
   }

@@ -1,15 +1,15 @@
 {
   "passes": [
-    { "id": "a6", "name": "Hammer", "key": "q" },
-    { "id": "a2", "name": "Forward", "key": "w" },
-    { "id": "a5", "name": "Knife", "key": "e" },
-    { "id": "a7", "name": "Skoober", "key": "r" },
-    { "id": "a3", "name": "Dump", "key": "d" },
-    { "id": "a4", "name": "Swing", "key": "a" }
+    { "id": "a6", "name": "Hammer", "key": "q", "description": "" },
+    { "id": "a2", "name": "Forward", "key": "w", "description": "" },
+    { "id": "a5", "name": "Knife", "key": "e", "description": "" },
+    { "id": "a7", "name": "Skoober", "key": "r", "description": "" },
+    { "id": "a3", "name": "Dump", "key": "d", "description": "" },
+    { "id": "a4", "name": "Swing", "key": "a", "description": "" }
   ],
   "passesModifiers": [
-    { "id": "pm1", "name": "Long", "key": "Shift" },
-    { "id": "pm2", "name": "Break", "key": "Ctrl" },
-    { "id": "pm3", "name": "Off-hand", "key": "Alt" }
+    { "id": "pm1", "name": "Long", "key": "Shift", "description": "" },
+    { "id": "pm2", "name": "Break", "key": "Ctrl", "description": "" },
+    { "id": "pm3", "name": "Off-hand", "key": "Alt", "description": "" }
   ]
 }

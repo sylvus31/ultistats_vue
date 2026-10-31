@@ -2,6 +2,7 @@ export interface Action {
   type: ActionType
   id: string
   name: string
+  description?: string
   key?: string
   terminal: boolean
 }
@@ -13,5 +14,6 @@ export enum ActionType {
 
 export interface ActionData {
   name: string
+  description?: string
   terminal: boolean
 }

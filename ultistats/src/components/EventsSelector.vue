@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { useEventsStore } from '@/stores/EventsStore'
 import { useJournalStore } from '@/stores/journal'
+import { getDescriptionTooltip } from '@/types/descriptions'
 
 const eventsStore = useEventsStore()
 const journalStore = useJournalStore()
@@ -10,6 +11,7 @@ const journalStore = useJournalStore()
     <sl-button
       v-for="action in eventsStore.events"
       :key="action.id"
+      :title="getDescriptionTooltip(action.description)"
       @click="journalStore.addEventEntry(action.id)"
     >
       <span class="pass-name">{{ action.name }}</span>

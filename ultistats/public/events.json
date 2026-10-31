@@ -1,18 +1,18 @@
 [
   {
-    "name": "pull",
+    "name": "Pull",
     "description": "The disc is thrown to the other team at the start of a point."
   },
   {
-    "name": "foul",
+    "name": "Foul",
     "description": "A foul is called by a player. This includes contested and uncontested fouls."
   },
   {
-    "name": "timeout",
+    "name": "Timeout",
     "description": "A timeout is called by either team."
   },
   {
-    "name": "game stoppage",
+    "name": "Game stoppage",
     "description": "Game stops for any reason except timeout or foul called. It can be injury, half time, ..."
   }
 ]

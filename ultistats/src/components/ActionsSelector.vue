@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { useActionsStore } from '@/stores/ActionsStore'
 import { useJournalStore } from '@/stores/journal'
+import { getDescriptionTooltip } from '@/types/descriptions'
 
 const journalStore = useJournalStore()
 const actionsStore = useActionsStore()
@@ -11,6 +12,7 @@ const actionsStore = useActionsStore()
       v-for="action in actionsStore.positiveActions"
       :key="action.id"
       :class="{ positiveButton: true }"
+      :title="getDescriptionTooltip(action.description)"
       @click="journalStore.addActionEntry(action.id, action.terminal, true)"
     >
       <span class="pass-name">{{ action.name }}</span>
@@ -19,6 +21,7 @@ const actionsStore = useActionsStore()
       v-for="action in actionsStore.negativeActions"
       :key="action.id"
       :class="{ negativeButton: true }"
+      :title="getDescriptionTooltip(action.description)"
       @click="journalStore.addActionEntry(action.id, action.terminal, false)"
     >
       <span class="pass-name">{{ action.name }}</span>

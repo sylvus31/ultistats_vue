@@ -1,21 +1,21 @@
 [
   {
-    "name": "pick up disc",
+    "name": "Pick up disc",
     "description": "The player picks up a disc, after a pull or turnover.",
     "terminal": false
   },
   {
-    "name": "intercept",
+    "name": "Intercept",
     "description": "The player intercepts a pass. The player catches the disc and gain possession",
     "terminal": true
   },
   {
-    "name": "block",
+    "name": "Block",
     "description": "The player blocks a pass, either when marking the thrower or when defending a cut.",
     "terminal": true
   },
   {
-    "name": "score",
+    "name": "Score",
     "description": "The player scores a point. This includes Callahan points.",
     "terminal": true
   }

@@ -23,6 +23,7 @@ export const useActionsStore = defineStore('actionsStore', () => {
         positiveActions.value?.push({
           id: 'pa' + nb,
           name: action.name,
+          description: action.description,
           terminal: action.terminal,
           type: ActionType.POSITIVE,
         })
@@ -45,6 +46,7 @@ export const useActionsStore = defineStore('actionsStore', () => {
         negativeActions.value?.push({
           id: 'na' + nb,
           name: action.name,
+          description: action.description,
           terminal: action.terminal,
           type: ActionType.NEGATIVE,
         })
