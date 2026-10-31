@@ -2,7 +2,7 @@ import { defineStore } from 'pinia'
 import { ref } from 'vue'
 import type { Event } from '@/types/EventsType'
 
-const events = ref<Event[]>()
+const events = ref<Event[]>([])
 
 export const useEventsStore = defineStore('eventsStore', () => {
   let hasImportedEvents = false

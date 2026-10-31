@@ -15,6 +15,7 @@ import { useEventsStore } from '@/stores/EventsStore'
 import type { VideoPlayerInstance } from '@/components/VideoPlayer.vue'
 import LineEditorDialog from './LineEditorDialog.vue'
 import type { journalLine } from '@/types/journaltypes'
+import { getConfiguredPassModifierName, hasPassModifier } from '@/types/passModifiers'
 
 const videoPlayerRef = ref<VideoPlayerInstance | null>(null)
 const setVideoPlayerRef = (ref: Ref<VideoPlayerInstance | null>) => {
@@ -56,12 +57,18 @@ const displayButtonStyle = (buttonId: string, displayStyle: string) => {
 }
 
 function onClickLongue(record: JournalEntry) {
-  journalStore.toggleModifier(record, 'longue')
+  journalStore.toggleModifier(
+    record,
+    getConfiguredPassModifierName(passesStore.passesModifiers, 'long'),
+  )
   record.source = src.USER
 }
 
 function onClickBreak(record: JournalEntry) {
-  journalStore.toggleModifier(record, 'break')
+  journalStore.toggleModifier(
+    record,
+    getConfiguredPassModifierName(passesStore.passesModifiers, 'break'),
+  )
   record.source = src.USER
 }
 
@@ -240,14 +247,14 @@ defineExpose({
         <span v-if="record.type === jet.PASS && 'modifiers' in record">
           <button
             class="pass-button"
-            :class="{ active: record.modifiers.has('longue') }"
+            :class="{ active: hasPassModifier(record.modifiers, 'long') }"
             @click.stop="onClickLongue(record)"
           >
             L
           </button>
           <button
             class="pass-button"
-            :class="{ active: record.modifiers.has('break') }"
+            :class="{ active: hasPassModifier(record.modifiers, 'break') }"
             @click.stop="onClickBreak(record)"
           >
             B
