@@ -6,6 +6,7 @@ import { ActionType } from '@/types/ActionsType'
 export const useActionsStore = defineStore('actionsStore', () => {
   const positiveActions = ref<Action[]>()
   const negativeActions = ref<Action[]>()
+  let hasImportedActions = false
 
   fetch('/actions/positive_actions.json', {
     headers: {
@@ -15,6 +16,7 @@ export const useActionsStore = defineStore('actionsStore', () => {
   })
     .then((response) => response.json())
     .then((data) => {
+      if (hasImportedActions) return
       let nb = 1
       positiveActions.value = []
       data.forEach((action: ActionData) => {
@@ -28,7 +30,7 @@ export const useActionsStore = defineStore('actionsStore', () => {
       })
     })
 
-  fetch('/actions/negative_actions.json',{
+  fetch('/actions/negative_actions.json', {
     headers: {
       'Content-Type': 'application/json',
       Accept: 'application/json',
@@ -36,6 +38,7 @@ export const useActionsStore = defineStore('actionsStore', () => {
   })
     .then((response) => response.json())
     .then((data) => {
+      if (hasImportedActions) return
       let nb = 1
       negativeActions.value = []
       data.forEach((action: ActionData) => {
@@ -49,6 +52,12 @@ export const useActionsStore = defineStore('actionsStore', () => {
       })
     })
 
+  function setActions(importedPositiveActions: Action[], importedNegativeActions: Action[]) {
+    hasImportedActions = true
+    positiveActions.value = importedPositiveActions
+    negativeActions.value = importedNegativeActions
+  }
+
   function getActionByID(id: string): Action | undefined {
     const action = positiveActions.value?.find((a) => a.id === id)
     if (action) {
@@ -57,5 +66,5 @@ export const useActionsStore = defineStore('actionsStore', () => {
     return negativeActions.value?.find((a) => a.id === id)
   }
 
-  return { positiveActions, negativeActions, getActionByID }
+  return { positiveActions, negativeActions, getActionByID, setActions }
 })

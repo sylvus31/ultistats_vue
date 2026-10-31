@@ -13,6 +13,7 @@
 </template>
 
 <script setup lang="ts">
+import { watch } from 'vue'
 import { usePassesStore } from '@/stores/passesStore'
 import { storeToRefs } from 'pinia'
 import type { Pass } from '@/types/Passes'
@@ -79,12 +80,18 @@ keyboardStore.registerShortcutTarget(
   passesSelectorShortcutManagerName,
   passesSelectorShortcutManager,
 )
-passes.value.forEach((p) => {
-  if (p.key) {
-    console.log('registering key binding for', p.name, p.key)
-    keyboardStore.addKeyBinding(p.key, passesSelectorShortcutManagerName)
-  }
-})
+watch(
+  () => passes.value.map((pass) => pass.key),
+  () => {
+    keyboardStore.removeKeyBindingsFor(passesSelectorShortcutManagerName)
+    passes.value.forEach((pass) => {
+      if (pass.key) {
+        keyboardStore.addKeyBinding(pass.key, passesSelectorShortcutManagerName)
+      }
+    })
+  },
+  { immediate: true },
+)
 </script>
 
 <style scoped>

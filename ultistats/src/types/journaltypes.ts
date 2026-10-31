@@ -55,3 +55,11 @@ export interface journalComment {
   source: JournalEntrySource
   details: string
 }
+
+export interface journalEvent {
+  type: JournalEntryType.EVENT
+  id: number
+  ts: number
+  name: string
+  source: JournalEntrySource
+}

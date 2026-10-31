@@ -8,12 +8,19 @@ import type { Player } from '@/types/Player'
 import { createPlayer } from '@/types/Player'
 import { normalizeShortcutKey } from '@/types/keyConstants'
 import { playersSelectorShortcutManagerName } from './interfaces/ShortcutTarget'
+import { usePassesStore } from '@/stores/passesStore'
+import { useEventsStore } from '@/stores/EventsStore'
+import { useActionsStore } from '@/stores/ActionsStore'
+import { JournalEntryType } from '@/types/journaltypes'
 
 const initStore = useInitStore()
 
 const journalStore = useJournalStore()
 const keyboardStore = useKeyboardStore()
 const teamStore = useTeamStore()
+const passesStore = usePassesStore()
+const eventsStore = useEventsStore()
+const actionsStore = useActionsStore()
 
 const handleGetFocus = () => {
   keyboardStore.forbidShortcuts()
@@ -25,7 +32,7 @@ const handleLosseFocus = () => {
 
 const saveFile = () => {
   const records = journalStore.sortedRecords
-  const version = '1'
+  const version = '2'
   const videoSrc = initStore.videoSrc
   const teamName_A = document.getElementById('teamName_A') as HTMLInputElement
   const teamName_B = document.getElementById('teamName_B') as HTMLInputElement
@@ -39,6 +46,12 @@ const saveFile = () => {
       { name: teamName_B.value, id: teamStore.teams[1].id, players: teamStore.teams[1].players },
     ],
     records: records,
+    comments: records.filter((record) => record.type === JournalEntryType.COMMENT),
+    events: eventsStore.events,
+    passes: passesStore.passes,
+    passesModifiers: passesStore.passesModifiers,
+    positiveActions: actionsStore.positiveActions,
+    negativeActions: actionsStore.negativeActions,
   }
 
   const blobPart = JSON.stringify(data, (_key, value) =>
@@ -71,15 +84,14 @@ const loadFile = () => {
 }
 
 const addRecords = (jsonData: any, timOffset: number) => {
-  let records = []
+  let records: any[] = []
   const jsonDataIsObject = typeof jsonData === 'object' && jsonData !== null
   const hasVersionProperty = jsonDataIsObject && 'version' in jsonData
 
   if (hasVersionProperty) {
-    console.log('Detected full save file format, extracting records only')
-    records = jsonData.records
+    records = Array.isArray(jsonData.records) ? jsonData.records : []
   } else {
-    records = jsonData
+    records = Array.isArray(jsonData) ? jsonData : []
   }
   records.forEach((record: any) => {
     //special processing for sets stored as array in json
@@ -101,28 +113,25 @@ const importData = (data: string) => {
   function setData() {
     keyboardStore.setPlayerModifierKey(jsonData.playerModifierKey ?? 'NumpadEnter')
 
-    for (let index = 0; index < 2; index++) {
-      teamStore.setTeamNameAndID(index, jsonData.teams[index].name, jsonData.teams[index].id)
+    if (Array.isArray(jsonData.teams)) {
+      for (let index = 0; index < Math.min(jsonData.teams.length, 2); index++) {
+        teamStore.setTeamNameAndID(index, jsonData.teams[index].name, jsonData.teams[index].id)
 
-      const players: Array<Player> = []
-      jsonData.teams[index].players?.forEach((playerData: any) => {
-        const keyCode = playerData['key_code']
-          ? normalizeShortcutKey(playerData['key_code'])
-          : undefined
-        const modifiers = (playerData['modifiers'] ?? []).map((modifier: string) =>
-          modifier === 'NumpadEnter' ? keyboardStore.playerModifierKey : modifier,
-        )
-        players.push(
-          createPlayer(
-            playerData['id'],
-            playerData['name'],
-            keyCode,
-            new Set(modifiers),
-          ),
-        )
-      })
+        const players: Array<Player> = []
+        jsonData.teams[index].players?.forEach((playerData: any) => {
+          const keyCode = playerData['key_code']
+            ? normalizeShortcutKey(playerData['key_code'])
+            : undefined
+          const modifiers = (playerData['modifiers'] ?? []).map((modifier: string) =>
+            modifier === 'NumpadEnter' ? keyboardStore.playerModifierKey : modifier,
+          )
+          players.push(
+            createPlayer(playerData['id'], playerData['name'], keyCode, new Set(modifiers)),
+          )
+        })
 
-      teamStore.setPlayersOfTeam(index, players)
+        teamStore.setPlayersOfTeam(index, players)
+      }
     }
 
     keyboardStore.removeKeyBindingsFor(playersSelectorShortcutManagerName)
@@ -133,8 +142,27 @@ const importData = (data: string) => {
     })
 
     addRecords(jsonData, timOffset)
+    if (Array.isArray(jsonData.comments)) {
+      const loadedCommentIds = new Set(
+        journalStore.sortedRecords
+          .filter((record) => record.type === JournalEntryType.COMMENT)
+          .map((record) => record.id),
+      )
+      jsonData.comments.forEach((comment: any) => {
+        if (loadedCommentIds.has(comment.id)) return
+        comment.ts += timOffset
+        journalStore.addRecord(comment)
+      })
+    }
 
     initStore.videoSrc = jsonData.videoSrc || { uri: '', type: '' }
+    if (Array.isArray(jsonData.events)) eventsStore.setEvents(jsonData.events)
+    if (Array.isArray(jsonData.passes)) {
+      passesStore.setPasses(jsonData.passes, jsonData.passesModifiers)
+    }
+    if (Array.isArray(jsonData.positiveActions) && Array.isArray(jsonData.negativeActions)) {
+      actionsStore.setActions(jsonData.positiveActions, jsonData.negativeActions)
+    }
   }
 
   if (journalStore.sortedRecords.length > 0) {

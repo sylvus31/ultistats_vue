@@ -267,7 +267,7 @@ defineExpose({
           ({{ getLinePlayerCount(record.players) }})
         </span>
         <span
-          v-if="record.type === jet.COMMENT && record.details"
+          v-if="record.type === jet.COMMENT && 'details' in record && record.details"
           class="mdi mdi-comment-text-outline"
           :title="record.details"
         ></span>

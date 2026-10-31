@@ -5,6 +5,8 @@ import type { Event } from '@/types/EventsType'
 const events = ref<Event[]>()
 
 export const useEventsStore = defineStore('eventsStore', () => {
+  let hasImportedEvents = false
+
   fetch('/events.json', {
     headers: {
       'Content-Type': 'application/json',
@@ -13,6 +15,7 @@ export const useEventsStore = defineStore('eventsStore', () => {
   })
     .then((response) => response.json())
     .then((data) => {
+      if (hasImportedEvents) return
       let nb = 1
       events.value = []
       data.forEach((event: { name: string }) => {
@@ -24,12 +27,18 @@ export const useEventsStore = defineStore('eventsStore', () => {
       })
     })
 
+  function setEvents(importedEvents: Event[]) {
+    hasImportedEvents = true
+    events.value = importedEvents
+  }
+
   function getEventByID(id: string): Event | undefined {
     return events.value?.find((e) => e.id === id)
   }
 
   return {
     events,
+    setEvents,
     getEventByID,
   }
 })
