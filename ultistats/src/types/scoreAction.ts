@@ -1,19 +1,12 @@
 import { JournalEntryType } from '@/types/journaltypes'
+import { ACTION_IDS } from '@/types/catalogIds'
 
 interface ScoreActionRecord {
   type: JournalEntryType
   name: string
 }
 
-interface ActionLookup {
-  getActionByID(id: string): { name: string } | undefined
-}
-
-export function isActionRecordNamed(
-  record: ScoreActionRecord,
-  actions: ActionLookup,
-  name: string,
-): boolean {
+export function isActionRecord(record: ScoreActionRecord, actionId: string): boolean {
   if (
     record.type !== JournalEntryType.POSITIVE_ACTION &&
     record.type !== JournalEntryType.NEGATIVE_ACTION
@@ -21,10 +14,9 @@ export function isActionRecordNamed(
     return false
   }
 
-  const action = actions.getActionByID(record.name)
-  return (action?.name ?? record.name).trim().toLowerCase() === name.trim().toLowerCase()
+  return record.name === actionId
 }
 
-export function isScoreActionRecord(record: ScoreActionRecord, actions: ActionLookup): boolean {
-  return isActionRecordNamed(record, actions, 'score')
+export function isScoreActionRecord(record: ScoreActionRecord): boolean {
+  return isActionRecord(record, ACTION_IDS.SCORE)
 }

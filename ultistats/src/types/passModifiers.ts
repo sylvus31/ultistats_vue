@@ -1,29 +1,17 @@
-import type { passModifier } from '@/types/Passes'
+import { PASS_MODIFIER_IDS } from '@/types/catalogIds'
 
 export type PassModifierKind = 'long' | 'break' | 'off-hand'
 
-export function getPassModifierKind(name: string): PassModifierKind | undefined {
-  const normalizedName = name.trim().toLowerCase()
-  if (normalizedName === 'long' || normalizedName === 'longue') return 'long'
-  if (normalizedName === 'break') return 'break'
-  if (normalizedName === 'off-hand') return 'off-hand'
-  return undefined
+const passModifierIds: Record<PassModifierKind, string> = {
+  long: PASS_MODIFIER_IDS.LONG,
+  break: PASS_MODIFIER_IDS.BREAK,
+  'off-hand': PASS_MODIFIER_IDS.OFF_HAND,
 }
 
 export function hasPassModifier(modifiers: ReadonlySet<string>, kind: PassModifierKind): boolean {
-  return [...modifiers].some((modifier) => getPassModifierKind(modifier) === kind)
+  return modifiers.has(passModifierIds[kind])
 }
 
-export function getConfiguredPassModifierName(
-  modifiers: passModifier[],
-  kind: PassModifierKind,
-): string {
-  const configuredModifier = modifiers.find(
-    (modifier) => getPassModifierKind(modifier.name) === kind,
-  )
-  if (configuredModifier) return configuredModifier.name
-
-  if (kind === 'long') return 'longue'
-  if (kind === 'off-hand') return 'Off-hand'
-  return 'break'
+export function getPassModifierId(kind: PassModifierKind): string {
+  return passModifierIds[kind]
 }

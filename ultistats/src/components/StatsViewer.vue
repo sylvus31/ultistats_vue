@@ -84,15 +84,14 @@ import PlayedTimeCell from './stats/PlayedTimeCell.vue'
 import TargetsCell from './stats/TargetsCell.vue'
 import type { VideoPlayerInstance } from '@/components/VideoPlayer.vue'
 import { hasPassModifier } from '@/types/passModifiers'
-import { isActionRecordNamed, isScoreActionRecord } from '@/types/scoreAction'
-import { useActionsStore } from '@/stores/ActionsStore'
+import { isActionRecord, isScoreActionRecord } from '@/types/scoreAction'
+import { ACTION_IDS, EVENT_IDS } from '@/types/catalogIds'
 const videoPlayerRef = ref<VideoPlayerInstance | null>(null)
 const setVideoPlayerRef = (ref: Ref<VideoPlayerInstance | null>) => {
   videoPlayerRef.value = ref.value
 }
 const teamStore = useTeamStore()
 const journalStore = useJournalStore()
-const actionsStore = useActionsStore()
 const stateStore = useStateStore()
 
 class StringNumberMap extends Map<string, number> {
@@ -218,15 +217,15 @@ const getStatsForOnePoint = (records: JournalEntry[]) => {
           //count providers
           baseValues.get(receiver.id)!.providers.increment(thrower.id)
           break
-        } else if (records[j].name === 'pull') {
+        } else if (records[j].type === jet.EVENT && records[j].name === EVENT_IDS.PULL) {
           baseValues.get(thrower.id)!.pulls += 1
           break
-        } else if (isActionRecordNamed(records[j], actionsStore, 'pick up disc')) {
+        } else if (isActionRecord(records[j], ACTION_IDS.PICK_UP_DISC)) {
           baseValues.get(thrower.id)!.pickUps += 1
           // no break needed, same player has disc
         }
       }
-    } else if (isScoreActionRecord(r, actionsStore)) {
+    } else if (isScoreActionRecord(r)) {
       // get scorer
       for (let j = i - 1; j >= 0; j--) {
         if (records[j].type === jet.PLAYER) {
@@ -259,7 +258,7 @@ const getStatsForOnePoint = (records: JournalEntry[]) => {
         if (line.type === jet.LINE && 'players' in line) {
           let pullTime = line.ts // if no pull recorded
           for (let k = j + 1; k < records.length; k++) {
-            if (records[k].name === 'pull') {
+            if (records[k].type === jet.EVENT && records[k].name === EVENT_IDS.PULL) {
               pullTime = records[k].ts
               break
             }
@@ -272,7 +271,7 @@ const getStatsForOnePoint = (records: JournalEntry[]) => {
           break
         }
       }
-    } else if (['block', 'intercept'].includes(r.name)) {
+    } else if (isActionRecord(r, ACTION_IDS.BLOCK) || isActionRecord(r, ACTION_IDS.INTERCEPT)) {
       for (let j = i - 1; j >= 0; j--) {
         if (records[j].type === jet.PLAYER) {
           baseValues.get(records[j].name)!.defenses += 1
@@ -379,7 +378,7 @@ const updateStatGrid = () => {
 }
 
 watch(
-  () => [journalStore.sortedRecords, actionsStore.positiveActions, actionsStore.negativeActions],
+  () => journalStore.sortedRecords,
   () => {
     console.log('watch journalStore.sortedRecords')
     updateStatGrid()

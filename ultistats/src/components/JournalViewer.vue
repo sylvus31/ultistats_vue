@@ -15,7 +15,7 @@ import { useEventsStore } from '@/stores/EventsStore'
 import type { VideoPlayerInstance } from '@/components/VideoPlayer.vue'
 import LineEditorDialog from './LineEditorDialog.vue'
 import type { journalLine } from '@/types/journaltypes'
-import { getConfiguredPassModifierName, hasPassModifier } from '@/types/passModifiers'
+import { getPassModifierId, hasPassModifier } from '@/types/passModifiers'
 
 const videoPlayerRef = ref<VideoPlayerInstance | null>(null)
 const setVideoPlayerRef = (ref: Ref<VideoPlayerInstance | null>) => {
@@ -57,23 +57,17 @@ const displayButtonStyle = (buttonId: string, displayStyle: string) => {
 }
 
 function onClickLongue(record: JournalEntry) {
-  journalStore.toggleModifier(
-    record,
-    getConfiguredPassModifierName(passesStore.passesModifiers, 'long'),
-  )
+  journalStore.toggleModifier(record, getPassModifierId('long'))
   record.source = src.USER
 }
 
 function onClickBreak(record: JournalEntry) {
-  journalStore.toggleModifier(
-    record,
-    getConfiguredPassModifierName(passesStore.passesModifiers, 'break'),
-  )
+  journalStore.toggleModifier(record, getPassModifierId('break'))
   record.source = src.USER
 }
 
 function onClickOffHans(record: JournalEntry) {
-  journalStore.toggleModifier(record, 'Off-hand')
+  journalStore.toggleModifier(record, getPassModifierId('off-hand'))
   record.source = src.USER
 }
 
@@ -261,7 +255,7 @@ defineExpose({
           </button>
           <button
             class="pass-button"
-            :class="{ active: record.modifiers.has('Off-hand') }"
+            :class="{ active: hasPassModifier(record.modifiers, 'off-hand') }"
             @click.stop="onClickOffHans(record)"
           >
             O

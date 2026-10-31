@@ -13,6 +13,7 @@ export enum ActionType {
 }
 
 export interface ActionData {
+  id: string
   name: string
   description?: string
   terminal: boolean

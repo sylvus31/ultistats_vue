@@ -17,17 +17,15 @@ export const useActionsStore = defineStore('actionsStore', () => {
     .then((response) => response.json())
     .then((data) => {
       if (hasImportedActions) return
-      let nb = 1
       positiveActions.value = []
       data.forEach((action: ActionData) => {
         positiveActions.value?.push({
-          id: 'pa' + nb,
+          id: action.id,
           name: action.name,
           description: action.description,
           terminal: action.terminal,
           type: ActionType.POSITIVE,
         })
-        nb++
       })
     })
 
@@ -40,17 +38,15 @@ export const useActionsStore = defineStore('actionsStore', () => {
     .then((response) => response.json())
     .then((data) => {
       if (hasImportedActions) return
-      let nb = 1
       negativeActions.value = []
       data.forEach((action: ActionData) => {
         negativeActions.value?.push({
-          id: 'na' + nb,
+          id: action.id,
           name: action.name,
           description: action.description,
           terminal: action.terminal,
           type: ActionType.NEGATIVE,
         })
-        nb++
       })
     })
 

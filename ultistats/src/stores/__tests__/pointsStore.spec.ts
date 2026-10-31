@@ -18,7 +18,7 @@ describe('score actions in point grouping', () => {
                 { id: 't1', name: 'Away', players: [] },
               ]
             : url === '/actions/positive_actions.json'
-              ? [{ name: 'Score', terminal: true }]
+              ? [{ id: 'pa4', name: 'Score', terminal: true }]
               : []
 
         return Promise.resolve({
@@ -44,7 +44,7 @@ describe('score actions in point grouping', () => {
     const points = separateRecordsInPoints([
       {
         id: 1,
-        name: 'pull',
+        name: 'e1',
         ts: 1,
         type: JournalEntryType.EVENT,
         source: JournalEntrySource.USER,
@@ -58,7 +58,7 @@ describe('score actions in point grouping', () => {
       },
       {
         id: 3,
-        name: 'pa1',
+        name: 'pa4',
         ts: 3,
         terminal: true,
         type: JournalEntryType.POSITIVE_ACTION,
@@ -67,6 +67,8 @@ describe('score actions in point grouping', () => {
     ])
 
     expect(points).toHaveLength(2)
+    expect(points[0].hasPull).toBe(true)
+    expect(points[0].pullTime).toBe(1)
     expect(points[0].scoringTeam).toBe(0)
     expect(points[0].endTime.value).toBe(3)
     expect(points[0].isFinished.value).toBe(true)

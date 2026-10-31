@@ -2,22 +2,20 @@ import { computed } from 'vue'
 import type { JournalEntry } from '@/stores/journal'
 import { JournalEntryType as jet } from '@/types/journaltypes'
 import { useTeamStore } from './Team'
-import { useActionsStore } from './ActionsStore'
 import { isScoreActionRecord } from '@/types/scoreAction'
+import { EVENT_IDS } from '@/types/catalogIds'
 
 export class Point {
   startTime: number
   pullTime: number
   endTime = computed(() => {
     const lastRecord = this.records[this.records.length - 1]
-    return lastRecord && isScoreActionRecord(lastRecord, useActionsStore())
-      ? lastRecord.ts
-      : Number.MAX_SAFE_INTEGER
+    return lastRecord && isScoreActionRecord(lastRecord) ? lastRecord.ts : Number.MAX_SAFE_INTEGER
   })
   records: JournalEntry[] = []
   isFinished = computed(() => {
     const lastRecord = this.records[this.records.length - 1]
-    return lastRecord ? isScoreActionRecord(lastRecord, useActionsStore()) : false
+    return lastRecord ? isScoreActionRecord(lastRecord) : false
   })
   attackingTeam: number = -1
   scoringTeam: number = -1
@@ -32,14 +30,13 @@ export class Point {
 }
 
 export const separateRecordsInPoints = (records: JournalEntry[]) => {
-  const actionsStore = useActionsStore()
   const tmp_points: Point[] = []
   const firstPoint = new Point(0)
   tmp_points.push(firstPoint)
 
   records.forEach((record, i) => {
     tmp_points[tmp_points.length - 1].addRecord(record)
-    if (record.name === 'pull') {
+    if (record.type === jet.EVENT && record.name === EVENT_IDS.PULL) {
       tmp_points[tmp_points.length - 1].pullTime = record.ts
       tmp_points[tmp_points.length - 1].hasPull = true
       for (let j = i; j < records.length; j++) {
@@ -51,7 +48,7 @@ export const separateRecordsInPoints = (records: JournalEntry[]) => {
           break
         }
       }
-    } else if (isScoreActionRecord(record, actionsStore)) {
+    } else if (isScoreActionRecord(record)) {
       for (let j = i - 1; j > 0; j--) {
         if (records[j].type == jet.PLAYER) {
           const teamStore = useTeamStore()

@@ -21,7 +21,7 @@ describe('ScoreEvolution', () => {
                 { id: 't1', name: 'Away', players: [] },
               ]
             : url === '/actions/positive_actions.json'
-              ? [{ name: 'Score', terminal: true }]
+              ? [{ id: 'pa4', name: 'Score', terminal: true }]
               : []
 
         return Promise.resolve({
@@ -51,7 +51,7 @@ describe('ScoreEvolution', () => {
 
     journalStore.addRecord({
       id: 1,
-      name: 'pull',
+      name: 'e1',
       ts: 1,
       type: JournalEntryType.EVENT,
       source: JournalEntrySource.USER,
@@ -65,7 +65,7 @@ describe('ScoreEvolution', () => {
     })
     journalStore.addRecord({
       id: 3,
-      name: 'pa1',
+      name: 'pa4',
       ts: 3,
       terminal: true,
       type: JournalEntryType.POSITIVE_ACTION,

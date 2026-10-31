@@ -1,38 +1,48 @@
 import { describe, expect, it } from 'vitest'
 import { JournalEntryType } from '@/types/journaltypes'
-import { isActionRecordNamed, isScoreActionRecord } from '@/types/scoreAction'
+import { ACTION_IDS } from '@/types/catalogIds'
+import { isActionRecord, isScoreActionRecord } from '@/types/scoreAction'
 
-describe('action record name matching', () => {
-  const actions = {
-    getActionByID: (id: string) => {
-      const byId: Record<string, { name: string }> = {
-        pa1: { name: 'Pick up disc' },
-        pa4: { name: 'Score' },
-      }
-      return byId[id]
-    },
-  }
-
-  it('resolves action IDs and ignores name casing', () => {
+describe('action record ID matching', () => {
+  it('matches default statistical actions by ID only', () => {
     expect(
-      isActionRecordNamed(
+      isActionRecord(
         { type: JournalEntryType.POSITIVE_ACTION, name: 'pa1' },
-        actions,
-        'pick up disc',
+        ACTION_IDS.PICK_UP_DISC,
       ),
     ).toBe(true)
     expect(
-      isActionRecordNamed(
+      isActionRecord(
         { type: JournalEntryType.POSITIVE_ACTION, name: 'Pick up disc' },
-        actions,
-        'PICK UP DISC',
+        ACTION_IDS.PICK_UP_DISC,
+      ),
+    ).toBe(false)
+    expect(
+      isActionRecord(
+        { type: JournalEntryType.POSITIVE_ACTION, name: ACTION_IDS.INTERCEPT },
+        ACTION_IDS.INTERCEPT,
+      ),
+    ).toBe(true)
+    expect(
+      isActionRecord(
+        { type: JournalEntryType.POSITIVE_ACTION, name: ACTION_IDS.BLOCK },
+        ACTION_IDS.BLOCK,
       ),
     ).toBe(true)
   })
 
   it('continues to identify score actions by ID', () => {
     expect(
-      isScoreActionRecord({ type: JournalEntryType.POSITIVE_ACTION, name: 'pa4' }, actions),
+      isScoreActionRecord({
+        type: JournalEntryType.POSITIVE_ACTION,
+        name: ACTION_IDS.SCORE,
+      }),
     ).toBe(true)
+    expect(
+      isScoreActionRecord({
+        type: JournalEntryType.POSITIVE_ACTION,
+        name: 'Score',
+      }),
+    ).toBe(false)
   })
 })

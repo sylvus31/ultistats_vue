@@ -15,10 +15,10 @@ describe('catalog editors', () => {
       vi.fn((url: string) => {
         const data =
           url === '/events.json'
-            ? [{ name: 'Pull', description: 'Start a point.' }]
+            ? [{ id: 'e1', name: 'Pull', description: 'Start a point.' }]
             : url === '/actions/positive_actions.json'
-              ? [{ name: 'Score', terminal: true }]
-              : [{ name: '', terminal: false }]
+              ? [{ id: 'pa4', name: 'Score', terminal: true }]
+              : [{ id: 'na1', name: '', terminal: false }]
 
         return Promise.resolve({
           ok: true,
