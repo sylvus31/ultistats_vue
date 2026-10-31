@@ -378,6 +378,12 @@ const updateStatGrid = () => {
 }
 
 watch(
+  () => teamStore.players.map((player) => [player.id, player.name]),
+  updateStatGrid,
+  { immediate: true },
+)
+
+watch(
   () => journalStore.sortedRecords,
   () => {
     console.log('watch journalStore.sortedRecords')

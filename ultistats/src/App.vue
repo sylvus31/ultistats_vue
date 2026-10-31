@@ -103,11 +103,11 @@ provide('videoPlayerRef', videoPlayerRef)
     <div slot="start" >
       <VideoPlayer ref="videoPlayerRef" />
       <JournalViewer ref="journalViewerRef"/>
-      <WindowHolder title="Stats team">
+      <WindowHolder title="Stats team" allowFullscreen>
         <template v-slot:menu><StatViewerMenu/></template>
         <template v-slot:main><StatsViewerTeam ref="statsViewerTeamRef"/></template>
       </WindowHolder>
-      <WindowHolder title="Stats players">
+      <WindowHolder title="Stats players" allowFullscreen>
         <template v-slot:menu><StatViewerMenu/></template>
         <template v-slot:main><StatsViewer ref="statsViewerRef"/></template>
       </WindowHolder>
