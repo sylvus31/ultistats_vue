@@ -67,12 +67,23 @@ export const usePassesStore = defineStore('passesStore', () => {
     })
   }
 
+  function setPasses(importedPasses: Pass[], importedModifiers?: passModifier[]) {
+    passes.value = importedPasses.map((pass) => ({
+      ...pass,
+      modifiers: pass.modifiers ? new Set(pass.modifiers) : undefined,
+    }))
+    if (Array.isArray(importedModifiers)) {
+      passesModifiers.value = importedModifiers
+    }
+  }
+
   // --- Return ---
   // Make state, getters, and actions available to components
   return {
     // State
     passes,
     passesModifiers,
+    setPasses,
     // Getters
     activePass,
     getPassByID,
