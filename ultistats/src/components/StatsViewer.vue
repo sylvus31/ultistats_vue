@@ -83,6 +83,7 @@ import { JournalEntryType as jet, type journalPass } from '@/types/journaltypes'
 import PlayedTimeCell from './stats/PlayedTimeCell.vue'
 import TargetsCell from './stats/TargetsCell.vue'
 import type { VideoPlayerInstance } from '@/components/VideoPlayer.vue'
+import { hasPassModifier } from '@/types/passModifiers'
 const videoPlayerRef = ref<VideoPlayerInstance | null>(null)
 const setVideoPlayerRef = (ref: Ref<VideoPlayerInstance | null>) => {
   videoPlayerRef.value = ref.value
@@ -195,7 +196,7 @@ const getStatsForOnePoint = (records: JournalEntry[]) => {
           }
           baseValues.get(thrower.id)!.passes_total += 1
           baseValues.get(thrower.id)!.passesType.increment(passType)
-          const isLong = passModifiers.has('longue')
+          const isLong = hasPassModifier(passModifiers, 'long')
           const success = teamStore.getPlayerTeam(thrower) === teamStore.getPlayerTeam(receiver)
 
           if (success) {

@@ -121,10 +121,10 @@ provide('videoPlayerRef', videoPlayerRef)
         <template v-slot:menu><PassesModifiersMenu/></template>
         <template v-slot:main><PassesSelector /></template>
       </WindowHolder>
-      <WindowHolder title="Actions">
+      <WindowHolder title="Actions" editorComponent="./ActionsEditor.vue">
         <template v-slot:main><ActionsSelector/></template>
       </WindowHolder>
-      <WindowHolder title="Events">
+      <WindowHolder title="Events" editorComponent="./EventsEditor.vue">
         <template v-slot:main><EventsSelector/></template>
       </WindowHolder>
       <WindowHolder title="Free comment">

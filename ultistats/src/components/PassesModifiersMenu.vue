@@ -6,6 +6,7 @@ import { useKeyboardStore } from '../stores/keyboardStore'
 import { formatShortcutKey, normalizeShortcutKey } from '@/types/keyConstants'
 import type { passModifier } from '@/types/Passes'
 import { passesModifiersMenuSelectorShortcutManagerName } from './interfaces/ShortcutTarget'
+import { getDescriptionTooltip } from '@/types/descriptions'
 
 const passesStore = usePassesStore()
 const { passesModifiers } = storeToRefs(passesStore)
@@ -81,6 +82,7 @@ watch(() => passesModifiers.value.map((modifier) => modifier.key), synchronizeMo
     @click="clickModifier(modifier)"
     class="pass-modifier-button"
     :class="{ active: modifier.isActive }"
+    :title="getDescriptionTooltip(modifier.description)"
   >
     <span class="pass-modifier-name">{{ modifier.name }}</span>
     <span v-if="modifier.key"> [{{ formatShortcutKey(modifier.key) }}]</span>

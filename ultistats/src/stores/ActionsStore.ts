@@ -4,8 +4,8 @@ import type { Action, ActionData } from '@/types/ActionsType'
 import { ActionType } from '@/types/ActionsType'
 
 export const useActionsStore = defineStore('actionsStore', () => {
-  const positiveActions = ref<Action[]>()
-  const negativeActions = ref<Action[]>()
+  const positiveActions = ref<Action[]>([])
+  const negativeActions = ref<Action[]>([])
   let hasImportedActions = false
 
   fetch('/actions/positive_actions.json', {
@@ -23,6 +23,7 @@ export const useActionsStore = defineStore('actionsStore', () => {
         positiveActions.value?.push({
           id: 'pa' + nb,
           name: action.name,
+          description: action.description,
           terminal: action.terminal,
           type: ActionType.POSITIVE,
         })
@@ -45,6 +46,7 @@ export const useActionsStore = defineStore('actionsStore', () => {
         negativeActions.value?.push({
           id: 'na' + nb,
           name: action.name,
+          description: action.description,
           terminal: action.terminal,
           type: ActionType.NEGATIVE,
         })

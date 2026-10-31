@@ -5,6 +5,7 @@
       :key="action.id"
       @click="clickAction(action)"
       :class="{ active: action.isActive }"
+      :title="getDescriptionTooltip(action.description)"
     >
       <span class="pass-name">{{ action.name }}</span>
       <span v-if="action.key"> [{{ formatShortcutKey(action.key) }}]</span>
@@ -23,6 +24,7 @@ import { useJournalStore } from '@/stores/journal'
 import type { ShortcutTarget } from './interfaces/ShortcutTarget'
 import { passesSelectorShortcutManagerName } from './interfaces/ShortcutTarget'
 import { formatShortcutKey } from '@/types/keyConstants'
+import { getDescriptionTooltip } from '@/types/descriptions'
 
 const keyboardStore = useKeyboardStore()
 const passesStore = usePassesStore()

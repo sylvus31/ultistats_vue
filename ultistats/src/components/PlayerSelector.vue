@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { watch } from 'vue'
 import { storeToRefs } from 'pinia'
 import type { Player } from '@/types/Player'
 import '@shoelace-style/shoelace/dist/components/button/button.js'
@@ -53,11 +54,18 @@ keyboardStore.registerShortcutTarget(
   playersSelectorShortcutManagerName,
   playersSelectorShortcutManager,
 )
-players.value.forEach((p) => {
-  if (p.key_code) {
-    keyboardStore.addKeyBinding(p.key_code, playersSelectorShortcutManagerName)
-  }
-})
+watch(
+  () => players.value.map((player) => player.key_code),
+  () => {
+    keyboardStore.removeKeyBindingsFor(playersSelectorShortcutManagerName)
+    players.value.forEach((player) => {
+      if (player.key_code) {
+        keyboardStore.addKeyBinding(player.key_code, playersSelectorShortcutManagerName)
+      }
+    })
+  },
+  { immediate: true },
+)
 
 defineExpose({ playersSelectorShortcutManager })
 </script>
@@ -72,14 +80,13 @@ defineExpose({ playersSelectorShortcutManager })
     >
       <div class="player-button-content">
         <div>
-          <span v-if="player.number">{{ player.number }} : </span>
           <span
             :class="[
               { 'player-name-playing': player.playing },
               { 'opponent-name': teamStore.getPlayerTeam(player) == 1 },
             ]"
-            >{{ player.name }}</span
-          >
+            >{{ player.name }}</span>
+          <span v-if="player.number">&nbsp;(#{{ player.number }}) </span>
         </div>
         <div>
           <span class="player-key" v-if="player.modifiers?.size > 0">

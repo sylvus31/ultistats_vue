@@ -1,23 +1,32 @@
 import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
 import type { Pass, passModifier } from '@/types/Passes'
-import { KeyboardConstants, normalizeShortcutKey } from '@/types/keyConstants'
+import { normalizeShortcutKey } from '@/types/keyConstants'
 
 export const usePassesStore = defineStore('passesStore', () => {
-  // Use ref to hold the array of Player objects
-  const passesModifiers = ref<passModifier[]>([
-    { id: 'pm1', name: 'longue', isActive: false, key: KeyboardConstants.SHIFT },
-    { id: 'pm2', name: 'break', isActive: false, key: KeyboardConstants.CTRL },
-    { id: 'pm3', name: 'Off-hand', isActive: false, key: KeyboardConstants.ALT },
-  ])
-  const passes = ref<Pass[]>([
-    { id: 'a6', name: 'Hammer', isActive: false, key: 'q' },
-    { id: 'a2', name: 'Avant', isActive: false, key: 'w' },
-    { id: 'a5', name: 'Knife', isActive: false, key: 'e' },
-    { id: 'a7', name: 'Skoober', isActive: false, key: 'r' },
-    { id: 'a3', name: 'Dump', isActive: false, key: 'd' },
-    { id: 'a4', name: 'Swing', isActive: false, key: 'a' },
-  ])
+  const passesModifiers = ref<passModifier[]>([])
+  const passes = ref<Pass[]>([])
+  let hasExplicitPasses = false
+
+  const loadDefaultPasses = async () => {
+    const response = await fetch('/passes.json')
+    if (!response.ok) {
+      throw new Error(`Failed to load default passes: ${response.status} ${response.statusText}`)
+    }
+
+    const defaults = (await response.json()) as {
+      passes: Pass[]
+      passesModifiers: passModifier[]
+    }
+    if (!Array.isArray(defaults.passes) || !Array.isArray(defaults.passesModifiers)) {
+      throw new Error('Default passes file must include passes and passesModifiers arrays')
+    }
+    if (hasExplicitPasses || passes.value.length > 0 || passesModifiers.value.length > 0) return
+    setPasses(defaults.passes, defaults.passesModifiers)
+  }
+  void loadDefaultPasses().catch((error: unknown) => {
+    console.error('Unable to load default passes.', error)
+  })
 
   // --- Getters ---
   const activePass = computed(() => passes.value.filter((p) => p.isActive))
@@ -68,6 +77,7 @@ export const usePassesStore = defineStore('passesStore', () => {
   }
 
   function setPasses(importedPasses: Pass[], importedModifiers?: passModifier[]) {
+    hasExplicitPasses = true
     passes.value = importedPasses.map((pass) => ({
       ...pass,
       modifiers: pass.modifiers ? new Set(pass.modifiers) : undefined,
