@@ -103,7 +103,7 @@ provide('videoPlayerRef', videoPlayerRef)
     <div slot="start" >
       <VideoPlayer ref="videoPlayerRef" />
       <JournalViewer ref="journalViewerRef"/>
-      <WindowHolder title="Stats team" allowFullscreen>
+      <WindowHolder title="Stats team">
         <template v-slot:menu><StatViewerMenu/></template>
         <template v-slot:main><StatsViewerTeam ref="statsViewerTeamRef"/></template>
       </WindowHolder>
@@ -113,18 +113,18 @@ provide('videoPlayerRef', videoPlayerRef)
       </WindowHolder>
     </div>
     <div slot="end">
-      <WindowHolder title="Players"  editorComponent='./PlayerEditor.vue'>
+      <WindowHolder title="Players" allowEdit editorComponent='./PlayerEditor.vue'>
         <template v-slot:menu><SetLine/></template>
         <template v-slot:main><PlayerSelector/></template>
       </WindowHolder>
-      <WindowHolder title="Passes" editorComponent='./PassEditor.vue'>
+      <WindowHolder title="Passes" allowEdit editorComponent='./PassEditor.vue'>
         <template v-slot:menu><PassesModifiersMenu/></template>
         <template v-slot:main><PassesSelector /></template>
       </WindowHolder>
-      <WindowHolder title="Actions" editorComponent="./ActionsEditor.vue">
+      <WindowHolder title="Actions" allowEdit editorComponent="./ActionsEditor.vue">
         <template v-slot:main><ActionsSelector/></template>
       </WindowHolder>
-      <WindowHolder title="Events" editorComponent="./EventsEditor.vue">
+      <WindowHolder title="Events" allowEdit editorComponent="./EventsEditor.vue">
         <template v-slot:main><EventsSelector/></template>
       </WindowHolder>
       <WindowHolder title="Free comment">

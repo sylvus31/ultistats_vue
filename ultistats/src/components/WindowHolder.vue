@@ -18,7 +18,7 @@
             aria-hidden="true"
           ></span>
         </button>
-        <button class="icon-button" @click="edit" title="Edit">
+        <button v-if="allowEdit" class="icon-button" @click="edit" title="Edit">
           <span class="mdi mdi-pencil"></span>
         </button>
         <button class="icon-button" @click="minimize" :title="isMinimized ? 'Expand' : 'Collapse'">
@@ -41,9 +41,11 @@ const props = withDefaults(
   defineProps<{
     title: string
     editorComponent?: string
+    allowEdit?: boolean
     allowFullscreen?: boolean
   }>(),
   {
+    allowEdit: false,
     allowFullscreen: false,
   },
 )

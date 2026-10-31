@@ -5,15 +5,20 @@ import WindowHolder from '../WindowHolder.vue'
 describe('WindowHolder fullscreen control', () => {
   it('does not render a fullscreen control by default', () => {
     const wrapper = mount(WindowHolder, {
-      props: { title: 'Players' },
+      props: { title: 'Players', editorComponent: './PlayerEditor.vue' },
     })
 
     expect(wrapper.find('[aria-label="Open full window"]').exists()).toBe(false)
+    expect(wrapper.find('[title="Edit"]').exists()).toBe(false)
   })
 
   it('renders before Edit and toggles fullscreen when enabled', async () => {
     const wrapper = mount(WindowHolder, {
-      props: { title: 'Stats players', allowFullscreen: true },
+      props: {
+        title: 'Stats players',
+        allowFullscreen: true,
+        allowEdit: true,
+      },
     })
     const actions = wrapper.find('.actions')
     const buttons = actions.findAll('button')
