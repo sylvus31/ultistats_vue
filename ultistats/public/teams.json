@@ -1,0 +1,58 @@
+[
+  {
+    "name": "BTR",
+    "id": "t0",
+    "players": [
+      {
+        "id": "p1",
+        "name": "Thomas",
+        "key_code": "Numpad7"
+      },
+      {
+        "id": "p2",
+        "name": "Guimsou",
+        "key_code": "Numpad8",
+        "modifiers": ["NumpadEnter"]
+      },
+      {
+        "id": "p3",
+        "name": "Clar",
+        "key_code": "Numpad8"
+      },
+      {
+        "id": "p4",
+        "name": "Toto",
+        "key_code": "Numpad4"
+      },
+      {
+        "id": "p5",
+        "name": "Yann",
+        "key_code": "Numpad5"
+      },
+      {
+        "id": "p6",
+        "name": "Matteo",
+        "key_code": "Numpad6"
+      },
+      {
+        "id": "p7",
+        "name": "Lucian",
+        "key_code": "Numpad1"
+      },
+      {
+        "id": "p8",
+        "name": "Lyloo",
+        "key_code": "NumpadDivide"
+      },
+      {
+        "id": "p9",
+        "name": "Salma"
+      }
+    ]
+  },
+  {
+    "name": "ADVERSAIRE",
+    "id": "t1",
+    "players": []
+  }
+]

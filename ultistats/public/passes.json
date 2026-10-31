@@ -1,0 +1,15 @@
+{
+  "passes": [
+    { "id": "a6", "name": "Hammer", "key": "q" },
+    { "id": "a2", "name": "Avant", "key": "w" },
+    { "id": "a5", "name": "Knife", "key": "e" },
+    { "id": "a7", "name": "Skoober", "key": "r" },
+    { "id": "a3", "name": "Dump", "key": "d" },
+    { "id": "a4", "name": "Swing", "key": "a" }
+  ],
+  "passesModifiers": [
+    { "id": "pm1", "name": "longue", "key": "Shift" },
+    { "id": "pm2", "name": "break", "key": "Ctrl" },
+    { "id": "pm3", "name": "Off-hand", "key": "Alt" }
+  ]
+}

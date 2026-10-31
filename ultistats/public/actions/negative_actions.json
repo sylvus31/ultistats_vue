@@ -1,18 +1,22 @@
 [
   {
-    "name": "refuse une passe",
+    "name": "Looking off",
+    "description":"The disc holder has a clear pass opportunity but do not make the pass.",
     "terminal": false
   },
   {
     "name": "drop",
+    "description": "The disc is dropped by the player.",
     "terminal": true
   },
   {
-    "name": "se fait breaker",
+    "name": "break throw allowed",
+    "description": "The player guarding a thrower allows a break throw to be completed.",
     "terminal": true
   },
   {
-    "name": "cut ouvert",
+    "name": "allow cut on open side",
+    "description": "The player is beaten on the open side by a cutter.",
     "terminal": true
   }
 ]

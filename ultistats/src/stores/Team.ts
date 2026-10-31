@@ -14,41 +14,62 @@ class Team {
     this.id = id
   }
 }
-const team_0 = new Team('BTR', 't0', [
-  {
-    id: 'p1',
-    name: 'Thomas',
-    isActive: false,
-    key_code: 'Numpad7',
-    playing: false,
-    modifiers: new Set(),
-  },
-  {
-    id: 'p2',
-    name: 'Guimsou',
-    // number: 7,
-    isActive: false,
-    key_code: 'Numpad8',
-    modifiers: new Set(['NumpadEnter']),
-    playing: false,
-  },
-  { id: 'p3', name: 'Clar', isActive: false, key_code: 'Numpad8', playing: false },
-  { id: 'p4', name: 'Toto', isActive: false, key_code: 'Numpad4', playing: false },
-  { id: 'p5', name: 'Yann', isActive: false, key_code: 'Numpad5', playing: false },
-  { id: 'p6', name: 'Matteo', isActive: false, key_code: 'Numpad6', playing: false },
-  { id: 'p7', name: 'Lucian', isActive: false, key_code: 'Numpad1', playing: false },
-  { id: 'p8', name: 'Lyloo', isActive: false, key_code: 'NumpadDivide', playing: false },
-  { id: 'p9', name: 'Salma', isActive: false, playing: false },
-])
+interface TeamData {
+  id: string
+  name: string
+  players: Array<{
+    id: string
+    name: string
+    key_code?: string
+    modifiers?: string[]
+    number?: number
+  }>
+}
 
-const team_1 = new Team('ADVERSAIRE', 't1')
 // Define the store with the ID 'team'
 export const useTeamStore = defineStore('team', () => {
-  const teams = ref<[Team, Team]>([team_0, team_1])
+  const teams = ref<[Team, Team]>([new Team('', 't0'), new Team('', 't1')])
   const teamShortcutPlayers = ref<[Player, Player]>([
-    createPlayer('t0', team_0.name, 't'),
-    createPlayer('t1', team_1.name, 'h'),
+    createPlayer('t0', teams.value[0].name, 't'),
+    createPlayer('t1', teams.value[1].name, 'h'),
   ])
+  const loadDefaultTeams = async () => {
+    const response = await fetch('/teams.json')
+    if (!response.ok) {
+      throw new Error(`Failed to load default teams: ${response.status} ${response.statusText}`)
+    }
+
+    const defaultTeams = (await response.json()) as TeamData[]
+    if (!Array.isArray(defaultTeams) || defaultTeams.length !== 2) {
+      throw new Error('Default teams file must contain exactly two teams')
+    }
+
+    const hasExistingTeamData = teams.value.some(
+      (team) => team.name !== '' || team.players.length > 0,
+    )
+    if (hasExistingTeamData) return
+
+    const loadedTeams = defaultTeams.map(
+      (team) =>
+        new Team(
+          team.name,
+          team.id,
+          team.players.map((player) => ({
+            ...createPlayer(
+              player.id,
+              player.name,
+              player.key_code ? normalizeShortcutKey(player.key_code) : undefined,
+              new Set(player.modifiers ?? []),
+              player.number,
+            ),
+          })),
+        ),
+    ) as [Team, Team]
+    teams.value = loadedTeams
+  }
+  void loadDefaultTeams().catch((error: unknown) => {
+    console.error('Unable to load default teams.', error)
+  })
   watch(
     () => teams.value.map((team) => team.name),
     ([team0Name, team1Name]) => {
@@ -58,11 +79,7 @@ export const useTeamStore = defineStore('team', () => {
     { immediate: true },
   )
   const players = computed(() => {
-    return [
-      ...teams.value[0].players,
-      ...teams.value[1].players,
-      ...teamShortcutPlayers.value,
-    ]
+    return [...teams.value[0].players, ...teams.value[1].players, ...teamShortcutPlayers.value]
   })
 
   // --- Getters ---
