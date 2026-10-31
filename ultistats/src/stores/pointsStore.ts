@@ -2,17 +2,23 @@ import { computed } from 'vue'
 import type { JournalEntry } from '@/stores/journal'
 import { JournalEntryType as jet } from '@/types/journaltypes'
 import { useTeamStore } from './Team'
+import { useActionsStore } from './ActionsStore'
+import { isScoreActionRecord } from '@/types/scoreAction'
 
 export class Point {
   startTime: number
   pullTime: number
-  endTime = computed(() =>
-    this.records[this.records.length - 1]?.name == 'score'
-      ? this.records[this.records.length - 1].ts
-      : Number.MAX_SAFE_INTEGER,
-  )
+  endTime = computed(() => {
+    const lastRecord = this.records[this.records.length - 1]
+    return lastRecord && isScoreActionRecord(lastRecord, useActionsStore())
+      ? lastRecord.ts
+      : Number.MAX_SAFE_INTEGER
+  })
   records: JournalEntry[] = []
-  isFinished = computed(() => Boolean(this.records[this.records.length - 1].name == 'score'))
+  isFinished = computed(() => {
+    const lastRecord = this.records[this.records.length - 1]
+    return lastRecord ? isScoreActionRecord(lastRecord, useActionsStore()) : false
+  })
   attackingTeam: number = -1
   scoringTeam: number = -1
   hasPull = false
@@ -26,6 +32,7 @@ export class Point {
 }
 
 export const separateRecordsInPoints = (records: JournalEntry[]) => {
+  const actionsStore = useActionsStore()
   const tmp_points: Point[] = []
   const firstPoint = new Point(0)
   tmp_points.push(firstPoint)
@@ -44,7 +51,7 @@ export const separateRecordsInPoints = (records: JournalEntry[]) => {
           break
         }
       }
-    } else if (record.name === 'score') {
+    } else if (isScoreActionRecord(record, actionsStore)) {
       for (let j = i - 1; j > 0; j--) {
         if (records[j].type == jet.PLAYER) {
           const teamStore = useTeamStore()

@@ -4,31 +4,35 @@ import { watch, computed, inject, ref, type Ref } from 'vue'
 import type { VideoPlayerInstance } from '@/components/VideoPlayer.vue'
 import { useStateStore } from '@/stores/StateStore'
 import { Point } from '@/stores/pointsStore'
+import { useActionsStore } from '@/stores/ActionsStore'
 
 const videoPlayerRef = inject<Ref<VideoPlayerInstance | null>>('videoPlayerRef')
 
 const stateStore = useStateStore()
 
 const journalStore = useJournalStore()
+const actionsStore = useActionsStore()
 
-const totalScore: [number, number] = [0, 0]
+const totalScore = ref<[number, number]>([0, 0])
 const updateTotalScore = (points: Point[] = journalStore.recordsAsPoints) => {
-  totalScore[0] = 0
-  totalScore[1] = 0
+  totalScore.value = [0, 0]
   points.forEach((p) => {
     if (p.scoringTeam === 0 || p.scoringTeam === 1) {
-      totalScore[p.scoringTeam] += 1
+      totalScore.value[p.scoringTeam] += 1
     }
   })
-  console.log('totalScore', totalScore)
+  console.log('totalScore', totalScore.value)
 }
 const scoreEvolution = ref<Point[]>([])
-watch(journalStore.sortedRecords, () => {
-  console.log('journalStore.recordsAsPoints', journalStore.recordsAsPoints)
-  scoreEvolution.value = []
-  scoreEvolution.value = journalStore.recordsAsPoints.filter((p) => p.hasPull)
-  updateTotalScore()
-})
+watch(
+  () => [journalStore.sortedRecords, actionsStore.positiveActions, actionsStore.negativeActions],
+  () => {
+    console.log('journalStore.recordsAsPoints', journalStore.recordsAsPoints)
+    scoreEvolution.value = journalStore.recordsAsPoints.filter((p) => p.hasPull)
+    updateTotalScore()
+  },
+  { deep: true, immediate: true },
+)
 const setVideoToBeginningOfPoint = (point: { pullTime: number }, index: number) => {
   if (videoPlayerRef?.value) {
     console.log('setVideoToBeginningOfPoint', point)
@@ -39,7 +43,7 @@ const setVideoToBeginningOfPoint = (point: { pullTime: number }, index: number) 
 }
 
 const score = computed(() => {
-  return totalScore
+  return totalScore.value
 })
 
 defineExpose({})

@@ -84,12 +84,15 @@ import PlayedTimeCell from './stats/PlayedTimeCell.vue'
 import TargetsCell from './stats/TargetsCell.vue'
 import type { VideoPlayerInstance } from '@/components/VideoPlayer.vue'
 import { hasPassModifier } from '@/types/passModifiers'
+import { isActionRecordNamed, isScoreActionRecord } from '@/types/scoreAction'
+import { useActionsStore } from '@/stores/ActionsStore'
 const videoPlayerRef = ref<VideoPlayerInstance | null>(null)
 const setVideoPlayerRef = (ref: Ref<VideoPlayerInstance | null>) => {
   videoPlayerRef.value = ref.value
 }
 const teamStore = useTeamStore()
 const journalStore = useJournalStore()
+const actionsStore = useActionsStore()
 const stateStore = useStateStore()
 
 class StringNumberMap extends Map<string, number> {
@@ -218,12 +221,12 @@ const getStatsForOnePoint = (records: JournalEntry[]) => {
         } else if (records[j].name === 'pull') {
           baseValues.get(thrower.id)!.pulls += 1
           break
-        } else if (records[j].name === 'pick up disc') {
+        } else if (isActionRecordNamed(records[j], actionsStore, 'pick up disc')) {
           baseValues.get(thrower.id)!.pickUps += 1
           // no break needed, same player has disc
         }
       }
-    } else if (r.name === 'score') {
+    } else if (isScoreActionRecord(r, actionsStore)) {
       // get scorer
       for (let j = i - 1; j >= 0; j--) {
         if (records[j].type === jet.PLAYER) {
@@ -375,10 +378,14 @@ const updateStatGrid = () => {
   console.log('updateStatGrid')
 }
 
-watch(journalStore.sortedRecords, () => {
-  console.log('watch journalStore.sortedRecords')
-  updateStatGrid()
-})
+watch(
+  () => [journalStore.sortedRecords, actionsStore.positiveActions, actionsStore.negativeActions],
+  () => {
+    console.log('watch journalStore.sortedRecords')
+    updateStatGrid()
+  },
+  { deep: true },
+)
 
 defineExpose({
   setVideoPlayerRef,
