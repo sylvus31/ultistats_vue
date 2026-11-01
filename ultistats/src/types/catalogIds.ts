@@ -4,6 +4,7 @@ export const ACTION_IDS = {
   BLOCK: 'pa3',
   SCORE: 'pa4',
   PULL: 'pa5',
+  DEFENSE: 'pa6',
 } as const
 
 export const PASS_MODIFIER_IDS = {

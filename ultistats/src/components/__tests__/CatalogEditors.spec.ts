@@ -17,7 +17,7 @@ describe('catalog editors', () => {
           url === '/events.json'
             ? [{ id: 'e2', name: 'Foul', description: 'Called by a player.' }]
             : url === '/actions/positive_actions.json'
-              ? [{ id: 'pa4', name: 'Score', terminal: true }]
+              ? [{ id: 'pa4', name: 'Score', terminal: true, core: true }]
               : [{ id: 'na1', name: '', terminal: false }]
 
         return Promise.resolve({
@@ -36,6 +36,11 @@ describe('catalog editors', () => {
     const wrapper = mount(ActionsEditor)
     const actionsStore = useActionsStore()
     await vi.waitFor(() => expect(actionsStore.negativeActions).toHaveLength(1))
+    expect(actionsStore.positiveActions[0].core).toBe(true)
+    const coreCheckbox = wrapper.get<HTMLInputElement>('[aria-label="Score is core"]')
+    expect(coreCheckbox.element.checked).toBe(true)
+    await coreCheckbox.setValue(false)
+    expect(actionsStore.positiveActions[0].core).toBe(false)
 
     await wrapper.get('[aria-label="Remove empty negative action"]').trigger('click')
     expect(actionsStore.negativeActions).toHaveLength(0)
@@ -49,6 +54,7 @@ describe('catalog editors', () => {
       name: 'Interception',
       description: '',
       terminal: false,
+      core: false,
     })
     wrapper.unmount()
   })

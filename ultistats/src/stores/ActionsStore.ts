@@ -24,6 +24,7 @@ export const useActionsStore = defineStore('actionsStore', () => {
           name: action.name,
           description: action.description,
           terminal: action.terminal,
+          core: action.core ?? false,
           type: ActionType.POSITIVE,
         })
       })
@@ -45,6 +46,7 @@ export const useActionsStore = defineStore('actionsStore', () => {
           name: action.name,
           description: action.description,
           terminal: action.terminal,
+          core: action.core ?? false,
           type: ActionType.NEGATIVE,
         })
       })

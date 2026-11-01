@@ -271,7 +271,11 @@ const getStatsForOnePoint = (records: JournalEntry[]) => {
           break
         }
       }
-    } else if (isActionRecord(r, ACTION_IDS.BLOCK) || isActionRecord(r, ACTION_IDS.INTERCEPT)) {
+    } else if (
+      isActionRecord(r, ACTION_IDS.BLOCK) ||
+      isActionRecord(r, ACTION_IDS.INTERCEPT) ||
+      isActionRecord(r, ACTION_IDS.DEFENSE)
+    ) {
       for (let j = i - 1; j >= 0; j--) {
         if (records[j].type === jet.PLAYER) {
           baseValues.get(records[j].name)!.defenses += 1
