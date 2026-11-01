@@ -74,12 +74,11 @@ export const useJournalStore = defineStore('journal', () => {
     addEntry(entry)
   }
 
-  const addActionEntry = (name: string, terminal: boolean, positive: boolean) => {
+  const addActionEntry = (name: string, positive: boolean) => {
     const entry = {
       id: getNextIdIndex(),
       name: name,
       ts: getTs(),
-      terminal: terminal,
       type: positive ? jet.POSITIVE_ACTION : jet.NEGATIVE_ACTION,
       source: src.USER,
     }

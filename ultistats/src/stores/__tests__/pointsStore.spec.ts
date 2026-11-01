@@ -19,8 +19,8 @@ describe('score actions in point grouping', () => {
               ]
             : url === '/actions/positive_actions.json'
               ? [
-                  { id: 'pa4', name: 'Score', terminal: true },
-                  { id: 'pa5', name: 'Pull', terminal: false },
+                  { id: 'pa4', name: 'Score' },
+                  { id: 'pa5', name: 'Pull' },
                 ]
               : []
 
@@ -49,7 +49,6 @@ describe('score actions in point grouping', () => {
         id: 1,
         name: 'pa5',
         ts: 1,
-        terminal: false,
         type: JournalEntryType.POSITIVE_ACTION,
         source: JournalEntrySource.USER,
       },
@@ -64,7 +63,6 @@ describe('score actions in point grouping', () => {
         id: 3,
         name: 'pa4',
         ts: 3,
-        terminal: true,
         type: JournalEntryType.POSITIVE_ACTION,
         source: JournalEntrySource.USER,
       },

@@ -4,7 +4,6 @@ export interface Action {
   name: string
   description?: string
   key?: string
-  terminal: boolean
   core?: boolean
 }
 
@@ -17,6 +16,5 @@ export interface ActionData {
   id: string
   name: string
   description?: string
-  terminal: boolean
   core?: boolean
 }

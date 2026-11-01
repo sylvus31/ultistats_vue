@@ -94,6 +94,12 @@ const addRecords = (jsonData: any, timOffset: number) => {
     records = Array.isArray(jsonData) ? jsonData : []
   }
   records.forEach((record: any) => {
+    if (
+      record.type === JournalEntryType.POSITIVE_ACTION ||
+      record.type === JournalEntryType.NEGATIVE_ACTION
+    ) {
+      delete record.terminal
+    }
     //special processing for sets stored as array in json
     if (record.modifiers) {
       record.modifiers = new Set(record.modifiers)

@@ -3,28 +3,24 @@
     "id": "na1",
     "name": "Looking off",
     "description": "The disc holder has a clear pass opportunity but do not make the pass.",
-    "terminal": false,
     "core": false
   },
   {
     "id": "na2",
     "name": "Drop",
     "description": "The disc is dropped by the player.",
-    "terminal": true,
     "core": false
   },
   {
     "id": "na3",
     "name": "Got broken",
     "description": "The player guarding a thrower allows a break throw to be completed.",
-    "terminal": true,
     "core": false
   },
   {
     "id": "na4",
     "name": "Got run",
     "description": "The player is beaten on the open side by a cutter.",
-    "terminal": true,
     "core": false
   }
 ]

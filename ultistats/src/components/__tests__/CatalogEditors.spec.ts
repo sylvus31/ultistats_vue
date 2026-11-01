@@ -6,6 +6,7 @@ import EventsEditor from '../EventsEditor.vue'
 import { useActionsStore } from '@/stores/ActionsStore'
 import { useEventsStore } from '@/stores/EventsStore'
 import { useKeyboardStore } from '@/stores/keyboardStore'
+import { ActionType } from '@/types/ActionsType'
 
 describe('catalog editors', () => {
   beforeEach(() => {
@@ -17,8 +18,8 @@ describe('catalog editors', () => {
           url === '/events.json'
             ? [{ id: 'e2', name: 'Foul', description: 'Called by a player.' }]
             : url === '/actions/positive_actions.json'
-              ? [{ id: 'pa4', name: 'Score', terminal: true, core: true }]
-              : [{ id: 'na1', name: '', terminal: false }]
+              ? [{ id: 'pa4', name: 'Score', core: true }]
+              : [{ id: 'na1', name: '' }]
 
         return Promise.resolve({
           ok: true,
@@ -53,10 +54,26 @@ describe('catalog editors', () => {
     expect(actionsStore.positiveActions[1]).toMatchObject({
       name: 'Interception',
       description: '',
-      terminal: false,
       core: false,
     })
     wrapper.unmount()
+  })
+
+  it('removes terminal metadata from imported actions', () => {
+    const actionsStore = useActionsStore()
+    actionsStore.setActions(
+      [
+        {
+          id: 'pa4',
+          name: 'Score',
+          type: ActionType.POSITIVE,
+          terminal: true,
+        },
+      ],
+      [],
+    )
+
+    expect(actionsStore.positiveActions[0]).not.toHaveProperty('terminal')
   })
 
   it('allows removing empty events and creating an event', async () => {

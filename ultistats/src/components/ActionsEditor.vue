@@ -21,7 +21,7 @@ const createActionDraft = (type: ActionType): Action => {
     negativeActions.value.some((action) => action.id === id)
   )
 
-  return { id, type, name: '', description: '', terminal: false }
+  return { id, type, name: '', description: '', core: false }
 }
 
 const newPositiveAction = ref(createActionDraft(ActionType.POSITIVE))
@@ -69,7 +69,7 @@ onBeforeUnmount(() => keyboardStore.allowShortcuts())
           <tr>
             <th>Name</th>
             <th>Description</th>
-            <th>Terminal</th>
+            <th>Core</th>
             <th>Remove</th>
           </tr>
         </thead>
@@ -90,11 +90,7 @@ onBeforeUnmount(() => keyboardStore.allowShortcuts())
               />
             </td>
             <td>
-              <input
-                v-model="action.terminal"
-                type="checkbox"
-                :aria-label="`${action.name} is terminal`"
-              />
+              <input v-model="action.core" type="checkbox" :aria-label="`${action.name} is core`" />
             </td>
             <td>
               <button
@@ -120,7 +116,7 @@ onBeforeUnmount(() => keyboardStore.allowShortcuts())
           <tr>
             <th>Name</th>
             <th>Description</th>
-            <th>Terminal</th>
+            <th>Core</th>
             <th>Remove</th>
           </tr>
         </thead>
@@ -141,11 +137,7 @@ onBeforeUnmount(() => keyboardStore.allowShortcuts())
               />
             </td>
             <td>
-              <input
-                v-model="action.terminal"
-                type="checkbox"
-                :aria-label="`${action.name} is terminal`"
-              />
+              <input v-model="action.core" type="checkbox" :aria-label="`${action.name} is core`" />
             </td>
             <td>
               <button

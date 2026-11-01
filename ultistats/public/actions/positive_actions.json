@@ -3,42 +3,36 @@
     "id": "pa1",
     "name": "Pick up disc",
     "description": "The player picks up a disc, after a pull or turnover.",
-    "terminal": false,
     "core": false
   },
   {
     "id": "pa2",
     "name": "Intercept",
     "description": "The player intercepts a pass. The player catches the disc and gain possession",
-    "terminal": true,
     "core": false
   },
   {
     "id": "pa3",
     "name": "Block",
     "description": "The player blocks a pass, either when marking the thrower or when defending a cut.",
-    "terminal": true,
     "core": false
   },
   {
     "id": "pa4",
     "name": "Score",
     "description": "The player scores a point. This includes Callahan points.",
-    "terminal": true,
     "core": true
   },
   {
     "id": "pa5",
     "name": "Pull",
     "description": "The disc is thrown to the other team at the start of a point.",
-    "terminal": false,
     "core": true
   },
   {
     "id": "pa6",
     "name": "Defense",
     "description": "A defensive play that results in a change of possession.",
-    "terminal": true,
     "core": true
   }
 ]
