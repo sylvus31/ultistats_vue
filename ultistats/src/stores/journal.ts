@@ -14,7 +14,8 @@ import type { VideoPlayerInstance } from '@/components/VideoPlayer.vue'
 import { separateRecordsInPoints } from './pointsStore'
 import { useTeamStore } from './Team'
 import { useActionsStore } from './ActionsStore'
-import { isScoreActionRecord } from '@/types/scoreAction'
+import { isActionRecord, isScoreActionRecord } from '@/types/scoreAction'
+import { ACTION_IDS } from '@/types/catalogIds'
 
 export type JournalEntry =
   | journalPass
@@ -122,7 +123,7 @@ export const useJournalStore = defineStore('journal', () => {
       .filter((e) => e.ts < entry.ts)
     let isBlocker = false
     intervalEntries.forEach((e) => {
-      if (e.type === jet.EVENT || isScoreActionRecord(e)) {
+      if (e.type === jet.EVENT || isScoreActionRecord(e) || isActionRecord(e, ACTION_IDS.PULL)) {
         isBlocker = true
       }
     })

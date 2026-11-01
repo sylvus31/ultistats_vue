@@ -1,10 +1,5 @@
 [
   {
-    "id": "e1",
-    "name": "Pull",
-    "description": "The disc is thrown to the other team at the start of a point."
-  },
-  {
     "id": "e2",
     "name": "Foul",
     "description": "A foul is called by a player. This includes contested and uncontested fouls."

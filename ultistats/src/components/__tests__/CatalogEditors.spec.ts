@@ -15,7 +15,7 @@ describe('catalog editors', () => {
       vi.fn((url: string) => {
         const data =
           url === '/events.json'
-            ? [{ id: 'e1', name: 'Pull', description: 'Start a point.' }]
+            ? [{ id: 'e2', name: 'Foul', description: 'Called by a player.' }]
             : url === '/actions/positive_actions.json'
               ? [{ id: 'pa4', name: 'Score', terminal: true }]
               : [{ id: 'na1', name: '', terminal: false }]
@@ -61,7 +61,7 @@ describe('catalog editors', () => {
     eventsStore.events.push({ id: 'empty-event', name: '', description: '' })
     await wrapper.vm.$nextTick()
     await wrapper.get('[aria-label="Remove empty event"]').trigger('click')
-    expect(eventsStore.events.map((event) => event.id)).toEqual(['e1'])
+    expect(eventsStore.events.map((event) => event.id)).toEqual(['e2'])
 
     const draftInput = wrapper.findAll('sl-input').at(-1)!
     draftInput.element.value = 'Timeout'

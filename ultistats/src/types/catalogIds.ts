@@ -3,10 +3,7 @@ export const ACTION_IDS = {
   INTERCEPT: 'pa2',
   BLOCK: 'pa3',
   SCORE: 'pa4',
-} as const
-
-export const EVENT_IDS = {
-  PULL: 'e1',
+  PULL: 'pa5',
 } as const
 
 export const PASS_MODIFIER_IDS = {

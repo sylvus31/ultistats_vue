@@ -21,7 +21,10 @@ describe('ScoreEvolution', () => {
                 { id: 't1', name: 'Away', players: [] },
               ]
             : url === '/actions/positive_actions.json'
-              ? [{ id: 'pa4', name: 'Score', terminal: true }]
+              ? [
+                  { id: 'pa4', name: 'Score', terminal: true },
+                  { id: 'pa5', name: 'Pull', terminal: false },
+                ]
               : []
 
         return Promise.resolve({
@@ -45,15 +48,16 @@ describe('ScoreEvolution', () => {
     })
     await vi.waitFor(() => expect(wrapper.text()).toContain('BTR: 0 - 0 ADV'))
     await vi.waitFor(() => {
-      expect(actionsStore.positiveActions).toHaveLength(1)
+      expect(actionsStore.positiveActions).toHaveLength(2)
       expect(teamStore.teams[0].players).toHaveLength(1)
     })
 
     journalStore.addRecord({
       id: 1,
-      name: 'e1',
+      name: 'pa5',
       ts: 1,
-      type: JournalEntryType.EVENT,
+      terminal: false,
+      type: JournalEntryType.POSITIVE_ACTION,
       source: JournalEntrySource.USER,
     })
     journalStore.addRecord({

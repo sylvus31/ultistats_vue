@@ -2,8 +2,8 @@ import { computed } from 'vue'
 import type { JournalEntry } from '@/stores/journal'
 import { JournalEntryType as jet } from '@/types/journaltypes'
 import { useTeamStore } from './Team'
-import { isScoreActionRecord } from '@/types/scoreAction'
-import { EVENT_IDS } from '@/types/catalogIds'
+import { isActionRecord, isScoreActionRecord } from '@/types/scoreAction'
+import { ACTION_IDS } from '@/types/catalogIds'
 
 export class Point {
   startTime: number
@@ -36,7 +36,7 @@ export const separateRecordsInPoints = (records: JournalEntry[]) => {
 
   records.forEach((record, i) => {
     tmp_points[tmp_points.length - 1].addRecord(record)
-    if (record.type === jet.EVENT && record.name === EVENT_IDS.PULL) {
+    if (isActionRecord(record, ACTION_IDS.PULL)) {
       tmp_points[tmp_points.length - 1].pullTime = record.ts
       tmp_points[tmp_points.length - 1].hasPull = true
       for (let j = i; j < records.length; j++) {

@@ -85,7 +85,7 @@ import TargetsCell from './stats/TargetsCell.vue'
 import type { VideoPlayerInstance } from '@/components/VideoPlayer.vue'
 import { hasPassModifier } from '@/types/passModifiers'
 import { isActionRecord, isScoreActionRecord } from '@/types/scoreAction'
-import { ACTION_IDS, EVENT_IDS } from '@/types/catalogIds'
+import { ACTION_IDS } from '@/types/catalogIds'
 const videoPlayerRef = ref<VideoPlayerInstance | null>(null)
 const setVideoPlayerRef = (ref: Ref<VideoPlayerInstance | null>) => {
   videoPlayerRef.value = ref.value
@@ -217,7 +217,7 @@ const getStatsForOnePoint = (records: JournalEntry[]) => {
           //count providers
           baseValues.get(receiver.id)!.providers.increment(thrower.id)
           break
-        } else if (records[j].type === jet.EVENT && records[j].name === EVENT_IDS.PULL) {
+        } else if (isActionRecord(records[j], ACTION_IDS.PULL)) {
           baseValues.get(thrower.id)!.pulls += 1
           break
         } else if (isActionRecord(records[j], ACTION_IDS.PICK_UP_DISC)) {
@@ -258,7 +258,7 @@ const getStatsForOnePoint = (records: JournalEntry[]) => {
         if (line.type === jet.LINE && 'players' in line) {
           let pullTime = line.ts // if no pull recorded
           for (let k = j + 1; k < records.length; k++) {
-            if (records[k].type === jet.EVENT && records[k].name === EVENT_IDS.PULL) {
+            if (isActionRecord(records[k], ACTION_IDS.PULL)) {
               pullTime = records[k].ts
               break
             }

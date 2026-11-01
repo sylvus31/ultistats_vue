@@ -22,5 +22,11 @@
     "name": "Score",
     "description": "The player scores a point. This includes Callahan points.",
     "terminal": true
+  },
+  {
+    "id": "pa5",
+    "name": "Pull",
+    "description": "The disc is thrown to the other team at the start of a point.",
+    "terminal": false
   }
 ]
