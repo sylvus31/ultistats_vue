@@ -26,8 +26,19 @@ const createActionDraft = (type: ActionType): Action => {
 
 const newPositiveAction = ref(createActionDraft(ActionType.POSITIVE))
 const newNegativeAction = ref(createActionDraft(ActionType.NEGATIVE))
-const editorPositiveActions = computed(() => [...positiveActions.value, newPositiveAction.value])
-const editorNegativeActions = computed(() => [...negativeActions.value, newNegativeAction.value])
+const editorActions = computed(() => [
+  ...positiveActions.value,
+  ...negativeActions.value,
+  newPositiveAction.value,
+  newNegativeAction.value,
+])
+const coreActions = computed(() => editorActions.value.filter((action) => action.core === true))
+const nonCorePositiveActions = computed(() =>
+  [...positiveActions.value, newPositiveAction.value].filter((action) => action.core !== true),
+)
+const nonCoreNegativeActions = computed(() =>
+  [...negativeActions.value, newNegativeAction.value].filter((action) => action.core !== true),
+)
 
 watch(
   () => newPositiveAction.value.name,
@@ -56,12 +67,50 @@ const removeAction = (action: Action) => {
   if (index !== -1) actions.splice(index, 1)
 }
 
+const clearAction = (action: Action) => {
+  action.name = ''
+  action.description = ''
+  action.core = false
+}
+
 onMounted(() => keyboardStore.forbidShortcuts())
 onBeforeUnmount(() => keyboardStore.allowShortcuts())
 </script>
 
 <template>
   <form>
+    <section class="editor-section core-actions">
+      <h3>Core actions</h3>
+      <table>
+        <thead>
+          <tr>
+            <th>Type</th>
+            <th>Name</th>
+            <th>Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="action in coreActions" :key="action.id">
+            <td>{{ action.type === ActionType.POSITIVE ? 'Positive' : 'Negative' }}</td>
+            <td>
+              <sl-input
+                v-model="action.name"
+                :aria-label="`${action.name || action.id} name`"
+                placeholder="Action name"
+              />
+            </td>
+            <td>
+              <textarea
+                v-model="action.description"
+                :aria-label="`${action.name} description`"
+                rows="2"
+              />
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
     <section class="editor-section">
       <h3>Positive actions</h3>
       <table>
@@ -70,15 +119,16 @@ onBeforeUnmount(() => keyboardStore.allowShortcuts())
             <th>Name</th>
             <th>Description</th>
             <th>Core</th>
+            <th>Clear</th>
             <th>Remove</th>
           </tr>
         </thead>
         <tbody>
-          <tr v-for="action in editorPositiveActions" :key="action.id">
+          <tr v-for="action in nonCorePositiveActions" :key="action.id">
             <td>
               <sl-input
                 v-model="action.name"
-                :aria-label="`${action.name} name`"
+                :aria-label="`${action.name || action.id} name`"
                 :placeholder="action.id === newPositiveAction.id ? 'new...' : ''"
               />
             </td>
@@ -94,11 +144,22 @@ onBeforeUnmount(() => keyboardStore.allowShortcuts())
             </td>
             <td>
               <button
+                type="button"
+                class="clear-entry"
+                :aria-label="`Clear ${action.name || action.id}`"
+                title="Clear action"
+                @click="clearAction(action)"
+              >
+                <span class="mdi mdi-eraser" aria-hidden="true"></span>
+              </button>
+            </td>
+            <td>
+              <button
                 v-if="!action.name.trim() && action.id !== newPositiveAction.id"
                 type="button"
                 class="remove-entry"
-                aria-label="Remove empty positive action"
-                title="Remove empty action"
+                :aria-label="`Remove ${action.name || action.id}`"
+                title="Remove action"
                 @click="removeAction(action)"
               >
                 <span class="mdi mdi-delete-outline" aria-hidden="true"></span>
@@ -117,15 +178,16 @@ onBeforeUnmount(() => keyboardStore.allowShortcuts())
             <th>Name</th>
             <th>Description</th>
             <th>Core</th>
+            <th>Clear</th>
             <th>Remove</th>
           </tr>
         </thead>
         <tbody>
-          <tr v-for="action in editorNegativeActions" :key="action.id">
+          <tr v-for="action in nonCoreNegativeActions" :key="action.id">
             <td>
               <sl-input
                 v-model="action.name"
-                :aria-label="`${action.name} name`"
+                :aria-label="`${action.name || action.id} name`"
                 :placeholder="action.id === newNegativeAction.id ? 'new...' : ''"
               />
             </td>
@@ -141,11 +203,22 @@ onBeforeUnmount(() => keyboardStore.allowShortcuts())
             </td>
             <td>
               <button
+                type="button"
+                class="clear-entry"
+                :aria-label="`Clear ${action.name || action.id}`"
+                title="Clear action"
+                @click="clearAction(action)"
+              >
+                <span class="mdi mdi-eraser" aria-hidden="true"></span>
+              </button>
+            </td>
+            <td>
+              <button
                 v-if="!action.name.trim() && action.id !== newNegativeAction.id"
                 type="button"
                 class="remove-entry"
-                aria-label="Remove empty negative action"
-                title="Remove empty action"
+                :aria-label="`Remove ${action.name || action.id}`"
+                title="Remove action"
                 @click="removeAction(action)"
               >
                 <span class="mdi mdi-delete-outline" aria-hidden="true"></span>
@@ -167,6 +240,12 @@ form {
 
 .editor-section + .editor-section {
   margin-top: var(--spacing-lg);
+}
+
+.core-actions {
+  padding: var(--spacing-md);
+  border-radius: var(--border-radius-md);
+  background-color: #444;
 }
 
 h3 {
@@ -195,5 +274,22 @@ textarea {
   background-color: var(--color-dark-bg);
   border: 1px solid var(--color-border);
   border-radius: var(--border-radius-sm);
+}
+
+.clear-entry,
+.remove-entry {
+  min-width: 32px;
+  min-height: 32px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--border-radius-sm);
+  color: var(--color-text-primary);
+  background-color: var(--color-dark-bg);
+  cursor: pointer;
+}
+
+.clear-entry:hover,
+.remove-entry:hover {
+  color: var(--color-accent);
+  border-color: var(--color-accent);
 }
 </style>

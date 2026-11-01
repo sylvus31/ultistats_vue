@@ -33,25 +33,43 @@ describe('catalog editors', () => {
     vi.unstubAllGlobals()
   })
 
-  it('allows removing empty actions and creating a positive action', async () => {
+  it('edits core status and exposes clear and remove controls', async () => {
     const wrapper = mount(ActionsEditor)
     const actionsStore = useActionsStore()
     await vi.waitFor(() => expect(actionsStore.negativeActions).toHaveLength(1))
     expect(actionsStore.positiveActions[0].core).toBe(true)
-    const coreCheckbox = wrapper.get<HTMLInputElement>('[aria-label="Score is core"]')
+
+    const coreSection = wrapper.find('.core-actions')
+    const coreCheckbox = coreSection.get<HTMLInputElement>('[aria-label="Score is core"]')
     expect(coreCheckbox.element.checked).toBe(true)
     await coreCheckbox.setValue(false)
     expect(actionsStore.positiveActions[0].core).toBe(false)
+    expect(wrapper.find('.core-actions').find('[aria-label="Score name"]').exists()).toBe(false)
 
-    await wrapper.get('[aria-label="Remove empty negative action"]').trigger('click')
+    const positiveSection = wrapper.findAll('section')[1]
+    const positiveCheckbox = positiveSection.get<HTMLInputElement>('[aria-label="Score is core"]')
+    await positiveCheckbox.setValue(true)
+    expect(actionsStore.positiveActions[0].core).toBe(true)
+    expect(wrapper.find('.core-actions').find('[aria-label="Score name"]').exists()).toBe(true)
+
+    await wrapper.get('[aria-label="Clear Score"]').trigger('click')
+    expect(actionsStore.positiveActions[0]).toMatchObject({
+      name: '',
+      description: '',
+      core: false,
+    })
+    await wrapper.get('[aria-label="Remove pa4"]').trigger('click')
+    expect(actionsStore.positiveActions).toHaveLength(0)
+
+    await wrapper.get('[aria-label="Remove na1"]').trigger('click')
     expect(actionsStore.negativeActions).toHaveLength(0)
 
-    const draftInput = wrapper.findAll('section')[0].findAll('sl-input')[1]
+    const draftInput = wrapper.findAll('section')[1].get('sl-input')
     draftInput.element.value = 'Interception'
     await draftInput.trigger('input')
 
-    await vi.waitFor(() => expect(actionsStore.positiveActions).toHaveLength(2))
-    expect(actionsStore.positiveActions[1]).toMatchObject({
+    await vi.waitFor(() => expect(actionsStore.positiveActions).toHaveLength(1))
+    expect(actionsStore.positiveActions[0]).toMatchObject({
       name: 'Interception',
       description: '',
       core: false,
