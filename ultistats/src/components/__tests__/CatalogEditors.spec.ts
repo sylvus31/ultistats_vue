@@ -16,7 +16,11 @@ describe('catalog editors', () => {
       vi.fn((url: string) => {
         const data =
           url === '/events.json'
-            ? [{ id: 'e2', name: 'Foul', description: 'Called by a player.' }]
+            ? [
+                { id: 'e2', name: 'Foul', description: 'Called by a player.' },
+                { id: 'e3', name: 'Timeout', description: 'A timeout is called.' },
+                { id: 'e4', name: 'Game stoppage', description: 'The game is stopped.' },
+              ]
             : url === '/actions/positive_actions.json'
               ? [{ id: 'pa4', name: 'Score', description: 'Points the team scores.', core: true }]
               : [{ id: 'na1', name: '' }]
@@ -107,24 +111,54 @@ describe('catalog editors', () => {
     expect(actionsStore.positiveActions[0]).not.toHaveProperty('terminal')
   })
 
-  it('allows removing empty events and creating an event', async () => {
+  it('locks core event descriptions and allows managing non-core events', async () => {
     const wrapper = mount(EventsEditor)
     const eventsStore = useEventsStore()
-    await vi.waitFor(() => expect(eventsStore.events).toHaveLength(1))
+    await vi.waitFor(() => expect(eventsStore.events).toHaveLength(3))
 
-    eventsStore.events.push({ id: 'empty-event', name: '', description: '' })
+    const coreSection = wrapper.find('.core-events')
+    expect(coreSection.findAll('tbody tr')).toHaveLength(3)
+    for (const name of ['Foul', 'Timeout', 'Game stoppage']) {
+      expect(
+        coreSection.get<HTMLTextAreaElement>(`[aria-label="${name} description"]`).element.readOnly,
+      ).toBe(true)
+      expect(coreSection.find(`[aria-label="Clear ${name}"]`).exists()).toBe(false)
+      expect(coreSection.find(`[aria-label="Remove ${name}"]`).exists()).toBe(false)
+    }
+
+    const foulName = coreSection.get('sl-input[aria-label="Foul name"]')
+    foulName.element.value = 'Changed foul'
+    await foulName.trigger('input')
+    expect(eventsStore.events[0].name).toBe('Changed foul')
+    expect(eventsStore.events[0].description).toBe('Called by a player.')
+
+    eventsStore.events.push({
+      id: 'custom-event',
+      name: 'Custom event',
+      description: 'Custom description',
+      core: false,
+    })
     await wrapper.vm.$nextTick()
-    await wrapper.get('[aria-label="Remove empty event"]').trigger('click')
-    expect(eventsStore.events.map((event) => event.id)).toEqual(['e2'])
+    const customDescription = wrapper.get<HTMLTextAreaElement>(
+      '[aria-label="Custom event description"]',
+    )
+    expect(customDescription.element.readOnly).toBe(false)
+    await customDescription.setValue('Updated description')
+    expect(eventsStore.events[3].description).toBe('Updated description')
+    await wrapper.get('[aria-label="Clear Custom event"]').trigger('click')
+    expect(eventsStore.events[3]).toMatchObject({ name: '', description: '', core: false })
+    await wrapper.get('[aria-label="Remove custom-event"]').trigger('click')
+    expect(eventsStore.events.map((event) => event.id)).toEqual(['e2', 'e3', 'e4'])
 
     const draftInput = wrapper.findAll('sl-input').at(-1)!
     draftInput.element.value = 'Timeout'
     await draftInput.trigger('input')
 
-    await vi.waitFor(() => expect(eventsStore.events).toHaveLength(2))
-    expect(eventsStore.events[1]).toMatchObject({
+    await vi.waitFor(() => expect(eventsStore.events).toHaveLength(4))
+    expect(eventsStore.events[3]).toMatchObject({
       name: 'Timeout',
       description: '',
+      core: false,
     })
     wrapper.unmount()
   })
