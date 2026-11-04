@@ -42,7 +42,6 @@ export interface journalAction {
   type: JournalEntryType
   id: number
   name: string
-  terminal: boolean
   ts: number
   source: JournalEntrySource
 }

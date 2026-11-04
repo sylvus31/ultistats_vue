@@ -3,4 +3,5 @@ export interface Event {
   name: string
   description?: string
   key?: string
+  core?: boolean
 }

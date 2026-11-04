@@ -13,7 +13,7 @@ const actionsStore = useActionsStore()
       :key="action.id"
       :class="{ positiveButton: true }"
       :title="getDescriptionTooltip(action.description)"
-      @click="journalStore.addActionEntry(action.id, action.terminal, true)"
+      @click="journalStore.addActionEntry(action.id, true)"
     >
       <span class="pass-name">{{ action.name }}</span>
     </sl-button>
@@ -22,7 +22,7 @@ const actionsStore = useActionsStore()
       :key="action.id"
       :class="{ negativeButton: true }"
       :title="getDescriptionTooltip(action.description)"
-      @click="journalStore.addActionEntry(action.id, action.terminal, false)"
+      @click="journalStore.addActionEntry(action.id, false)"
     >
       <span class="pass-name">{{ action.name }}</span>
     </sl-button>

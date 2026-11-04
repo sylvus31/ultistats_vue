@@ -29,6 +29,12 @@ describe('action record ID matching', () => {
         ACTION_IDS.BLOCK,
       ),
     ).toBe(true)
+    expect(
+      isActionRecord(
+        { type: JournalEntryType.POSITIVE_ACTION, name: ACTION_IDS.DEFENSE },
+        ACTION_IDS.DEFENSE,
+      ),
+    ).toBe(true)
   })
 
   it('continues to identify score actions by ID', () => {

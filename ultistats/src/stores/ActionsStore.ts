@@ -23,7 +23,7 @@ export const useActionsStore = defineStore('actionsStore', () => {
           id: action.id,
           name: action.name,
           description: action.description,
-          terminal: action.terminal,
+          core: action.core ?? false,
           type: ActionType.POSITIVE,
         })
       })
@@ -44,16 +44,24 @@ export const useActionsStore = defineStore('actionsStore', () => {
           id: action.id,
           name: action.name,
           description: action.description,
-          terminal: action.terminal,
+          core: action.core ?? false,
           type: ActionType.NEGATIVE,
         })
       })
     })
 
-  function setActions(importedPositiveActions: Action[], importedNegativeActions: Action[]) {
+  function setActions(
+    importedPositiveActions: Array<Action & { terminal?: boolean }>,
+    importedNegativeActions: Array<Action & { terminal?: boolean }>,
+  ) {
     hasImportedActions = true
-    positiveActions.value = importedPositiveActions
-    negativeActions.value = importedNegativeActions
+    const removeTerminal = (action: Action & { terminal?: boolean }): Action => {
+      const cleanAction = { ...action }
+      delete cleanAction.terminal
+      return cleanAction
+    }
+    positiveActions.value = importedPositiveActions.map(removeTerminal)
+    negativeActions.value = importedNegativeActions.map(removeTerminal)
   }
 
   function getActionByID(id: string): Action | undefined {

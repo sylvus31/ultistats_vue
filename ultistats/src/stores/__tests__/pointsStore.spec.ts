@@ -18,7 +18,10 @@ describe('score actions in point grouping', () => {
                 { id: 't1', name: 'Away', players: [] },
               ]
             : url === '/actions/positive_actions.json'
-              ? [{ id: 'pa4', name: 'Score', terminal: true }]
+              ? [
+                  { id: 'pa4', name: 'Score' },
+                  { id: 'pa5', name: 'Pull' },
+                ]
               : []
 
         return Promise.resolve({
@@ -38,15 +41,15 @@ describe('score actions in point grouping', () => {
     const actionsStore = useActionsStore()
     await vi.waitFor(() => {
       expect(teamStore.teams[0].players).toHaveLength(1)
-      expect(actionsStore.positiveActions).toHaveLength(1)
+      expect(actionsStore.positiveActions).toHaveLength(2)
     })
 
     const points = separateRecordsInPoints([
       {
         id: 1,
-        name: 'e1',
+        name: 'pa5',
         ts: 1,
-        type: JournalEntryType.EVENT,
+        type: JournalEntryType.POSITIVE_ACTION,
         source: JournalEntrySource.USER,
       },
       {
@@ -60,7 +63,6 @@ describe('score actions in point grouping', () => {
         id: 3,
         name: 'pa4',
         ts: 3,
-        terminal: true,
         type: JournalEntryType.POSITIVE_ACTION,
         source: JournalEntrySource.USER,
       },
