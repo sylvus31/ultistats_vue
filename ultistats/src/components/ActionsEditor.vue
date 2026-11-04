@@ -101,9 +101,10 @@ onBeforeUnmount(() => keyboardStore.allowShortcuts())
             </td>
             <td>
               <textarea
-                v-model="action.description"
+                :value="action.description"
                 :aria-label="`${action.name} description`"
                 rows="2"
+                readonly
               />
             </td>
           </tr>

@@ -18,7 +18,7 @@ describe('catalog editors', () => {
           url === '/events.json'
             ? [{ id: 'e2', name: 'Foul', description: 'Called by a player.' }]
             : url === '/actions/positive_actions.json'
-              ? [{ id: 'pa4', name: 'Score', core: true }]
+              ? [{ id: 'pa4', name: 'Score', description: 'Points the team scores.', core: true }]
               : [{ id: 'na1', name: '' }]
 
         return Promise.resolve({
@@ -74,6 +74,19 @@ describe('catalog editors', () => {
       description: '',
       core: false,
     })
+    wrapper.unmount()
+  })
+
+  it('does not allow editing core action descriptions', async () => {
+    const wrapper = mount(ActionsEditor)
+    await vi.waitFor(() => expect(useActionsStore().positiveActions).toHaveLength(1))
+
+    const description = wrapper.get<HTMLTextAreaElement>(
+      '.core-actions [aria-label="Score description"]',
+    )
+    expect(description.element.readOnly).toBe(true)
+    expect(description.element.value).toBe('Points the team scores.')
+
     wrapper.unmount()
   })
 
