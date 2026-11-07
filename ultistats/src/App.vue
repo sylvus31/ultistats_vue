@@ -27,6 +27,7 @@ const videoPlayerRef = ref<VideoPlayerInstance | null>(null)
 const fileInputRef = ref<HTMLInputElement | null>(null) // Ref for the hidden file input
 const journalViewerRef = ref<InstanceType<typeof JournalViewer> | null>(null)
 const statsViewerRef = ref<InstanceType<typeof StatsViewer> | null>(null)
+const onlyLinePlayers = ref(false)
 
 // Method to trigger the hidden file input
 const openFileDialog = () => {
@@ -115,13 +116,29 @@ provide('videoPlayerRef', videoPlayerRef)
     </div>
     <div slot="end">
       <WindowHolder title="Players" allowEdit editorComponent='./PlayerEditor.vue'>
+        <template #before-edit>
+          <button
+            class="icon-button"
+            type="button"
+            :title="onlyLinePlayers ? 'Show all players' : 'Show only players in line'"
+            :aria-label="onlyLinePlayers ? 'Show all players' : 'Show only players in line'"
+            :aria-pressed="onlyLinePlayers"
+            @click="onlyLinePlayers = !onlyLinePlayers"
+          >
+            <span
+              class="mdi"
+              :class="onlyLinePlayers ? 'mdi-account' : 'mdi-account-multiple'"
+              aria-hidden="true"
+            ></span>
+          </button>
+        </template>
         <template v-slot:menu>
           <div class="players-menu">
             <TeamSelector />
             <SetLine />
           </div>
         </template>
-        <template v-slot:main><PlayerSelector/></template>
+        <template v-slot:main><PlayerSelector :only-line-players="onlyLinePlayers" /></template>
       </WindowHolder>
       <WindowHolder title="Passes" allowEdit editorComponent='./PassEditor.vue'>
         <template v-slot:menu><PassesModifiersMenu/></template>
