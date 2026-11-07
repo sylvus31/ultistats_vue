@@ -36,6 +36,9 @@ describe('PlayerSelector shortcuts', () => {
     await vi.waitFor(() => {
       expect(keyboardStore.getKeyBinding('Numpad7')).toBe('playersSelectorShortcutManager')
     })
+    expect(wrapper.text()).toContain('Thomas')
+    expect(wrapper.text()).not.toContain('BTR')
+    expect(wrapper.text()).not.toContain('ADVERSAIRE')
 
     teamStore.teams[0].players[0].key_code = 'Numpad6'
 

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { watch } from 'vue'
+import { computed, watch } from 'vue'
 import { storeToRefs } from 'pinia'
 import type { Player } from '@/types/Player'
 import '@shoelace-style/shoelace/dist/components/button/button.js'
@@ -12,6 +12,9 @@ import { formatShortcutKey } from '@/types/keyConstants'
 
 const teamStore = useTeamStore()
 const { players } = storeToRefs(teamStore)
+const rosterPlayers = computed(() =>
+  players.value.filter((player) => !teamStore.teams.some((team) => team.id === player.id)),
+)
 
 const keyboardStore = useKeyboardStore()
 
@@ -73,7 +76,7 @@ defineExpose({ playersSelectorShortcutManager })
 <template>
   <div class="buttons">
     <sl-button
-      v-for="player in players"
+      v-for="player in rosterPlayers"
       :key="player.id"
       @click="selectPlayer(player)"
       :class="{ active: player.isActive }"

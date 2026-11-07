@@ -18,6 +18,7 @@ import ActionsSelector from './components/ActionsSelector.vue'
 import EventsSelector from './components/EventsSelector.vue'
 import FileSaver from './components/FileSaver.vue'
 import SetLine from './components/SetLine.vue'
+import TeamSelector from './components/TeamSelector.vue'
 import StatsViewer from './components/StatsViewer.vue'
 import StatViewerMenu from './components/StatViewerMenu.vue'
 import StatsViewerTeam from './components/StatsViewerTeam.vue'
@@ -114,7 +115,12 @@ provide('videoPlayerRef', videoPlayerRef)
     </div>
     <div slot="end">
       <WindowHolder title="Players" allowEdit editorComponent='./PlayerEditor.vue'>
-        <template v-slot:menu><SetLine/></template>
+        <template v-slot:menu>
+          <div class="players-menu">
+            <TeamSelector />
+            <SetLine />
+          </div>
+        </template>
         <template v-slot:main><PlayerSelector/></template>
       </WindowHolder>
       <WindowHolder title="Passes" allowEdit editorComponent='./PassEditor.vue'>
@@ -191,6 +197,11 @@ sl-button:hover:not(.active)::part(base) {
   align-items: center; /* Vertically align items */
   gap: 20px; /* Add more space between button and input */
   margin-bottom: 10px; /* Add some space below the container */
+}
+.players-menu {
+  display: flex;
+  align-items: center;
+  gap: 5px;
 }
 
 /* Apply specific padding to align start panel content with button above */
