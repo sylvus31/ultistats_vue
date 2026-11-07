@@ -66,7 +66,7 @@ function onClickBreak(record: JournalEntry) {
   record.source = src.USER
 }
 
-function onClickOffHans(record: JournalEntry) {
+function onClickOffHand(record: JournalEntry) {
   journalStore.toggleModifier(record, getPassModifierId('off-hand'))
   record.source = src.USER
 }
@@ -269,7 +269,7 @@ defineExpose({
           <button
             class="pass-button"
             :class="{ active: hasPassModifier(record.modifiers, 'off-hand') }"
-            @click.stop="onClickOffHans(record)"
+            @click.stop="onClickOffHand(record)"
           >
             O
           </button>
