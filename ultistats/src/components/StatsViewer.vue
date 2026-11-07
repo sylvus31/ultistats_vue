@@ -23,8 +23,23 @@
     </Column>
     <Column field="passes_total" header="P total" :sortable="true"></Column>
     <Column field="passes_success" header="P success" :sortable="true"></Column>
+    <Column header="P success rate">
+      <template #body="slotProps">
+        {{ formatSuccessRate(slotProps.data.passes_success, slotProps.data.passes_total) }}
+      </template>
+    </Column>
     <Column field="passes_fail" header="P fail" :sortable="true"></Column>
     <Column field="long_success" header="L success" :sortable="true"></Column>
+    <Column header="L success rate">
+      <template #body="slotProps">
+        {{
+          formatSuccessRate(
+            slotProps.data.long_success,
+            slotProps.data.long_success + slotProps.data.long_fail,
+          )
+        }}
+      </template>
+    </Column>
     <Column field="long_fail" header="L fail" :sortable="true"></Column>
     <Column field="passes_D" header="P D" :sortable="true">
       <template #body="slotProps">
@@ -47,6 +62,15 @@
     <Column field="played_time" header="Played Time" :sortable="true">
       <template #body="slotProps">
         <PlayedTimeCell :value="slotProps.data.played_time" />
+      </template>
+    </Column>
+    <Column field="time_in_hand_average" header="Time in Hand" :sortable="true">
+      <template #body="slotProps">
+        <PlayedTimeCell
+          v-if="slotProps.data.time_in_hand_average !== null"
+          :value="slotProps.data.time_in_hand_average"
+        />
+        <span v-else>--</span>
       </template>
     </Column>
     <Column field="targets" header="Targets">
@@ -167,6 +191,9 @@ interface Row {
   defenses: number
   played_points: number
   played_time: number
+  time_in_hand: number
+  time_in_hand_count: number
+  time_in_hand_average: number | null
   targets: StringNumberMap
   providers: StringNumberMap
   passesType: StringNumberMap
@@ -179,6 +206,9 @@ interface Row {
 }
 
 const rows = ref<Row[]>([])
+const formatSuccessRate = (successes: number, attempts: number) =>
+  attempts === 0 ? '--' : `${((successes / attempts) * 100).toFixed(1)}%`
+
 const initStats = (r: Row[]) => {
   r.splice(0, r.length)
   const teamNames = teamStore.teams.map((t) => t.id)
@@ -203,6 +233,9 @@ const initRow = (id: string) => {
     defenses: 0,
     played_points: 0,
     played_time: 0,
+    time_in_hand: 0,
+    time_in_hand_count: 0,
+    time_in_hand_average: null,
     targets: new StringNumberMap(),
     providers: new StringNumberMap(),
     passesType: new StringNumberMap(),
@@ -230,6 +263,23 @@ const getStatsForOnePoint = (records: JournalEntry[]) => {
   const baseValues = initMap()
   records.forEach((r, i) => {
     if (r.type === jet.PLAYER) {
+      for (let j = i + 1; j < records.length; j++) {
+        const nextRecord = records[j]
+        if (nextRecord.type === jet.PLAYER) break
+        if (nextRecord.type === jet.PASS) {
+          baseValues.get(r.name)!.time_in_hand += Math.max(0, nextRecord.ts - r.ts)
+          baseValues.get(r.name)!.time_in_hand_count += 1
+          break
+        }
+        if (
+          isScoreActionRecord(nextRecord) ||
+          isActionRecord(nextRecord, ACTION_IDS.PULL) ||
+          isActionRecord(nextRecord, ACTION_IDS.DROP)
+        ) {
+          break
+        }
+      }
+
       const thrower = teamStore.getPlayerByID(r.name)!
       for (let j = i + 1; j < records.length; j++) {
         if (records[j].type === jet.PLAYER) {
@@ -344,6 +394,8 @@ const getStatsForOnePoint = (records: JournalEntry[]) => {
       }
       teamStats.points += playerStats.points
       teamStats.defenses += playerStats.defenses
+      teamStats.time_in_hand += playerStats.time_in_hand
+      teamStats.time_in_hand_count += playerStats.time_in_hand_count
       teamStats.pulls += playerStats.pulls
       teamStats.pickUps += playerStats.pickUps
       teamStats.long_success += playerStats.long_success
@@ -406,6 +458,8 @@ const updateStatGrid = () => {
       playerTotalStats.pickUps += r.pickUps
       playerTotalStats.played_points += r.played_points
       playerTotalStats.played_time += r.played_time
+      playerTotalStats.time_in_hand += r.time_in_hand
+      playerTotalStats.time_in_hand_count += r.time_in_hand_count
       playerTotalStats.long_success += r.long_success
       playerTotalStats.long_fail += r.long_fail
       r.targets.forEach((v, k) => {
@@ -418,6 +472,13 @@ const updateStatGrid = () => {
         playerTotalStats.passesType.set(k, playerTotalStats.passesType.getOrDefault(k) + v)
       })
     })
+  })
+
+  statsMap.forEach((stats) => {
+    stats.time_in_hand_average =
+      stats.time_in_hand_count > 0
+        ? Math.round(stats.time_in_hand / stats.time_in_hand_count)
+        : null
   })
 
   // update the grid
