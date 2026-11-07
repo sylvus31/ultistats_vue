@@ -103,13 +103,10 @@ export const useTeamStore = defineStore('team', () => {
   }
 
   function getPlayerTeam(player: Player) {
-    let index = -1
-    teams.value.forEach((team, i) => {
-      if (team.name === player.name || team.players?.find((p) => p.id === player.id)) {
-        index = i
-      }
-    })
-    return index
+    return teams.value.findIndex(
+      (team) =>
+        team.id === player.id || team.players.some((teamPlayer) => teamPlayer.id === player.id),
+    )
   }
 
   function getPlayerByName(name: string) {

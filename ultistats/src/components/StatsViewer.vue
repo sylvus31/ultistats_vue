@@ -285,37 +285,34 @@ const getStatsForOnePoint = (records: JournalEntry[]) => {
     }
   })
 
-  //add BTR line
-  const team_0_stats = baseValues.get(teamStore.teams[0].id)!
-  const teamNames = teamStore.teams.map((t) => t.name)
-  baseValues.forEach((r) => {
-    if (!teamNames.includes(r.player)) {
-      team_0_stats.passes_total += r.passes_total
-      team_0_stats.passes_success += r.passes_success
-      team_0_stats.passes_fail += r.passes_fail
-      for (let i = 0; i < r.passes_D.length; i++) {
-        team_0_stats.passes_D[i] += r.passes_D[i]
+  teamStore.teams.forEach((team) => {
+    const teamStats = baseValues.get(team.id)!
+    team.players.forEach((player) => {
+      const playerStats = baseValues.get(player.id)!
+      teamStats.passes_total += playerStats.passes_total
+      teamStats.passes_success += playerStats.passes_success
+      teamStats.passes_fail += playerStats.passes_fail
+      for (let i = 0; i < playerStats.passes_D.length; i++) {
+        teamStats.passes_D[i] += playerStats.passes_D[i]
       }
-      team_0_stats.points += r.points
-      team_0_stats.defenses += r.defenses
-      team_0_stats.pulls += r.pulls
-      team_0_stats.pickUps += r.pickUps
-      team_0_stats.long_success += r.long_success
-      team_0_stats.long_fail += r.long_fail
+      teamStats.points += playerStats.points
+      teamStats.defenses += playerStats.defenses
+      teamStats.pulls += playerStats.pulls
+      teamStats.pickUps += playerStats.pickUps
+      teamStats.long_success += playerStats.long_success
+      teamStats.long_fail += playerStats.long_fail
 
-      r.targets.forEach((v, k) => {
-        team_0_stats.targets.set(k, team_0_stats.targets.getOrDefault(k) + v)
+      playerStats.targets.forEach((value, key) => {
+        teamStats.targets.set(key, teamStats.targets.getOrDefault(key) + value)
       })
-      r.providers.forEach((v, k) => {
-        team_0_stats.providers.set(k, team_0_stats.providers.getOrDefault(k) + v)
+      playerStats.providers.forEach((value, key) => {
+        teamStats.providers.set(key, teamStats.providers.getOrDefault(key) + value)
       })
-      r.passesType.forEach((v, k) => {
-        team_0_stats.passesType.set(k, team_0_stats.passesType.getOrDefault(k) + v)
+      playerStats.passesType.forEach((value, key) => {
+        teamStats.passesType.set(key, teamStats.passesType.getOrDefault(key) + value)
       })
-    }
+    })
   })
-  team_0_stats.played_time = baseValues.get(teamStore.teams[1].id)!.played_time
-  team_0_stats.played_points = baseValues.get(teamStore.teams[1].id)!.played_points
 
   return baseValues
 }
