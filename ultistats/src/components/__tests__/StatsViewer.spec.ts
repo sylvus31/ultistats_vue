@@ -48,6 +48,14 @@ describe('StatsViewer', () => {
       expect(wrapper.text()).toContain('Player One')
       expect(wrapper.text()).toContain('Player Two')
     })
+    const playerOne = wrapper.findAll('.player-name').find((name) => name.text() === 'Player One')
+    const playerTwo = wrapper.findAll('.player-name').find((name) => name.text() === 'Player Two')
+    expect((playerOne?.element as HTMLElement | undefined)?.style.textDecorationColor).toBe(
+      '#00bcd4',
+    )
+    expect((playerTwo?.element as HTMLElement | undefined)?.style.textDecorationColor).toBe(
+      '#b05959',
+    )
 
     wrapper.unmount()
   })

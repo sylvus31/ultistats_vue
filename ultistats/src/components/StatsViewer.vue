@@ -12,7 +12,15 @@
       :sortable="true"
       :frozen="true"
       style="background-color: #1a1a1a; font-weight: bold"
-    ></Column>
+    >
+      <template #body="slotProps">
+        <span
+          class="player-name"
+          :style="{ textDecorationColor: getStatsTeamColor(slotProps.data.id) }"
+          >{{ slotProps.data.player }}</span
+        >
+      </template>
+    </Column>
     <Column field="passes_total" header="P total" :sortable="true"></Column>
     <Column field="passes_success" header="P success" :sortable="true"></Column>
     <Column field="passes_fail" header="P fail" :sortable="true"></Column>
@@ -43,12 +51,32 @@
     </Column>
     <Column field="targets" header="Targets">
       <template #body="slotProps">
-        <TargetsCell :value="new Map<string, number>(Array.from(slotProps.data.targets, ([key, value]) => [teamStore.getPlayerByID(key)!.name, value]))" />
+        <TargetsCell
+          :value="
+            new Map<string, number>(
+              Array.from(slotProps.data.targets, ([key, value]) => [
+                teamStore.getPlayerByID(key)!.name,
+                value,
+              ]),
+            )
+          "
+          :player-colors="getPlayerColors(slotProps.data.targets)"
+        />
       </template>
     </Column>
     <Column field="providers" header="Providers">
       <template #body="slotProps">
-        <TargetsCell :value="new Map<string, number>(Array.from(slotProps.data.providers, ([key, value]) => [teamStore.getPlayerByID(key)!.name, value]))" />
+        <TargetsCell
+          :value="
+            new Map<string, number>(
+              Array.from(slotProps.data.providers, ([key, value]) => [
+                teamStore.getPlayerByID(key)!.name,
+                value,
+              ]),
+            )
+          "
+          :player-colors="getPlayerColors(slotProps.data.providers)"
+        />
       </template>
     </Column>
     <Column field="passesType" header="Passes Type">
@@ -69,6 +97,11 @@
 .stat_viewer :deep(td),
 .stat_viewer :deep(th) {
   padding: 10px;
+}
+
+.player-name {
+  text-decoration: underline;
+  text-underline-offset: 3px;
 }
 </style>
 
@@ -93,6 +126,22 @@ const setVideoPlayerRef = (ref: Ref<VideoPlayerInstance | null>) => {
 const teamStore = useTeamStore()
 const journalStore = useJournalStore()
 const stateStore = useStateStore()
+
+const getStatsTeamColor = (id: string) => {
+  const teamIndex = teamStore.teams.findIndex(
+    (team) => team.id === id || team.players.some((player) => player.id === id),
+  )
+  return teamStore.teams[teamIndex]?.color
+}
+
+const getPlayerColors = (values: Map<string, number>) =>
+  new Map(
+    Array.from(values.keys(), (playerId) => {
+      const player = teamStore.getPlayerByID(playerId)
+      const teamIndex = player ? teamStore.getPlayerTeam(player) : -1
+      return [player?.name ?? playerId, teamStore.teams[teamIndex]?.color] as const
+    }),
+  )
 
 class StringNumberMap extends Map<string, number> {
   constructor(iterable: Iterable<[string, number]> = []) {
@@ -236,9 +285,7 @@ const getStatsForOnePoint = (records: JournalEntry[]) => {
           for (let k = j - 1; k >= 0; k--) {
             if (records[k].type === jet.PLAYER) {
               // calahan is counted as a pass D
-              const passerTeam = teamStore.getPlayerTeam(
-                teamStore.getPlayerByID(records[k].name)!,
-              )
+              const passerTeam = teamStore.getPlayerTeam(teamStore.getPlayerByID(records[k].name)!)
               if (passerTeam != scoreTeam) {
                 break
               }
@@ -378,11 +425,9 @@ const updateStatGrid = () => {
   console.log('updateStatGrid')
 }
 
-watch(
-  () => teamStore.players.map((player) => [player.id, player.name]),
-  updateStatGrid,
-  { immediate: true },
-)
+watch(() => teamStore.players.map((player) => [player.id, player.name]), updateStatGrid, {
+  immediate: true,
+})
 
 watch(
   () => journalStore.sortedRecords,

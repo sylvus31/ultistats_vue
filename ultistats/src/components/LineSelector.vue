@@ -30,12 +30,14 @@ const setPlaying = (playerId: string, playing: boolean) => {
     <div class="list">
       <h3>Playing</h3>
       <ul>
-        <li
-          v-for="player in playingPlayers"
-          :key="player.id"
-          @click="setPlaying(player.id, false)"
-        >
-          {{ player.name }}
+        <li v-for="player in playingPlayers" :key="player.id" @click="setPlaying(player.id, false)">
+          <span
+            class="player-name"
+            :style="{
+              textDecorationColor: playerStore.teams[playerStore.getPlayerTeam(player)]?.color,
+            }"
+            >{{ player.name }}</span
+          >
         </li>
       </ul>
     </div>
@@ -47,7 +49,13 @@ const setPlaying = (playerId: string, playing: boolean) => {
           :key="player.id"
           @click="setPlaying(player.id, true)"
         >
-          {{ player.name }}
+          <span
+            class="player-name"
+            :style="{
+              textDecorationColor: playerStore.teams[playerStore.getPlayerTeam(player)]?.color,
+            }"
+            >{{ player.name }}</span
+          >
         </li>
       </ul>
     </div>
@@ -85,6 +93,11 @@ const setPlaying = (playerId: string, playing: boolean) => {
   border: 1px solid var(--color-border);
   border-radius: var(--border-radius-sm);
   cursor: pointer;
+}
+
+.player-name {
+  text-decoration: underline;
+  text-underline-offset: 3px;
 }
 
 .list li:hover {

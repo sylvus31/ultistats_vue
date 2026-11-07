@@ -42,6 +42,9 @@ describe('PlayerSelector shortcuts', () => {
     expect(wrapper.text()).toContain('Thomas')
     expect(wrapper.text()).not.toContain('BTR')
     expect(wrapper.text()).not.toContain('ADVERSAIRE')
+    expect((wrapper.get('.player-name').element as HTMLElement).style.textDecorationColor).toBe(
+      '#00bcd4',
+    )
 
     teamStore.teams[0].players[0].key_code = 'Numpad6'
 

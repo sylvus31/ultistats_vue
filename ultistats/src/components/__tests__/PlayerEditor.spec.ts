@@ -40,6 +40,11 @@ describe('PlayerEditor team shortcuts', () => {
     expect((rows[1].find('sl-input').element as HTMLElement & { readonly: boolean }).readonly).toBe(
       true,
     )
+    expect(
+      (rows[2].find('.player-name-input').element as HTMLElement).style.getPropertyValue(
+        '--player-team-color',
+      ),
+    ).toBe('#00bcd4')
     expect(rows[0].find('.remove-entry').exists()).toBe(false)
     expect(rows[1].find('.remove-entry').exists()).toBe(false)
     expect(rows[2].find('sl-input').attributes('data-player-id')).toBe('p1')

@@ -211,8 +211,12 @@ const isRosterPlayer = (player: Player) =>
         >
           <td>
             <sl-input
+              class="player-name-input"
               v-model="player.name"
               :readonly="isTeamShortcut(player)"
+              :style="{
+                '--player-team-color': teamStore.teams[teamStore.getPlayerTeam(player)]?.color,
+              }"
               :data-player-id="player.id"
               :placeholder="player.id === newPlayerDraft.id ? 'new...' : ''"
               :aria-label="
@@ -289,6 +293,12 @@ form {
 
 .sl-input {
   margin-bottom: 10px;
+}
+
+.player-name-input::part(input) {
+  text-decoration: underline;
+  text-decoration-color: var(--player-team-color);
+  text-underline-offset: 3px;
 }
 
 .modifier-shortcut {
