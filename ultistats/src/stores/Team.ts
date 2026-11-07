@@ -103,13 +103,10 @@ export const useTeamStore = defineStore('team', () => {
   }
 
   function getPlayerTeam(player: Player) {
-    let index = -1
-    teams.value.forEach((team, i) => {
-      if (team.name === player.name || team.players?.find((p) => p.id === player.id)) {
-        index = i
-      }
-    })
-    return index
+    return teams.value.findIndex(
+      (team) =>
+        team.id === player.id || team.players.some((teamPlayer) => teamPlayer.id === player.id),
+    )
   }
 
   function getPlayerByName(name: string) {
@@ -134,6 +131,20 @@ export const useTeamStore = defineStore('team', () => {
     teams.value.forEach((team) => {
       team.players = team.players.filter((player) => player.id !== playerId)
     })
+  }
+
+  function movePlayerToOtherTeam(playerId: string) {
+    const sourceTeamIndex = teams.value.findIndex((team) =>
+      team.players.some((player) => player.id === playerId),
+    )
+    if (sourceTeamIndex === -1) return
+
+    const sourcePlayers = teams.value[sourceTeamIndex].players
+    const playerIndex = sourcePlayers.findIndex((player) => player.id === playerId)
+    const [player] = sourcePlayers.splice(playerIndex, 1)
+    if (!player) return
+
+    teams.value[1 - sourceTeamIndex].players.push(player)
   }
 
   function setPlayingStatus(playerId: string, playing: boolean) {
@@ -193,6 +204,7 @@ export const useTeamStore = defineStore('team', () => {
     getPlayerByID,
     // Actions
     removePlayer,
+    movePlayerToOtherTeam,
     updatePlayer,
     selectActivePlayer,
     getPlayerTeam,

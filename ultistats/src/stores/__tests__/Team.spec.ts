@@ -47,4 +47,12 @@ describe('team shortcut players', () => {
 
     expect(teamStore.players.find((player) => player.id === 't0')?.key_code).toBe('b')
   })
+
+  it('determines a player team by membership rather than matching the team name', async () => {
+    const teamStore = useTeamStore()
+    await vi.waitFor(() => expect(teamStore.teams[0].players[0]?.name).toBe('Thomas'))
+    teamStore.teams[0].players[0].name = 'ADVERSAIRE'
+
+    expect(teamStore.getPlayerTeam(teamStore.teams[0].players[0])).toBe(0)
+  })
 })

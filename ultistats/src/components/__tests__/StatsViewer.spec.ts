@@ -2,6 +2,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { mount } from '@vue/test-utils'
 import { createPinia, setActivePinia } from 'pinia'
 import StatsViewer from '../StatsViewer.vue'
+import { useJournalStore } from '@/stores/journal'
 
 describe('StatsViewer', () => {
   beforeEach(() => {
@@ -20,7 +21,10 @@ describe('StatsViewer', () => {
                 {
                   id: 't1',
                   name: 'Away',
-                  players: [{ id: 'p2', name: 'Player Two' }],
+                  players: [
+                    { id: 'p2', name: 'Player Two' },
+                    { id: 'p3', name: 'Player Three' },
+                  ],
                 },
               ]
             : []
@@ -43,6 +47,31 @@ describe('StatsViewer', () => {
     await vi.waitFor(() => {
       expect(wrapper.text()).toContain('Player One')
       expect(wrapper.text()).toContain('Player Two')
+    })
+
+    wrapper.unmount()
+  })
+
+  it('counts passes between players on the away team in the away team summary', async () => {
+    const wrapper = mount(StatsViewer)
+    const journalStore = useJournalStore()
+
+    await vi.waitFor(() => expect(wrapper.text()).toContain('Player Three'))
+    journalStore.addPlayerEntry('p2')
+    journalStore.addPassEntry('pass', new Set())
+    journalStore.addPlayerEntry('p3')
+
+    await vi.waitFor(() => {
+      const teamRows = wrapper.findAll('tbody tr').filter((row) => {
+        const label = row.find('td').text()
+        return label === 'Home' || label === 'Away'
+      })
+      expect(teamRows).toHaveLength(2)
+      const homeCells = teamRows.find((row) => row.find('td').text() === 'Home')!.findAll('td')
+      const awayCells = teamRows.find((row) => row.find('td').text() === 'Away')!.findAll('td')
+      expect(homeCells[1].text()).toBe('0')
+      expect(awayCells[1].text()).toBe('1')
+      expect(awayCells[2].text()).toBe('1')
     })
 
     wrapper.unmount()

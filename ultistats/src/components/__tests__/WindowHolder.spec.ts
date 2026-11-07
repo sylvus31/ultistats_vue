@@ -33,4 +33,22 @@ describe('WindowHolder fullscreen control', () => {
     await wrapper.get('[aria-label="Restore window"]').trigger('click')
     expect(wrapper.find('.window-container').classes()).not.toContain('window-container-fullscreen')
   })
+
+  it('renders the before-edit slot immediately before Edit', () => {
+    const wrapper = mount(WindowHolder, {
+      props: { title: 'Players', allowEdit: true },
+      slots: {
+        'before-edit': '<button aria-label="Filter players">Eye</button>',
+      },
+    })
+    const actions = wrapper.find('.actions')
+
+    const buttons = actions.findAll('button')
+
+    expect(buttons[0].attributes('aria-label')).toBe('Filter players')
+    expect(buttons[1].attributes('title')).toBe('Edit')
+    expect(actions.find('button[aria-label="Filter players"]').element.nextElementSibling).toBe(
+      actions.find('[title="Edit"]').element,
+    )
+  })
 })

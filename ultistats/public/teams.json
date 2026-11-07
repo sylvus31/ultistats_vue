@@ -1,6 +1,6 @@
 [
   {
-    "name": "BTR",
+    "name": "YOUR TEAM",
     "id": "t0",
     "players": [
       {
@@ -51,7 +51,7 @@
     ]
   },
   {
-    "name": "ADVERSAIRE",
+    "name": "OPPONENT",
     "id": "t1",
     "players": []
   }

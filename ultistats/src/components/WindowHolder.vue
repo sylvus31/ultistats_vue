@@ -18,6 +18,7 @@
             aria-hidden="true"
           ></span>
         </button>
+        <slot name="before-edit" />
         <button v-if="allowEdit" class="icon-button" @click="edit" title="Edit">
           <span class="mdi mdi-pencil"></span>
         </button>
@@ -136,6 +137,20 @@ const edit = async () => {
 }
 
 .icon-button:hover {
+  color: var(--color-accent);
+}
+
+.actions :slotted(.icon-button) {
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  color: var(--color-text-primary);
+  padding: var(--spacing-sm);
+  border-radius: var(--border-radius-sm);
+  transition: color 0.2s ease;
+}
+
+.actions :slotted(.icon-button:hover) {
   color: var(--color-accent);
 }
 </style>
