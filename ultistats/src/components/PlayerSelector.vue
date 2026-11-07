@@ -121,6 +121,11 @@ defineExpose({ playersSelectorShortcutManager })
 .player-name-playing {
   font-weight: bold;
   color: #00bcd4;
+  text-decoration-line: underline;
+}
+
+.player-name-playing.opponent-name {
+  color: #00bcd4;
 }
 
 .player-name {
