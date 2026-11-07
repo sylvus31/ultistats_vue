@@ -23,7 +23,20 @@ const createNewPlayerId = () => {
 
 const createPlayerDraft = () => createPlayer(createNewPlayerId(), '', undefined, new Set<string>())
 const newPlayerDraft = ref<Player>(createPlayerDraft())
-const editorPlayers = computed(() => [...players.value, newPlayerDraft.value])
+const teamShortcutPlayers = computed(() =>
+  players.value.filter((player) => teamStore.teams.some((team) => team.id === player.id)),
+)
+const rosterPlayers = computed(() =>
+  players.value.filter((player) => !teamStore.teams.some((team) => team.id === player.id)),
+)
+const editorPlayers = computed(() => [
+  ...teamShortcutPlayers.value,
+  ...rosterPlayers.value,
+  newPlayerDraft.value,
+])
+
+const isTeamShortcut = (player: Player) =>
+  teamStore.teams.some((team) => team.id === player.id)
 
 watch(
   () => newPlayerDraft.value.name,
@@ -160,6 +173,7 @@ const removeEmptyPlayer = (player: Player) => {
 }
 
 const isRosterPlayer = (player: Player) =>
+  !isTeamShortcut(player) &&
   teamStore.teams.some((team) => team.players.some((rosterPlayer) => rosterPlayer.id === player.id))
 </script>
 
@@ -185,10 +199,15 @@ const isRosterPlayer = (player: Player) =>
         </tr>
       </thead>
       <tbody>
-        <tr v-for="player in editorPlayers" :key="player.id">
+        <tr
+          v-for="player in editorPlayers"
+          :key="player.id"
+          :class="{ 'team-shortcut-row': isTeamShortcut(player) }"
+        >
           <td>
             <sl-input
               v-model="player.name"
+              :readonly="isTeamShortcut(player)"
               :data-player-id="player.id"
               :placeholder="player.id === newPlayerDraft.id ? 'new...' : ''"
               :aria-label="
@@ -297,6 +316,10 @@ tbody tr {
 
 tbody tr:nth-of-type(even) {
   background-color: var(--color-darker-bg);
+}
+
+tbody tr.team-shortcut-row {
+  background-color: var(--color-card-bg);
 }
 
 tbody tr:hover {
