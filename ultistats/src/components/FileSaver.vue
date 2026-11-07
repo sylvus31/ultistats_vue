@@ -42,8 +42,18 @@ const saveFile = () => {
     videoSrc: videoSrc,
     playerModifierKey: keyboardStore.playerModifierKey,
     teams: [
-      { name: teamName_A.value, id: teamStore.teams[0].id, players: teamStore.teams[0].players },
-      { name: teamName_B.value, id: teamStore.teams[1].id, players: teamStore.teams[1].players },
+      {
+        name: teamName_A.value,
+        id: teamStore.teams[0].id,
+        color: teamStore.teams[0].color,
+        players: teamStore.teams[0].players,
+      },
+      {
+        name: teamName_B.value,
+        id: teamStore.teams[1].id,
+        color: teamStore.teams[1].color,
+        players: teamStore.teams[1].players,
+      },
     ],
     records: records,
     comments: records.filter((record) => record.type === JournalEntryType.COMMENT),
@@ -122,6 +132,9 @@ const importData = (data: string) => {
     if (Array.isArray(jsonData.teams)) {
       for (let index = 0; index < Math.min(jsonData.teams.length, 2); index++) {
         teamStore.setTeamNameAndID(index, jsonData.teams[index].name, jsonData.teams[index].id)
+        if (typeof jsonData.teams[index].color === 'string') {
+          teamStore.setTeamColor(index, jsonData.teams[index].color)
+        }
 
         const players: Array<Player> = []
         jsonData.teams[index].players?.forEach((playerData: any) => {
@@ -218,27 +231,74 @@ onMounted(() => {
 </script>
 
 <template>
-  <input
-    id="teamName_A"
-    type="text"
-    @focusin="handleGetFocus"
-    @focusout="handleLosseFocus"
-    class="input-base input-medium"
-    v-model="teamStore.teams[0].name"
-  />
+  <div class="team-name-field">
+    <input
+      id="teamName_A"
+      type="text"
+      @focusin="handleGetFocus"
+      @focusout="handleLosseFocus"
+      class="input-base input-medium team-name-input"
+      v-model="teamStore.teams[0].name"
+    />
+    <input
+      v-model="teamStore.teams[0].color"
+      class="team-color-picker"
+      type="color"
+      aria-label="Choose YOUR TEAM color"
+      title="Choose team color"
+    />
+  </div>
   VS
-  <input
-    id="teamName_B"
-    v-model="teamStore.teams[1].name"
-    type="text"
-    @focusin="handleGetFocus"
-    @focusout="handleLosseFocus"
-    class="input-base input-medium"
-  />
+  <div class="team-name-field">
+    <input
+      id="teamName_B"
+      v-model="teamStore.teams[1].name"
+      type="text"
+      @focusin="handleGetFocus"
+      @focusout="handleLosseFocus"
+      class="input-base input-medium team-name-input"
+    />
+    <input
+      v-model="teamStore.teams[1].color"
+      class="team-color-picker"
+      type="color"
+      aria-label="Choose opponent team color"
+      title="Choose team color"
+    />
+  </div>
   <sl-button @click="saveFile">Save File</sl-button>
   <sl-button @click="loadFile">Load File</sl-button>
 </template>
 
 <style scoped>
-/* No component-specific styles needed - using global input-base and input-medium classes */
+.team-name-field {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+}
+
+.team-name-input {
+  padding-right: 42px;
+}
+
+.team-color-picker {
+  position: absolute;
+  right: 12px;
+  width: 24px;
+  height: 24px;
+  padding: 2px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--border-radius-sm);
+  background-color: var(--color-card-bg);
+  cursor: pointer;
+}
+
+.team-color-picker::-webkit-color-swatch-wrapper {
+  padding: 0;
+}
+
+.team-color-picker::-webkit-color-swatch {
+  border: 0;
+  border-radius: 2px;
+}
 </style>

@@ -8,15 +8,18 @@ class Team {
   players: Player[]
   name: string
   id: string
-  constructor(name: string = '', id: string, players: Player[] = []) {
+  color: string
+  constructor(name: string = '', id: string, players: Player[] = [], color: string) {
     this.name = name
     this.players = players
     this.id = id
+    this.color = color
   }
 }
 interface TeamData {
   id: string
   name: string
+  color?: string
   players: Array<{
     id: string
     name: string
@@ -28,7 +31,11 @@ interface TeamData {
 
 // Define the store with the ID 'team'
 export const useTeamStore = defineStore('team', () => {
-  const teams = ref<[Team, Team]>([new Team('', 't0'), new Team('', 't1')])
+  const defaultTeamColors = ['#00bcd4', '#b05959'] as const
+  const teams = ref<[Team, Team]>([
+    new Team('', 't0', [], defaultTeamColors[0]),
+    new Team('', 't1', [], defaultTeamColors[1]),
+  ])
   const teamShortcutPlayers = ref<[Player, Player]>([
     createPlayer('t0', teams.value[0].name, 't'),
     createPlayer('t1', teams.value[1].name, 'h'),
@@ -50,7 +57,7 @@ export const useTeamStore = defineStore('team', () => {
     if (hasExistingTeamData) return
 
     const loadedTeams = defaultTeams.map(
-      (team) =>
+      (team, index) =>
         new Team(
           team.name,
           team.id,
@@ -63,6 +70,7 @@ export const useTeamStore = defineStore('team', () => {
               player.number,
             ),
           })),
+          team.color ?? defaultTeamColors[index] ?? defaultTeamColors[0],
         ),
     ) as [Team, Team]
     teams.value = loadedTeams
@@ -176,6 +184,10 @@ export const useTeamStore = defineStore('team', () => {
     teams.value[teamIndex].id = teamID
   }
 
+  function setTeamColor(teamIndex: number, color: string) {
+    teams.value[teamIndex].color = color
+  }
+
   function setPlayersOfTeam(teamIndex: number, teamPlayers: Player[]) {
     teams.value[teamIndex].players.splice(0)
     teams.value[teamIndex].players.push(...teamPlayers)
@@ -183,8 +195,10 @@ export const useTeamStore = defineStore('team', () => {
 
   function clearTeams(name_1: string = 'Team 1', name_2: string = 'Team 2') {
     teams.value[0].name = name_1
+    teams.value[0].color = defaultTeamColors[0]
     teams.value[0].players.splice(0)
     teams.value[1].name = name_2
+    teams.value[1].color = defaultTeamColors[1]
     teams.value[1].players.splice(0)
   }
   // --- Return ---
@@ -194,6 +208,7 @@ export const useTeamStore = defineStore('team', () => {
     players,
     teams,
     setTeamNameAndID,
+    setTeamColor,
     setPlayersOfTeam,
     // Getters
     activePlayers,

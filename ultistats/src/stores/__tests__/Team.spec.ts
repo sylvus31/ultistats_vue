@@ -55,4 +55,15 @@ describe('team shortcut players', () => {
 
     expect(teamStore.getPlayerTeam(teamStore.teams[0].players[0])).toBe(0)
   })
+
+  it('loads team colors with defaults and allows changing them', async () => {
+    const teamStore = useTeamStore()
+    await vi.waitFor(() => expect(teamStore.teams[0].name).toBe('BTR'))
+
+    expect(teamStore.teams[0].color).toBe('#00bcd4')
+    expect(teamStore.teams[1].color).toBe('#b05959')
+
+    teamStore.setTeamColor(1, '#123456')
+    expect(teamStore.teams[1].color).toBe('#123456')
+  })
 })

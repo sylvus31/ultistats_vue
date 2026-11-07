@@ -92,11 +92,16 @@ defineExpose({ playersSelectorShortcutManager })
       <div class="player-button-content">
         <div>
           <span
+            class="player-name"
             :class="[
               { 'player-name-playing': player.playing },
               { 'opponent-name': teamStore.getPlayerTeam(player) == 1 },
             ]"
-            >{{ player.name }}</span>
+            :style="{
+              textDecorationColor: teamStore.teams[teamStore.getPlayerTeam(player)]?.color,
+            }"
+            >{{ player.name }}</span
+          >
           <span v-if="player.number">&nbsp;(#{{ player.number }}) </span>
         </div>
         <div>
@@ -116,6 +121,16 @@ defineExpose({ playersSelectorShortcutManager })
 .player-name-playing {
   font-weight: bold;
   color: #00bcd4;
+  text-decoration-line: underline;
+}
+
+.player-name-playing.opponent-name {
+  color: #00bcd4;
+}
+
+.player-name {
+  text-decoration: underline;
+  text-underline-offset: 3px;
 }
 
 .opponent-name {

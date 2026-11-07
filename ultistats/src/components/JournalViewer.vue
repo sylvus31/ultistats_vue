@@ -186,6 +186,13 @@ function getRecordName(record: JournalEntry): string {
   }
 }
 
+function getPlayerNameColor(record: JournalEntry): string | undefined {
+  if (record.type !== jet.PLAYER) return undefined
+  const player = teamStore.getPlayerByID(record.name)
+  if (!player) return undefined
+  return teamStore.teams[teamStore.getPlayerTeam(player)]?.color
+}
+
 function getLinePlayersLabel(players: Set<string>): string {
   return Array.from(players)
     .map((playerId) => teamStore.getPlayerByID(playerId)?.name ?? playerId)
@@ -237,7 +244,13 @@ defineExpose({
           style="display: none"
           title="Supprimer l'action"
         ></span>
-        {{ getRecordName(record) }}
+        <span
+          v-if="record.type === jet.PLAYER"
+          class="player-name"
+          :style="{ textDecorationColor: getPlayerNameColor(record) }"
+          >{{ getRecordName(record) }}</span
+        >
+        <span v-else>{{ getRecordName(record) }}</span>
         <span v-if="record.type === jet.PASS && 'modifiers' in record">
           <button
             class="pass-button"
@@ -300,6 +313,11 @@ defineExpose({
   position: relative;
   width: 100%;
   overflow: hidden;
+}
+
+.player-name {
+  text-decoration: underline;
+  text-underline-offset: 3px;
 }
 
 .button-container {
