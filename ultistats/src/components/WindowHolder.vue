@@ -2,7 +2,7 @@
   <div class="window-container" :class="{ 'window-container-fullscreen': isFullscreen }">
     <div class="title-bar">
       <div class="title">{{ title }}</div>
-      <div><slot name="menu" /></div>
+      <div class="title-menu"><slot name="menu" /></div>
       <div class="actions">
         <button
           v-if="allowFullscreen"
@@ -108,6 +108,7 @@ const edit = async () => {
   align-items: center;
   margin: var(--spacing-sm);
   padding: var(--button-padding);
+  gap: var(--spacing-sm);
   min-width: var(--button-min-width);
   background-color: var(--color-card-bg);
   color: var(--color-text-primary);
@@ -118,12 +119,21 @@ const edit = async () => {
 
 .title {
   font-weight: bold;
+  white-space: nowrap;
+}
+
+.title-menu {
+  display: flex;
+  flex: 1;
+  min-width: 0;
+  justify-content: center;
 }
 
 .actions {
   display: flex;
   align-items: center;
   gap: var(--spacing-sm);
+  flex-shrink: 0;
 }
 
 .icon-button {

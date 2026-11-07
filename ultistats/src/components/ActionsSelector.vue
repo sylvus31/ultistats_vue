@@ -1,15 +1,27 @@
 <script setup lang="ts">
+import { computed } from 'vue'
 import { useActionsStore } from '@/stores/ActionsStore'
 import { useJournalStore } from '@/stores/journal'
 import { getDescriptionTooltip } from '@/types/descriptions'
 
+const props = withDefaults(defineProps<{ coreOnly?: boolean }>(), { coreOnly: false })
 const journalStore = useJournalStore()
 const actionsStore = useActionsStore()
+const visiblePositiveActions = computed(() =>
+  actionsStore.positiveActions.filter((action) =>
+    props.coreOnly ? action.core === true : action.core !== true,
+  ),
+)
+const visibleNegativeActions = computed(() =>
+  actionsStore.negativeActions.filter((action) =>
+    props.coreOnly ? action.core === true : action.core !== true,
+  ),
+)
 </script>
 <template>
-  <div class="buttons">
+  <div class="buttons" :class="{ 'core-actions': props.coreOnly }">
     <sl-button
-      v-for="action in actionsStore.positiveActions"
+      v-for="action in visiblePositiveActions"
       :key="action.id"
       :class="{ positiveButton: true }"
       :title="getDescriptionTooltip(action.description)"
@@ -18,7 +30,7 @@ const actionsStore = useActionsStore()
       <span class="pass-name">{{ action.name }}</span>
     </sl-button>
     <sl-button
-      v-for="action in actionsStore.negativeActions"
+      v-for="action in visibleNegativeActions"
       :key="action.id"
       :class="{ negativeButton: true }"
       :title="getDescriptionTooltip(action.description)"
@@ -48,4 +60,10 @@ sl-button.negativeButton::part(base) {
   display: flex;
   flex-wrap: wrap;
 }
+
+.core-actions {
+  flex-wrap: nowrap;
+  gap: var(--spacing-xs);
+}
+
 </style>

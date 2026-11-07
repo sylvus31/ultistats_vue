@@ -21,7 +21,6 @@ import SetLine from './components/SetLine.vue'
 import TeamSelector from './components/TeamSelector.vue'
 import StatsViewer from './components/StatsViewer.vue'
 import StatViewerMenu from './components/StatViewerMenu.vue'
-import StatsViewerTeam from './components/StatsViewerTeam.vue'
 import FreeComment from './components/FreeComment.vue'
 const videoPlayerRef = ref<VideoPlayerInstance | null>(null)
 const fileInputRef = ref<HTMLInputElement | null>(null) // Ref for the hidden file input
@@ -105,10 +104,6 @@ provide('videoPlayerRef', videoPlayerRef)
     <div slot="start" >
       <VideoPlayer ref="videoPlayerRef" />
       <JournalViewer ref="journalViewerRef"/>
-      <WindowHolder title="Stats team">
-        <template v-slot:menu><StatViewerMenu/></template>
-        <template v-slot:main><StatsViewerTeam ref="statsViewerTeamRef"/></template>
-      </WindowHolder>
       <WindowHolder title="Stats players" allowFullscreen>
         <template v-slot:menu><StatViewerMenu/></template>
         <template v-slot:main><StatsViewer ref="statsViewerRef"/></template>
@@ -145,7 +140,8 @@ provide('videoPlayerRef', videoPlayerRef)
         <template v-slot:main><PassesSelector /></template>
       </WindowHolder>
       <WindowHolder title="Actions" allowEdit editorComponent="./ActionsEditor.vue">
-        <template v-slot:main><ActionsSelector/></template>
+        <template v-slot:menu><ActionsSelector core-only /></template>
+        <template v-slot:main><ActionsSelector /></template>
       </WindowHolder>
       <WindowHolder title="Events" allowEdit editorComponent="./EventsEditor.vue">
         <template v-slot:main><EventsSelector/></template>
