@@ -35,8 +35,12 @@ const editorPlayers = computed(() => [
   newPlayerDraft.value,
 ])
 
-const isTeamShortcut = (player: Player) =>
-  teamStore.teams.some((team) => team.id === player.id)
+const isTeamShortcut = (player: Player) => teamStore.teams.some((team) => team.id === player.id)
+
+const getPlayerTeamIndex = (player: Player) =>
+  teamStore.teams.findIndex((team) =>
+    team.players.some((rosterPlayer) => rosterPlayer.id === player.id),
+  )
 
 watch(
   () => newPlayerDraft.value.name,
@@ -192,6 +196,7 @@ const isRosterPlayer = (player: Player) =>
         <tr>
           <th>Name</th>
           <th>Number</th>
+          <th>Team</th>
           <th>Shortcut</th>
           <th>Clear</th>
           <th>Remove</th>
@@ -217,6 +222,17 @@ const isRosterPlayer = (player: Player) =>
           </td>
           <td>
             <sl-input v-model="player.number" type="number" />
+          </td>
+          <td>
+            <button
+              v-if="isRosterPlayer(player)"
+              type="button"
+              class="team-toggle"
+              :aria-label="`Move ${player.name} to ${teamStore.teams[1 - getPlayerTeamIndex(player)].name}`"
+              @click="teamStore.movePlayerToOtherTeam(player.id)"
+            >
+              {{ teamStore.teams[getPlayerTeamIndex(player)].name }}
+            </button>
           </td>
           <td>
             <sl-input
@@ -342,6 +358,20 @@ input[type='checkbox'] {
 .clear-shortcut:disabled {
   cursor: default;
   opacity: 0.5;
+}
+
+.team-toggle {
+  min-width: 90px;
+  padding: var(--spacing-sm) var(--spacing-md);
+  color: var(--color-text-primary);
+  background-color: var(--color-card-bg);
+  border: 1px solid var(--color-border);
+  border-radius: var(--border-radius-sm);
+  cursor: pointer;
+}
+
+.team-toggle:hover {
+  background-color: var(--color-border);
 }
 
 .remove-entry {

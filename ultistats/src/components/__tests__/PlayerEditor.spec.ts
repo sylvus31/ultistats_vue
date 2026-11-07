@@ -34,12 +34,12 @@ describe('PlayerEditor team shortcuts', () => {
     expect(rows[1].find('sl-input').attributes('data-player-id')).toBe('t1')
     expect(rows[0].classes()).toContain('team-shortcut-row')
     expect(rows[1].classes()).toContain('team-shortcut-row')
-    expect(
-      (rows[0].find('sl-input').element as HTMLElement & { readonly: boolean }).readonly,
-    ).toBe(true)
-    expect(
-      (rows[1].find('sl-input').element as HTMLElement & { readonly: boolean }).readonly,
-    ).toBe(true)
+    expect((rows[0].find('sl-input').element as HTMLElement & { readonly: boolean }).readonly).toBe(
+      true,
+    )
+    expect((rows[1].find('sl-input').element as HTMLElement & { readonly: boolean }).readonly).toBe(
+      true,
+    )
     expect(rows[0].find('.remove-entry').exists()).toBe(false)
     expect(rows[1].find('.remove-entry').exists()).toBe(false)
     expect(rows[2].find('sl-input').attributes('data-player-id')).toBe('p1')
@@ -47,6 +47,29 @@ describe('PlayerEditor team shortcuts', () => {
       (rows[2].find('sl-input').element as HTMLElement & { readonly?: boolean }).readonly,
     ).toBe(false)
 
+    wrapper.unmount()
+  })
+
+  it('moves a player between teams using the team toggle', async () => {
+    const wrapper = mount(PlayerEditor)
+    const teamStore = useTeamStore()
+
+    await vi.waitFor(() => expect(teamStore.teams[0].players[0]?.id).toBe('p1'))
+    let toggle = wrapper.get('.team-toggle')
+
+    expect(toggle.text()).toBe('BTR')
+    expect(toggle.attributes('aria-label')).toBe('Move Thomas to ADVERSAIRE')
+
+    await toggle.trigger('click')
+
+    expect(teamStore.teams[0].players).toHaveLength(0)
+    expect(teamStore.teams[1].players.map((player) => player.id)).toContain('p1')
+    expect(wrapper.get('.team-toggle').text()).toBe('ADVERSAIRE')
+
+    await wrapper.get('.team-toggle').trigger('click')
+
+    expect(teamStore.teams[0].players.map((player) => player.id)).toContain('p1')
+    expect(teamStore.teams[1].players).toHaveLength(0)
     wrapper.unmount()
   })
 })
