@@ -1,8 +1,12 @@
 import { beforeEach, describe, expect, it } from 'vitest'
 import { createPinia, setActivePinia } from 'pinia'
+import { ref } from 'vue'
+import type { VideoPlayerInstance } from '@/components/VideoPlayer.vue'
+import { ACTION_IDS } from '@/types/catalogIds'
+import { JournalEntrySource, JournalEntryType } from '@/types/journaltypes'
 import { useJournalStore } from '../journal'
 
-describe('journal unsaved changes', () => {
+describe('journal store', () => {
   beforeEach(() => {
     setActivePinia(createPinia())
   })
@@ -20,5 +24,36 @@ describe('journal unsaved changes', () => {
 
     journalStore.deleteRecord(journalStore.sortedRecords[0]!)
     expect(journalStore.hasUnsavedChanges).toBe(true)
+  })
+
+  it.each([
+    ['pull', ACTION_IDS.PULL],
+    ['block', ACTION_IDS.BLOCK],
+  ])('does not add a default pass after a %s', (_action, actionId) => {
+    const journalStore = useJournalStore()
+    journalStore.addRecord({
+      id: 1,
+      name: 'player-1',
+      ts: 1,
+      type: JournalEntryType.PLAYER,
+      source: JournalEntrySource.USER,
+    })
+    journalStore.addRecord({
+      id: 2,
+      name: actionId,
+      ts: 2,
+      type: JournalEntryType.POSITIVE_ACTION,
+      source: JournalEntrySource.USER,
+    })
+    journalStore.setVideoPlayerRef(
+      ref({ elapsedTimeValue: 3 } as VideoPlayerInstance),
+    )
+
+    journalStore.addPlayerEntry('player-2')
+
+    expect(journalStore.sortedRecords).toHaveLength(3)
+    expect(journalStore.sortedRecords.some((record) => record.type === JournalEntryType.PASS)).toBe(
+      false,
+    )
   })
 })

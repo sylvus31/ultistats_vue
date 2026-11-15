@@ -127,7 +127,12 @@ export const useJournalStore = defineStore('journal', () => {
       .filter((e) => e.ts < entry.ts)
     let isBlocker = false
     intervalEntries.forEach((e) => {
-      if (e.type === jet.EVENT || isScoreActionRecord(e) || isActionRecord(e, ACTION_IDS.PULL)) {
+      if (
+        e.type === jet.EVENT ||
+        isScoreActionRecord(e) ||
+        isActionRecord(e, ACTION_IDS.PULL) ||
+        isActionRecord(e, ACTION_IDS.BLOCK)
+      ) {
         isBlocker = true
       }
     })
