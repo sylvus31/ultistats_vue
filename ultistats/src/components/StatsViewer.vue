@@ -316,8 +316,9 @@ const getStatsForOnePoint = (records: JournalEntry[]) => {
           }
           //count receivers
           baseValues.get(thrower.id)!.targets.increment(receiver.id)
-          //count providers
-          baseValues.get(receiver.id)!.providers.increment(thrower.id)
+          if (success) {
+            baseValues.get(receiver.id)!.providers.increment(thrower.id)
+          }
           break
         } else if (isActionRecord(records[j], ACTION_IDS.PULL)) {
           baseValues.get(thrower.id)!.pulls += 1

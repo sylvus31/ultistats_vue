@@ -114,6 +114,33 @@ describe('StatsViewer', () => {
     wrapper.unmount()
   })
 
+  it('counts providers only for passes between teammates', async () => {
+    const wrapper = mount(StatsViewer)
+    const journalStore = useJournalStore()
+
+    await vi.waitFor(() => expect(wrapper.text()).toContain('Player Three'))
+    journalStore.addPlayerEntry('p1')
+    journalStore.addPassEntry('pass', new Set())
+    journalStore.addPlayerEntry('p2')
+    journalStore.addPlayerEntry('p1')
+    journalStore.addPassEntry('pass', new Set())
+    journalStore.addPlayerEntry('p4')
+
+    await vi.waitFor(() => {
+      const headers = wrapper.findAll('thead th').map((header) => header.text())
+      const providersColumn = headers.indexOf('Providers')
+      const rows = wrapper.findAll('tbody tr')
+      const playerTwo = rows.find((row) => row.find('td').text() === 'Player Two')
+      const playerFour = rows.find((row) => row.find('td').text() === 'Player Four')
+
+      expect(providersColumn).toBeGreaterThan(-1)
+      expect(playerTwo?.findAll('td')[providersColumn].text()).toBe('')
+      expect(playerFour?.findAll('td')[providersColumn].text()).toContain('Player One: 1')
+    })
+
+    wrapper.unmount()
+  })
+
   it('shows overall and long-pass completion rates and dashes when there are no attempts', async () => {
     const wrapper = mount(StatsViewer)
     const journalStore = useJournalStore()
