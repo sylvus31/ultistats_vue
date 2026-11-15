@@ -6,6 +6,7 @@ import { useJournalStore } from '@/stores/journal'
 import { getPassModifierId } from '@/types/passModifiers'
 import { ACTION_IDS } from '@/types/catalogIds'
 import { useStateStore } from '@/stores/StateStore'
+import { usePassesStore } from '@/stores/passesStore'
 
 describe('StatsViewer', () => {
   beforeEach(() => {
@@ -86,6 +87,28 @@ describe('StatsViewer', () => {
       expect(homeCells[1].text()).toBe('0')
       expect(awayCells[1].text()).toBe('1')
       expect(awayCells[2].text()).toBe('1')
+    })
+
+    wrapper.unmount()
+  })
+
+  it('shows pass names instead of pass ids in the pass type statistics', async () => {
+    const wrapper = mount(StatsViewer)
+    const journalStore = useJournalStore()
+    usePassesStore().setPasses([{ id: 'pass-id', name: 'Forehand', isActive: true }])
+
+    await vi.waitFor(() => expect(wrapper.text()).toContain('Player Three'))
+    journalStore.addPlayerEntry('p1')
+    journalStore.addPassEntry('pass-id', new Set())
+    journalStore.addPlayerEntry('p4')
+
+    await vi.waitFor(() => {
+      const playerOneRow = wrapper
+        .findAll('tbody tr')
+        .find((row) => row.find('td').text() === 'Player One')
+
+      expect(playerOneRow?.text()).toContain('Forehand: 1')
+      expect(playerOneRow?.text()).not.toContain('pass-id')
     })
 
     wrapper.unmount()
