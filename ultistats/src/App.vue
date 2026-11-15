@@ -6,7 +6,7 @@ import '@shoelace-style/shoelace/dist/themes/dark.css'
 
 import '@shoelace-style/shoelace/dist/components/details/details.js'
 import VideoPlayer, { type VideoPlayerInstance } from './components/VideoPlayer.vue'
-import { ref, provide } from 'vue'
+import { ref, provide, onBeforeUnmount, onMounted } from 'vue'
 import PlayerSelector from './components/PlayerSelector.vue'
 import WindowHolder from './components/WindowHolder.vue'
 import YoutubeVideoSelector from './components/YoutubeVideoSelector.vue'
@@ -27,6 +27,17 @@ const fileInputRef = ref<HTMLInputElement | null>(null) // Ref for the hidden fi
 const journalViewerRef = ref<InstanceType<typeof JournalViewer> | null>(null)
 const statsViewerRef = ref<InstanceType<typeof StatsViewer> | null>(null)
 const onlyLinePlayers = ref(false)
+const journalStore = useJournalStore()
+
+const warnBeforeUnload = (event: BeforeUnloadEvent) => {
+  if (!journalStore.hasUnsavedChanges) return
+
+  event.preventDefault()
+  event.returnValue = ''
+}
+
+onMounted(() => window.addEventListener('beforeunload', warnBeforeUnload))
+onBeforeUnmount(() => window.removeEventListener('beforeunload', warnBeforeUnload))
 
 // Method to trigger the hidden file input
 const openFileDialog = () => {
@@ -39,7 +50,7 @@ const handleFileChange = (event: Event) => {
   const file = target.files?.[0]
 
   if (file && videoPlayerRef.value) {
-    useJournalStore().setVideoPlayerRef(videoPlayerRef)
+    journalStore.setVideoPlayerRef(videoPlayerRef)
     journalViewerRef.value?.setVideoPlayerRef(videoPlayerRef)
     statsViewerRef.value?.setVideoPlayerRef(videoPlayerRef)
 
@@ -71,7 +82,7 @@ const handleLoadYoutubeVideo = (source: { src: string; type: string }) => {
   console.log('App.vue received load-video event:', source)
   if (videoPlayerRef.value) {
     videoPlayerRef.value.loadVideo(source)
-    useJournalStore().setVideoPlayerRef(videoPlayerRef)
+    journalStore.setVideoPlayerRef(videoPlayerRef)
     journalViewerRef.value?.setVideoPlayerRef(videoPlayerRef)
     statsViewerRef.value?.setVideoPlayerRef(videoPlayerRef)
   } else {

@@ -74,6 +74,7 @@ const saveFile = () => {
   a.download = teamName_A.value + '_vs_' + teamName_B.value + '.json'
   a.click()
   window.URL.revokeObjectURL(url)
+  journalStore.markSaved()
 }
 
 const loadFile = () => {
@@ -182,6 +183,7 @@ const importData = (data: string) => {
     if (Array.isArray(jsonData.positiveActions) && Array.isArray(jsonData.negativeActions)) {
       actionsStore.setActions(jsonData.positiveActions, jsonData.negativeActions)
     }
+    journalStore.markSaved()
   }
 
   if (journalStore.sortedRecords.length > 0) {

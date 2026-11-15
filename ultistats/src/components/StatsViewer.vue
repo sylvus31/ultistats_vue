@@ -135,6 +135,7 @@ import { ref, watch, type Ref } from 'vue'
 import { useTeamStore } from '@/stores/Team'
 import { useJournalStore, type JournalEntry } from '@/stores/journal'
 import { useStateStore } from '@/stores/StateStore'
+import { usePassesStore } from '@/stores/passesStore'
 import type { Point } from '@/stores/pointsStore'
 import { JournalEntryType as jet, type journalPass } from '@/types/journaltypes'
 import PlayedTimeCell from './stats/PlayedTimeCell.vue'
@@ -150,6 +151,7 @@ const setVideoPlayerRef = (ref: Ref<VideoPlayerInstance | null>) => {
 const teamStore = useTeamStore()
 const journalStore = useJournalStore()
 const stateStore = useStateStore()
+const passesStore = usePassesStore()
 
 const getStatsTeamColor = (id: string) => {
   const teamIndex = teamStore.teams.findIndex(
@@ -290,7 +292,8 @@ const getStatsForOnePoint = (records: JournalEntry[]) => {
           for (let k = i + 1; k < j; k++) {
             if (records[k].type === jet.PASS) {
               const pass = records[k] as journalPass
-              passType = pass.name
+              passType = passesStore.passes.find((catalogPass) => catalogPass.id === pass.name)?.name
+                ?? pass.name
               passModifiers = pass.modifiers
               break
             }
@@ -313,8 +316,9 @@ const getStatsForOnePoint = (records: JournalEntry[]) => {
           }
           //count receivers
           baseValues.get(thrower.id)!.targets.increment(receiver.id)
-          //count providers
-          baseValues.get(receiver.id)!.providers.increment(thrower.id)
+          if (success) {
+            baseValues.get(receiver.id)!.providers.increment(thrower.id)
+          }
           break
         } else if (isActionRecord(records[j], ACTION_IDS.PULL)) {
           baseValues.get(thrower.id)!.pulls += 1
@@ -489,6 +493,8 @@ const updateStatGrid = () => {
 watch(() => teamStore.players.map((player) => [player.id, player.name]), updateStatGrid, {
   immediate: true,
 })
+
+watch(() => passesStore.passes, updateStatGrid, { deep: true })
 
 watch(
   () => journalStore.sortedRecords,
