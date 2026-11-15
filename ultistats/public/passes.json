@@ -1,11 +1,11 @@
 {
   "passes": [
-    { "id": "a6", "name": "Hammer", "key": "q", "description": "" },
-    { "id": "a2", "name": "Forward", "key": "w", "description": "" },
+    { "id": "a6", "name": "Hammer", "key": "a", "description": "" },
+    { "id": "a2", "name": "Forward", "key": "z", "description": "" },
     { "id": "a5", "name": "Knife", "key": "e", "description": "" },
     { "id": "a7", "name": "Skoober", "key": "r", "description": "" },
     { "id": "a3", "name": "Dump", "key": "d", "description": "" },
-    { "id": "a4", "name": "Swing", "key": "a", "description": "" }
+    { "id": "a4", "name": "Swing", "key": "s", "description": "" }
   ],
   "passesModifiers": [
     { "id": "pm1", "name": "Long", "key": "Shift", "description": "" },

@@ -46,10 +46,15 @@ function getTs() {
 
 export const useJournalStore = defineStore('journal', () => {
   const records = ref<JournalEntry[]>([])
+  const hasUnsavedChanges = ref(false)
   const sortedRecords = computed(() => records.value.sort((a, b) => a.ts - b.ts))
   const recordsAsPoints = computed(() => {
     return separateRecordsInPoints(sortedRecords.value)
   })
+
+  const markSaved = () => {
+    hasUnsavedChanges.value = false
+  }
 
   const addPlayerEntry = (name: string) => {
     const entry = {
@@ -167,6 +172,7 @@ export const useJournalStore = defineStore('journal', () => {
   const addEntry = (entry: JournalEntry) => {
     addAiEntry(entry)
     records.value.push(entry)
+    hasUnsavedChanges.value = true
   }
 
   const toggleModifier = (entry: JournalEntry, modifier: string) => {
@@ -176,6 +182,7 @@ export const useJournalStore = defineStore('journal', () => {
       } else {
         entry.modifiers.add(modifier)
       }
+      hasUnsavedChanges.value = true
     }
   }
 
@@ -206,19 +213,25 @@ export const useJournalStore = defineStore('journal', () => {
     const index = records.value.indexOf(entry)
     if (index !== -1) {
       records.value.splice(index, 1)
+      hasUnsavedChanges.value = true
     }
   }
 
   const deleteAllRecords = () => {
+    if (records.value.length > 0) {
+      hasUnsavedChanges.value = true
+    }
     records.value.splice(0)
   }
 
   const updateTime = (entry: JournalEntry) => {
     entry.ts = getTs()
+    hasUnsavedChanges.value = true
   }
 
   const addRecord = (record: JournalEntry) => {
     records.value.push(record)
+    hasUnsavedChanges.value = true
     if (record.id >= idIndex) {
       idIndex = record.id + 1
     }
@@ -240,6 +253,8 @@ export const useJournalStore = defineStore('journal', () => {
   return {
     sortedRecords,
     recordsAsPoints,
+    hasUnsavedChanges,
+    markSaved,
     deleteAllRecords,
     addRecord,
     addPlayerEntry,
