@@ -143,7 +143,7 @@ export const useJournalStore = defineStore('journal', () => {
     if (lastMeaningFulEntry.type === jet.PLAYER && entry.type === jet.PLAYER) {
       const aiEntry = {
         id: getNextIdIndex(),
-        name: 'Passe',
+        name: 'a0',
         ts: ts,
         modifiers: new Set([]),
         type: jet.PASS,
@@ -154,14 +154,14 @@ export const useJournalStore = defineStore('journal', () => {
 
     // pass to pass
     if (lastMeaningFulEntry.type === jet.PASS && entry.type === jet.PASS) {
-      const lastPlayer = getPrecedentEntryByTypes(entry, [jet.PLAYER])
-      if (lastPlayer) {
+      const lastPlayerEntry = getPrecedentEntryByTypes(entry, [jet.PLAYER])
+      if (lastPlayerEntry) {
         // if called at top, generate error because pinia is not initialised yet
         const teamStore = useTeamStore()
 
-        const player = teamStore.getPlayerByName(lastPlayer.name)!
+        const player = teamStore.getPlayerByID(lastPlayerEntry.name)!
         const teamIndex = teamStore.getPlayerTeam(player)
-        const name = teamStore.teams[teamIndex].name
+        const name = teamStore.teams[teamIndex].id
         const aiEntry = {
           id: getNextIdIndex(),
           name: name,

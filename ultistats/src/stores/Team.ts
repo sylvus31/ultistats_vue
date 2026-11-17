@@ -117,10 +117,6 @@ export const useTeamStore = defineStore('team', () => {
     )
   }
 
-  function getPlayerByName(name: string) {
-    return players.value.find((p) => p.name === name)
-  }
-
   function getPlayerByID(id: string) {
     return players.value.find((p) => p.id === id)
   }
