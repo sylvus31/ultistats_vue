@@ -276,6 +276,7 @@ const getStatsForOnePoint = (records: JournalEntry[]) => {
         if (
           isScoreActionRecord(nextRecord) ||
           isActionRecord(nextRecord, ACTION_IDS.PULL) ||
+          isActionRecord(nextRecord, ACTION_IDS.BLOCK) ||
           isActionRecord(nextRecord, ACTION_IDS.DROP)
         ) {
           break
@@ -284,7 +285,9 @@ const getStatsForOnePoint = (records: JournalEntry[]) => {
 
       const thrower = teamStore.getPlayerByID(r.name)!
       for (let j = i + 1; j < records.length; j++) {
-        if (records[j].type === jet.PLAYER) {
+        const nextRecord = records[j]
+
+        if (nextRecord.type === jet.PLAYER) {
           const receiver = teamStore.getPlayerByID(records[j].name)!
           let passType = 'pass'
           let passModifiers = new Set<string>()
@@ -315,17 +318,24 @@ const getStatsForOnePoint = (records: JournalEntry[]) => {
             }
           }
           //count receivers
-          baseValues.get(thrower.id)!.targets.increment(receiver.id)
           if (success) {
+            baseValues.get(thrower.id)!.targets.increment(receiver.id)
             baseValues.get(receiver.id)!.providers.increment(thrower.id)
           }
           break
-        } else if (isActionRecord(records[j], ACTION_IDS.PULL)) {
+        } else if (isActionRecord(nextRecord, ACTION_IDS.PULL)) {
           baseValues.get(thrower.id)!.pulls += 1
           break
-        } else if (isActionRecord(records[j], ACTION_IDS.PICK_UP_DISC)) {
+        } else if (isActionRecord(nextRecord, ACTION_IDS.PICK_UP_DISC)) {
           baseValues.get(thrower.id)!.pickUps += 1
           // no break needed, same player has disc
+        } else if (
+          isScoreActionRecord(nextRecord) ||
+          isActionRecord(nextRecord, ACTION_IDS.PULL) ||
+          isActionRecord(nextRecord, ACTION_IDS.BLOCK) ||
+          isActionRecord(nextRecord, ACTION_IDS.DROP)
+        ) {
+          break
         }
       }
     } else if (isScoreActionRecord(r)) {

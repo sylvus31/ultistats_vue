@@ -5,10 +5,11 @@
     { "id": "a5", "name": "Knife", "key": "e", "description": "" },
     { "id": "a7", "name": "Skoober", "key": "r", "description": "" },
     { "id": "a3", "name": "Dump", "key": "d", "description": "" },
-    { "id": "a4", "name": "Swing", "key": "s", "description": "" }
+    { "id": "a4", "name": "Swing", "key": "s", "description": "" },
+    { "id": "a0", "name": "Pass", "key": "p", "description": "A pass, nothing more to say about it" }
   ],
   "passesModifiers": [
-    { "id": "pm1", "name": "Long", "key": "Shift", "description": "" },
+    { "id": "pm1", "name": "Long", "key": "Shift", "description": "You decide what is a long pass" },
     { "id": "pm2", "name": "Break", "key": "Ctrl", "description": "" },
     { "id": "pm3", "name": "Off-hand", "key": "Alt", "description": "" }
   ]
