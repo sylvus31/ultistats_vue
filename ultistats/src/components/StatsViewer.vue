@@ -265,11 +265,15 @@ const getStatsForOnePoint = (records: JournalEntry[]) => {
   const baseValues = initMap()
   records.forEach((r, i) => {
     if (r.type === jet.PLAYER) {
+      let catchTS = r.ts
       for (let j = i + 1; j < records.length; j++) {
         const nextRecord = records[j]
         if (nextRecord.type === jet.PLAYER) break
+        if(nextRecord.name === ACTION_IDS.PICK_UP_DISC) {
+          catchTS = nextRecord.ts
+        }
         if (nextRecord.type === jet.PASS) {
-          baseValues.get(r.name)!.time_in_hand += Math.max(0, nextRecord.ts - r.ts)
+          baseValues.get(r.name)!.time_in_hand += Math.max(0, nextRecord.ts - catchTS)
           baseValues.get(r.name)!.time_in_hand_count += 1
           break
         }
