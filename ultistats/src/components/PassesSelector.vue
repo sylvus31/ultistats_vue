@@ -51,7 +51,7 @@ const logAction = (eventCode: string, _modifiers: Set<string>) => {
 }
 
 const passesSelectorShortcutManager: ShortcutTarget = {
-  message() {
+  message(eventCode: string) {
     const action = passesStore.getActionByKey(eventCode)
 
     return 'action: ' + (action ? action.name : 'unknown')
@@ -61,20 +61,9 @@ const passesSelectorShortcutManager: ShortcutTarget = {
     logAction(eventCode, activeModifiers)
   },
 
-  setShortcut(eventCode: string) {
-    const player = teamStore.getPlayerByKeyCodeAndModifiers(eventCode, activeModifiers)
-    if (player) {
-      player.key_code = eventCode
-      player.modifiers = activeModifiers
-    }
-  },
-
-  removeShortcut(eventCode: string, activeModifiers: Set<string>) {
-    const player = teamStore.getPlayerByKeyCodeAndModifiers(eventCode, activeModifiers)
-    if (player) {
-      player.key_code = ''
-      player.modifiers = new Set()
-    }
+  removeShortcut(eventCode: string) {
+    const action = passesStore.getActionByKey(eventCode)
+    if (action) action.key = ''
   },
 }
 
