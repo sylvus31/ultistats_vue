@@ -5,6 +5,7 @@ import { watch } from 'vue'
 import { useKeyboardStore } from '../stores/keyboardStore'
 import { formatShortcutKey, normalizeShortcutKey } from '@/types/keyConstants'
 import type { passModifier } from '@/types/Passes'
+import type { ShortcutTarget } from './interfaces/ShortcutTarget'
 import { passesModifiersMenuSelectorShortcutManagerName } from './interfaces/ShortcutTarget'
 import { getDescriptionTooltip } from '@/types/descriptions'
 
@@ -48,10 +49,10 @@ const clickModifier = (modifier: passModifier) => {
 }
 
 const passesModifiersMenuSelectorShortcutManager: ShortcutTarget = {
-  message() {
-    const action = passesStore.getActionByKey(eventCode)
+  message(eventCode: string, _modifiers: Set<string>) {
+    const modifier = passesStore.getModifierByKey(eventCode)
 
-    return 'action: ' + (action ? action.name : 'unknown')
+    return 'modifier: ' + (modifier ? modifier.name : 'unknown')
   },
 
   callback(eventCode: string, activeModifiers: Set<string>) {
@@ -62,8 +63,8 @@ const passesModifiersMenuSelectorShortcutManager: ShortcutTarget = {
     console.log('set shortcut', eventCode)
   },
 
-  removeShortcut(eventCode: string, activeModifiers: Set<string>) {
-    console.log('remove shortcut', eventCode, activeModifiers)
+  removeShortcut(eventCode: string) {
+    console.log('remove shortcut', eventCode)
   },
 }
 keyboardStore.registerShortcutTarget(

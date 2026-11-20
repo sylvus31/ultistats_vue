@@ -127,7 +127,8 @@ describe('catalog editors', () => {
     }
 
     const foulName = coreSection.get('sl-input[aria-label="Foul name"]')
-    foulName.element.value = 'Changed foul'
+    const foulNameInput = foulName.element as HTMLElement & { value: string }
+    foulNameInput.value = 'Changed foul'
     await foulName.trigger('input')
     expect(eventsStore.events[0].name).toBe('Changed foul')
     expect(eventsStore.events[0].description).toBe('Called by a player.')

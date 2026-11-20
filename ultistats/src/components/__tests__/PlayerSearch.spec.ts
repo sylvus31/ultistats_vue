@@ -104,7 +104,9 @@ describe('PlayerSearch', () => {
 
     const playerButtons = wrapper.findAll('.player-buttons sl-button')
     expect(playerButtons.map((button) => button.text())).toEqual(['Player One', 'Player Two'])
-    expect(playerButtons[0].get('.player-name').element.style.textDecorationColor).toBe('#00bcd4')
+    expect(
+      playerButtons[0].get<HTMLElement>('.player-name').element.style.textDecorationColor,
+    ).toBe('#00bcd4')
 
     await playerButtons[0].trigger('click')
 

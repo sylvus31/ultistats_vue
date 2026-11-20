@@ -300,6 +300,7 @@ const srcInfo = () => {
 }
 
 export interface VideoPlayerInstance {
+  play: () => void
   playPause: () => void
   isPlayingValue: boolean
   seek: (seconds: number) => void

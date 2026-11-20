@@ -8,7 +8,7 @@ import { useJournalStore } from '@/stores/journal'
 import type { ShortcutTarget } from './interfaces/ShortcutTarget'
 import { playersSelectorShortcutManagerName } from './interfaces/ShortcutTarget'
 import { useTeamStore } from '@/stores/Team'
-import { formatShortcutKey } from '@/types/keyConstants'
+import { formatShortcutKey, normalizeShortcutKey } from '@/types/keyConstants'
 
 const teamStore = useTeamStore()
 const { players } = storeToRefs(teamStore)
@@ -32,7 +32,7 @@ const selectPlayer = (player: Player) => {
 }
 
 const playersSelectorShortcutManager: ShortcutTarget = {
-  message() {
+  message(eventCode: string, activeModifiers: Set<string>) {
     const player = teamStore.getPlayerByKeyCodeAndModifiers(eventCode, activeModifiers)
 
     return 'player: ' + (player ? player.name : 'unknown')
@@ -45,15 +45,13 @@ const playersSelectorShortcutManager: ShortcutTarget = {
     }
   },
 
-  setShortcut(eventCode: string) {
-    const player = teamStore.getPlayerByKeyCodeAndModifiers(eventCode)
-    if (player) {
-      player.key_code = eventCode
-    }
-  },
+  setShortcut: () => {},
 
-  removeShortcut(eventCode: string, activeModifiers: Set<string>) {
-    const player = teamStore.getPlayerByKeyCodeAndModifiers(eventCode, activeModifiers)
+  removeShortcut(eventCode: string) {
+    const key = normalizeShortcutKey(eventCode)
+    const player = players.value.find(
+      (candidate) => candidate.key_code && normalizeShortcutKey(candidate.key_code) === key,
+    )
     if (player) {
       player.key_code = ''
       player.modifiers = new Set()
@@ -105,8 +103,8 @@ defineExpose({ playersSelectorShortcutManager })
           <span v-if="player.number">&nbsp;(#{{ player.number }}) </span>
         </div>
         <div>
-          <span class="player-key" v-if="player.modifiers?.size > 0">
-            [{{ Array.from(player.modifiers).join(',') }}]</span
+          <span class="player-key" v-if="(player.modifiers?.size ?? 0) > 0">
+            [{{ Array.from(player.modifiers ?? []).join(',') }}]</span
           >
           <span class="player-key" v-if="player.key_code">
             [{{ formatShortcutKey(player.key_code) }}]</span
