@@ -22,6 +22,7 @@ import TeamSelector from './components/TeamSelector.vue'
 import StatsViewer from './components/StatsViewer.vue'
 import StatViewerMenu from './components/StatViewerMenu.vue'
 import FreeComment from './components/FreeComment.vue'
+import PlayerSearch from './components/PlayerSearch.vue'
 const videoPlayerRef = ref<VideoPlayerInstance | null>(null)
 const fileInputRef = ref<HTMLInputElement | null>(null) // Ref for the hidden file input
 const journalViewerRef = ref<InstanceType<typeof JournalViewer> | null>(null)
@@ -159,6 +160,9 @@ provide('videoPlayerRef', videoPlayerRef)
       </WindowHolder>
       <WindowHolder title="Free comment">
         <template v-slot:main><FreeComment/></template>
+      </WindowHolder>
+      <WindowHolder title="Search by player">
+        <template v-slot:main><PlayerSearch :video-player="videoPlayerRef" /></template>
       </WindowHolder>
     </div>
   </sl-split-panel>
