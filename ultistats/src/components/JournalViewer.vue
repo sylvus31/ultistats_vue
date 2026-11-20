@@ -96,9 +96,10 @@ function getAlternatives(type: JournalEntryType) {
       break
     case jet.PLAYER:
       alternatives = teamStore.players
+      break
+    default:
+      return []
   }
-  console.log(alternatives)
-  console.log(alternatives[0])
   return alternatives
 }
 function onClickSwap(record: JournalEntry, event: MouseEvent) {
@@ -135,7 +136,12 @@ function onClickSwap(record: JournalEntry, event: MouseEvent) {
   const select = selectDialog.querySelector('select')
   select!.addEventListener('change', (e) => {
     const selectedValue = (e.target as HTMLSelectElement).value
-    record.name = alternatives[selectedValue].id
+    const selectedAlternative = alternatives[Number(selectedValue)]
+    if (!selectedAlternative) {
+      console.error(`No journal alternative exists at index ${selectedValue}`)
+      return
+    }
+    record.name = selectedAlternative.id
     record.source = src.USER
     selectDialog.close()
   })
