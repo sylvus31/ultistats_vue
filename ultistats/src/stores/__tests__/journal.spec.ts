@@ -26,6 +26,30 @@ describe('journal store', () => {
     expect(journalStore.hasUnsavedChanges).toBe(true)
   })
 
+  it('returns the latest journal entry strictly before the video time', () => {
+    const journalStore = useJournalStore()
+    journalStore.addRecord({
+      id: 1,
+      name: 'Earlier',
+      ts: 4,
+      type: JournalEntryType.COMMENT,
+      source: JournalEntrySource.USER,
+      details: '',
+    })
+    journalStore.addRecord({
+      id: 2,
+      name: 'Later',
+      ts: 9,
+      type: JournalEntryType.COMMENT,
+      source: JournalEntrySource.USER,
+      details: '',
+    })
+
+    expect(journalStore.getLastEntryBeforeTs(12)?.name).toBe('Later')
+    expect(journalStore.getLastEntryBeforeTs(9)?.name).toBe('Earlier')
+    expect(journalStore.getLastEntryBeforeTs(4)).toBeNull()
+  })
+
   it.each([
     ['pull', ACTION_IDS.PULL],
     ['block', ACTION_IDS.BLOCK],

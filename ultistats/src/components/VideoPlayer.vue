@@ -5,7 +5,6 @@
       <video
         ref="videoNode"
         class="video-js vjs-default-skin"
-        @timeupdate="handleTimeUpdate"
       ></video>
       <div class="overlay overlay-bottom-left"><TimerOverlay ref="timerOverlay" /></div>
     </div>
@@ -97,9 +96,6 @@ const currentSpeed = ref<number | undefined>(1.0)
 const playerWrapper = ref<HTMLDivElement | null>(null)
 const elapsedTime = ref(0) // Add ref for elapsed time
 
-const handleTimeUpdate = () => {
-  timerOverlay.value?.setVideoTime(player.value?.currentTime() || 0)
-}
 const isPlayingValue = computed(() => {
   return isPlaying.value
 })
@@ -121,12 +117,14 @@ onMounted(() => {
       if (player.value) {
         isPlaying.value = !player.value.paused()
         currentSpeed.value = player.value.playbackRate()
-        elapsedTime.value = player.value.currentTime() || 0 // Initialize time
+        const timeUpdateHandler = () => {
+          const currentTime = player.value?.currentTime() || 0
+          elapsedTime.value = currentTime
+          timerOverlay.value?.setVideoTime(currentTime)
+        }
+        timeUpdateHandler()
 
         // --- Event Listeners ---
-        // Store handler function to remove it later
-        const timeUpdateHandler = () => (elapsedTime.value = player.value?.currentTime() || 0)
-
         player.value.on('play', () => {
           isPlaying.value = true
         })
