@@ -63,8 +63,8 @@ const passesModifiersMenuSelectorShortcutManager: ShortcutTarget = {
     console.log('set shortcut', eventCode)
   },
 
-  removeShortcut(eventCode: string, activeModifiers: Set<string>) {
-    console.log('remove shortcut', eventCode, activeModifiers)
+  removeShortcut(eventCode: string) {
+    console.log('remove shortcut', eventCode)
   },
 }
 keyboardStore.registerShortcutTarget(
