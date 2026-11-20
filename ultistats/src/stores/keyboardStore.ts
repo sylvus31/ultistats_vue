@@ -134,7 +134,7 @@ export const useKeyboardStore = defineStore('keyboard', () => {
     console.log('onKeyStroke: event', event)
     const code = transformCodeForSpecialKeys(event.code)
     const key = getKeyboardShortcutKey(event)
-    if (userSpecialModifiers.includes(code)) {
+    if (code === KeyboardConstants.SHIFT || code === KeyboardConstants.CTRL) {
       activeModifiers.add(code)
     }
     if (key === playerModifierKey.value) {
