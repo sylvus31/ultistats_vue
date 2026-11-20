@@ -41,7 +41,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, onBeforeUnmount, computed, type Ref } from 'vue'
+import { ref, onMounted, onBeforeUnmount, computed} from 'vue'
 import 'videojs-youtube'
 import videojs from 'video.js'
 import type Player from 'video.js/dist/types/player'
@@ -176,6 +176,16 @@ const playPause = () => {
   }
 }
 
+const play = () => {
+  if (!player.value) return
+  player.value.play()
+}
+
+const pause = () => {
+  if (!player.value) return
+  player.value.pause()
+}
+
 const seek = (seconds: number) => {
   if (!player.value) return
   const currentTime = player.value.currentTime() || 0
@@ -305,6 +315,8 @@ export interface VideoPlayerInstance {
 
 defineExpose({
   playPause,
+  play,
+  pause,
   isPlayingValue,
   seek,
   changeSpeed,
