@@ -37,7 +37,7 @@ describe('PlayerSearch', () => {
     vi.unstubAllGlobals()
   })
 
-  it('shows player occurrences with neighboring records and seeks two seconds early', async () => {
+  it('shows player occurrences with neighboring records and seeks three seconds early', async () => {
     const teamStore = useTeamStore()
     await vi.waitFor(() => expect(teamStore.teams[0].players).toHaveLength(1))
 
@@ -97,12 +97,14 @@ describe('PlayerSearch', () => {
     records.forEach((record) => journalStore.addRecord(record))
 
     const goTo = vi.fn()
+    const play = vi.fn()
     const wrapper = mount(PlayerSearch, {
-      props: { videoPlayer: { goTo } },
+      props: { videoPlayer: { goTo, play } },
     })
 
     const playerButtons = wrapper.findAll('.player-buttons sl-button')
     expect(playerButtons.map((button) => button.text())).toEqual(['Player One', 'Player Two'])
+    expect(playerButtons[0].get('.player-name').element.style.textDecorationColor).toBe('#00bcd4')
 
     await playerButtons[0].trigger('click')
 
@@ -116,6 +118,7 @@ describe('PlayerSearch', () => {
     expect(results[1].text()).toContain('—')
 
     await results[0].trigger('click')
-    expect(goTo).toHaveBeenCalledWith(8)
+    expect(goTo).toHaveBeenCalledWith(7)
+    expect(play).toHaveBeenCalled()
   })
 })

@@ -38,6 +38,12 @@ const occurrences = computed(() => {
   )
 })
 
+function getPlayerNameColor(playerId: string): string | undefined {
+  const player = teamStore.getPlayerByID(playerId)
+  if (!player) return undefined
+  return teamStore.teams[teamStore.getPlayerTeam(player)]?.color
+}
+
 function getRecordName(record: JournalEntry | undefined): string {
   if (!record) return '—'
 
@@ -61,7 +67,7 @@ function getRecordName(record: JournalEntry | undefined): string {
 }
 
 function goToOccurrence(timestamp: number) {
-  props.videoPlayer?.goTo(timestamp - 2)
+  props.videoPlayer?.goTo(timestamp - 3)
   props.videoPlayer?.play()
 }
 </script>
@@ -76,7 +82,11 @@ function goToOccurrence(timestamp: number) {
         :aria-pressed="selectedPlayerId === player.id"
         @click="selectedPlayerId = player.id"
       >
-        {{ player.name }}
+        <span
+          class="player-name"
+          :style="{ textDecorationColor: getPlayerNameColor(player.id) }"
+          >{{ player.name }}</span
+        >
       </sl-button>
     </div>
 
@@ -110,6 +120,12 @@ function goToOccurrence(timestamp: number) {
 .player-buttons {
   display: flex;
   flex-wrap: wrap;
+  gap: 0.35em;
+}
+
+.player-name {
+  text-decoration: underline;
+  text-underline-offset: 3px;
 }
 
 .results {
