@@ -10,7 +10,7 @@ import type { VideoPlayerInstance } from '@/components/VideoPlayer.vue'
 import { JournalEntryType as jet } from '@/types/journaltypes'
 
 const props = defineProps<{
-  videoPlayer: Pick<VideoPlayerInstance, 'goTo'> | null
+  videoPlayer: Pick<VideoPlayerInstance, 'goTo' | 'play'> | null
 }>()
 
 const journalStore = useJournalStore()

@@ -61,6 +61,8 @@ const passesSelectorShortcutManager: ShortcutTarget = {
     logAction(eventCode, activeModifiers)
   },
 
+  setShortcut: () => {},
+
   removeShortcut(eventCode: string) {
     const action = passesStore.getActionByKey(eventCode)
     if (action) action.key = ''
