@@ -224,8 +224,30 @@
         <TargetsCell :value="slotProps.data.passesType" />
       </template>
     </Column>
-    <Column field="pulls" header="Pulls" :sortable="true"></Column>
-    <Column field="pickUps" header="Pick Ups" :sortable="true"></Column>
+    <Column field="pulls" header="Pulls" :sortable="true">
+      <template #body="slotProps">
+        <button
+          type="button"
+          class="stat-search-button"
+          :aria-label="`Search pulls by ${slotProps.data.player}`"
+          @click="searchForRow('pull', slotProps.data.id)"
+        >
+          {{ slotProps.data.pulls }}
+        </button>
+      </template>
+    </Column>
+    <Column field="pickUps" header="Pick Ups" :sortable="true">
+      <template #body="slotProps">
+        <button
+          type="button"
+          class="stat-search-button"
+          :aria-label="`Search pick ups by ${slotProps.data.player}`"
+          @click="searchForRow('pick-up', slotProps.data.id)"
+        >
+          {{ slotProps.data.pickUps }}
+        </button>
+      </template>
+    </Column>
   </DataTable>
 </template>
 
@@ -446,24 +468,6 @@ const getStatsForOnePoint = (records: JournalEntry[]) => {
           break
         }
       }
-
-      for (let j = i + 1; j < records.length; j++) {
-        const nextRecord = records[j]
-
-        if (nextRecord.type === jet.PLAYER) break
-        if (isActionRecord(nextRecord, ACTION_IDS.PULL)) {
-          baseValues.get(r.name)!.pulls += 1
-          break
-        } else if (isActionRecord(nextRecord, ACTION_IDS.PICK_UP_DISC)) {
-          baseValues.get(r.name)!.pickUps += 1
-        } else if (
-          isScoreActionRecord(nextRecord) ||
-          isActionRecord(nextRecord, ACTION_IDS.BLOCK) ||
-          isActionRecord(nextRecord, ACTION_IDS.DROP)
-        ) {
-          break
-        }
-      }
     } else if (isScoreActionRecord(r)) {
       // get scorer
       for (let j = i - 1; j >= 0; j--) {
@@ -502,6 +506,16 @@ const getStatsForOnePoint = (records: JournalEntry[]) => {
     if (event.kind === 'defense') {
       const playerStats = baseValues.get(event.playerId)
       if (playerStats) playerStats.defenses += 1
+      return
+    }
+    if (event.kind === 'pull') {
+      const playerStats = baseValues.get(event.playerId)
+      if (playerStats) playerStats.pulls += 1
+      return
+    }
+    if (event.kind === 'pick-up') {
+      const playerStats = baseValues.get(event.playerId)
+      if (playerStats) playerStats.pickUps += 1
       return
     }
     if (event.kind === 'score-assist') {

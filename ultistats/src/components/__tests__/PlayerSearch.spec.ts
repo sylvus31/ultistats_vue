@@ -497,6 +497,65 @@ describe('PlayerSearch', () => {
     wrapper.unmount()
   })
 
+  it('finds pull and pick-up action records', async () => {
+    const teamStore = useTeamStore()
+    await vi.waitFor(() => expect(teamStore.teams[0].players).toHaveLength(1))
+
+    useActionsStore().setActions(
+      [
+        { id: ACTION_IDS.PULL, name: 'Pull', type: ActionType.POSITIVE },
+        { id: ACTION_IDS.PICK_UP_DISC, name: 'Pick Up Disc', type: ActionType.POSITIVE },
+      ],
+      [],
+    )
+    const journalStore = useJournalStore()
+    const records: JournalEntry[] = [
+      { id: 1, type: JournalEntryType.PLAYER, name: 'p1', ts: 1, source: JournalEntrySource.USER },
+      {
+        id: 2,
+        type: JournalEntryType.POSITIVE_ACTION,
+        name: ACTION_IDS.PICK_UP_DISC,
+        ts: 2,
+        source: JournalEntrySource.USER,
+      },
+      {
+        id: 3,
+        type: JournalEntryType.POSITIVE_ACTION,
+        name: ACTION_IDS.PULL,
+        ts: 3,
+        source: JournalEntrySource.USER,
+      },
+      {
+        id: 4,
+        type: JournalEntryType.POSITIVE_ACTION,
+        name: ACTION_IDS.PICK_UP_DISC,
+        ts: 4,
+        source: JournalEntrySource.USER,
+      },
+    ]
+    records.forEach((record) => journalStore.addRecord(record))
+
+    const wrapper = mount(PlayerSearch, {
+      props: {
+        videoPlayer: null,
+        searchRequest: createStatSearchRequest('pull', 't0', ['t0', 'p1']),
+      },
+    })
+
+    expect(wrapper.findAll('.result-entry')).toHaveLength(1)
+    expect(wrapper.find('.result-entry').attributes('aria-label')).toContain('Pull at 3 seconds')
+
+    await wrapper.setProps({
+      searchRequest: createStatSearchRequest('pick-up', 't0', ['t0', 'p1']),
+    })
+    expect(wrapper.findAll('.result-entry')).toHaveLength(1)
+    expect(wrapper.find('.result-entry').attributes('aria-label')).toContain(
+      'Pick Up Disc at 2 seconds',
+    )
+
+    wrapper.unmount()
+  })
+
   it('limits occurrences to the points included in the selected stats scope', async () => {
     const teamStore = useTeamStore()
     await vi.waitFor(() => expect(teamStore.teams[0].players).toHaveLength(1))

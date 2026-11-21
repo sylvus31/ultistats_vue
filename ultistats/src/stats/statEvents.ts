@@ -32,6 +32,11 @@ export type StatEvent =
       playerId: string
       record: journalAction
     }
+  | {
+      kind: 'pull' | 'pick-up'
+      playerId: string
+      record: journalAction
+    }
 
 export type StatEventCriterion =
   | {
@@ -80,12 +85,10 @@ function isScoreEntry(record: JournalEntry): record is journalAction {
   )
 }
 
-function isDefenseEntry(record: JournalEntry): record is journalAction {
+function isActionEntry(record: JournalEntry, actionId: string): record is journalAction {
   return (
     (record.type === jet.POSITIVE_ACTION || record.type === jet.NEGATIVE_ACTION) &&
-    (record.name === ACTION_IDS.BLOCK ||
-      record.name === ACTION_IDS.INTERCEPT ||
-      record.name === ACTION_IDS.DEFENSE)
+    record.name === actionId
   )
 }
 
@@ -151,10 +154,12 @@ export function buildStatEvents(
   const events: StatEvent[] = []
   const passAttempts: Extract<StatEvent, { kind: 'pass-attempt' }>[] = []
   let latestPlayer: journalPlayer | undefined
+  let canTrackPossessionActions = false
 
   records.forEach((record, index) => {
     if (isPlayerEntry(record)) {
       latestPlayer = record
+      canTrackPossessionActions = true
       events.push({
         kind: 'player-occurrence',
         playerId: record.name,
@@ -173,12 +178,40 @@ export function buildStatEvents(
       }
       events.push(event)
       passAttempts.push(event)
-    } else if (isDefenseEntry(record) && latestPlayer) {
+    } else if (
+      latestPlayer &&
+      (isActionEntry(record, ACTION_IDS.BLOCK) ||
+        isActionEntry(record, ACTION_IDS.INTERCEPT) ||
+        isActionEntry(record, ACTION_IDS.DEFENSE))
+    ) {
       events.push({
         kind: 'defense',
         playerId: latestPlayer.name,
         record,
       })
+    } else if (latestPlayer && isActionEntry(record, ACTION_IDS.PULL)) {
+      if (canTrackPossessionActions) {
+        events.push({
+          kind: 'pull',
+          playerId: latestPlayer.name,
+          record,
+        })
+      }
+      canTrackPossessionActions = false
+    } else if (latestPlayer && isActionEntry(record, ACTION_IDS.PICK_UP_DISC)) {
+      if (canTrackPossessionActions) {
+        events.push({
+          kind: 'pick-up',
+          playerId: latestPlayer.name,
+          record,
+        })
+      }
+    } else if (
+      isScoreActionRecord(record) ||
+      isActionRecord(record, ACTION_IDS.BLOCK) ||
+      isActionRecord(record, ACTION_IDS.DROP)
+    ) {
+      canTrackPossessionActions = false
     }
   })
 

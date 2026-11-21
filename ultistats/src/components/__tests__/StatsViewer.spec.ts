@@ -254,6 +254,49 @@ describe('StatsViewer', () => {
     wrapper.unmount()
   })
 
+  it('searches pull and pick-up actions from their stat cells', async () => {
+    const wrapper = mount(StatsViewer)
+    const journalStore = useJournalStore()
+
+    await vi.waitFor(() => expect(wrapper.text()).toContain('Player One'))
+    journalStore.addPlayerEntry('p1')
+    journalStore.addActionEntry(ACTION_IDS.PICK_UP_DISC, true)
+    journalStore.addActionEntry(ACTION_IDS.PULL, true)
+    journalStore.addActionEntry(ACTION_IDS.PICK_UP_DISC, true)
+
+    const pullButton = wrapper.find('[aria-label="Search pulls by Player One"]')
+    const pickupButton = wrapper.find('[aria-label="Search pick ups by Player One"]')
+    await vi.waitFor(() => {
+      expect(pullButton.text()).toBe('1')
+      expect(pickupButton.text()).toBe('1')
+    })
+
+    await pullButton.trigger('click')
+    await pickupButton.trigger('click')
+    expect(wrapper.emitted('select-search')?.slice(-2)).toEqual([
+      [
+        {
+          subjectId: 'p1',
+          criteria: [
+            { field: 'kind', operator: 'equals', value: 'pull' },
+            { field: 'playerId', operator: 'in', value: ['p1'] },
+          ],
+        },
+      ],
+      [
+        {
+          subjectId: 'p1',
+          criteria: [
+            { field: 'kind', operator: 'equals', value: 'pick-up' },
+            { field: 'playerId', operator: 'in', value: ['p1'] },
+          ],
+        },
+      ],
+    ])
+
+    wrapper.unmount()
+  })
+
   it('shows pass names instead of pass ids in the pass type statistics', async () => {
     const wrapper = mount(StatsViewer)
     const journalStore = useJournalStore()
