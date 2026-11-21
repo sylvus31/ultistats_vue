@@ -68,6 +68,7 @@ describe('StatsViewer', () => {
     const homeTeam = wrapper.findAll('.player-name').find((name) => name.text() === 'Home')
     await homeTeam?.trigger('click')
     await wrapper.find('[aria-label="Search passes attempted by Player One"]').trigger('click')
+    await wrapper.find('[aria-label="Search successful passes for Player One"]').trigger('click')
     expect(wrapper.emitted('select-search')).toEqual([
       [
         {
@@ -93,6 +94,16 @@ describe('StatsViewer', () => {
           criteria: [
             { field: 'kind', operator: 'equals', value: 'pass-attempt' },
             { field: 'playerId', operator: 'in', value: ['p1'] },
+          ],
+        },
+      ],
+      [
+        {
+          subjectId: 'p1',
+          criteria: [
+            { field: 'kind', operator: 'equals', value: 'pass-attempt' },
+            { field: 'playerId', operator: 'in', value: ['p1'] },
+            { field: 'outcome', operator: 'equals', value: 'completed' },
           ],
         },
       ],

@@ -37,7 +37,22 @@
         </button>
       </template>
     </Column>
-    <Column field="passes_success" header="P success" :sortable="true"></Column>
+    <Column field="passes_success" header="P success" :sortable="true">
+      <template #body="slotProps">
+        <button
+          type="button"
+          class="stat-search-button"
+          :aria-label="`Search successful passes for ${slotProps.data.player}`"
+          @click="
+            searchForRow('pass-attempt', slotProps.data.id, [
+              { field: 'outcome', operator: 'equals', value: 'completed' },
+            ])
+          "
+        >
+          {{ slotProps.data.passes_success }}
+        </button>
+      </template>
+    </Column>
     <Column header="P success rate">
       <template #body="slotProps">
         {{ formatSuccessRate(slotProps.data.passes_success, slotProps.data.passes_total) }}
@@ -176,6 +191,7 @@ import {
   buildStatEvents,
   createStatSearchRequest,
   type StatEvent,
+  type StatEventCriterion,
   type StatSearchRequest,
 } from '@/stats/statEvents'
 const emit = defineEmits<{
@@ -195,8 +211,15 @@ const getSearchPlayerIds = (id: string) => {
   return [id, ...(team?.players.map((player) => player.id) ?? [])]
 }
 
-const searchForRow = (kind: StatEvent['kind'], id: string) => {
-  emit('select-search', createStatSearchRequest(kind, id, getSearchPlayerIds(id)))
+const searchForRow = (
+  kind: StatEvent['kind'],
+  id: string,
+  additionalCriteria: readonly StatEventCriterion[] = [],
+) => {
+  emit(
+    'select-search',
+    createStatSearchRequest(kind, id, getSearchPlayerIds(id), additionalCriteria),
+  )
 }
 
 const getStatsTeamColor = (id: string) => {

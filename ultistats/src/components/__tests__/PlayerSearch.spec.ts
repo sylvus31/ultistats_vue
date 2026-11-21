@@ -253,6 +253,65 @@ describe('PlayerSearch', () => {
     wrapper.unmount()
   })
 
+  it('filters successful pass searches for all players included in a selected team', async () => {
+    const teamStore = useTeamStore()
+    await vi.waitFor(() => expect(teamStore.teams[0].players).toHaveLength(1))
+
+    usePassesStore().setPasses([{ id: 'pass', name: 'Forehand', isActive: true }])
+    const journalStore = useJournalStore()
+    const records: JournalEntry[] = [
+      { id: 1, type: JournalEntryType.PLAYER, name: 'p1', ts: 1, source: JournalEntrySource.USER },
+      {
+        id: 2,
+        type: JournalEntryType.PASS,
+        name: 'pass',
+        ts: 2,
+        source: JournalEntrySource.USER,
+        modifiers: new Set(),
+      },
+      { id: 3, type: JournalEntryType.PLAYER, name: 'p1', ts: 3, source: JournalEntrySource.USER },
+      { id: 4, type: JournalEntryType.PLAYER, name: 'p1', ts: 4, source: JournalEntrySource.USER },
+      {
+        id: 5,
+        type: JournalEntryType.PASS,
+        name: 'pass',
+        ts: 5,
+        source: JournalEntrySource.USER,
+        modifiers: new Set(),
+      },
+      { id: 6, type: JournalEntryType.PLAYER, name: 'p2', ts: 6, source: JournalEntrySource.USER },
+      { id: 7, type: JournalEntryType.PLAYER, name: 't0', ts: 7, source: JournalEntrySource.USER },
+      {
+        id: 8,
+        type: JournalEntryType.PASS,
+        name: 'pass',
+        ts: 8,
+        source: JournalEntrySource.USER,
+        modifiers: new Set(),
+      },
+      { id: 9, type: JournalEntryType.PLAYER, name: 't0', ts: 9, source: JournalEntrySource.USER },
+    ]
+    records.forEach((record) => journalStore.addRecord(record))
+
+    const wrapper = mount(PlayerSearch, {
+      props: {
+        videoPlayer: null,
+        searchRequest: createStatSearchRequest('pass-attempt', 't0', ['t0', 'p1'], [
+          { field: 'outcome', operator: 'equals', value: 'completed' },
+        ]),
+      },
+    })
+
+    const results = wrapper.findAll('.result-entry')
+    expect(results).toHaveLength(2)
+    expect(results.map((result) => result.attributes('aria-label'))).toEqual([
+      expect.stringContaining('2 seconds'),
+      expect.stringContaining('8 seconds'),
+    ])
+
+    wrapper.unmount()
+  })
+
   it('limits occurrences to the points included in the selected stats scope', async () => {
     const teamStore = useTeamStore()
     await vi.waitFor(() => expect(teamStore.teams[0].players).toHaveLength(1))

@@ -31,6 +31,11 @@ export type StatEventCriterion =
       operator: 'in'
       value: readonly string[]
     }
+  | {
+      field: 'outcome'
+      operator: 'equals'
+      value: Extract<StatEvent, { kind: 'pass-attempt' }>['outcome']
+    }
 
 export interface StatSearchRequest {
   subjectId: string
@@ -49,12 +54,14 @@ export function createStatSearchRequest(
   kind: StatEvent['kind'],
   subjectId: string,
   playerIds: readonly string[],
+  additionalCriteria: readonly StatEventCriterion[] = [],
 ): StatSearchRequest {
   return {
     subjectId,
     criteria: [
       { field: 'kind', operator: 'equals', value: kind },
       { field: 'playerId', operator: 'in', value: playerIds },
+      ...additionalCriteria,
     ],
   }
 }
@@ -140,6 +147,12 @@ export function searchStatEvents(
           return criterion.operator === 'equals' && event.kind === criterion.value
         case 'playerId':
           return criterion.operator === 'in' && criterion.value.includes(event.playerId)
+        case 'outcome':
+          return (
+            event.kind === 'pass-attempt' &&
+            criterion.operator === 'equals' &&
+            event.outcome === criterion.value
+          )
       }
     }),
   )
