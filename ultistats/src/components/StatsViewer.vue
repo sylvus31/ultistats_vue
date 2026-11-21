@@ -14,50 +14,166 @@
       style="background-color: #1a1a1a; font-weight: bold"
     >
       <template #body="slotProps">
-        <span
+        <button
+          type="button"
           class="player-name"
+          :aria-label="`Show search results for ${slotProps.data.player}`"
           :style="{ textDecorationColor: getStatsTeamColor(slotProps.data.id) }"
-          >{{ slotProps.data.player }}</span
+          @click="searchForRow('player-occurrence', slotProps.data.id)"
         >
+          {{ slotProps.data.player }}
+        </button>
       </template>
     </Column>
-    <Column field="passes_total" header="P total" :sortable="true"></Column>
-    <Column field="passes_success" header="P success" :sortable="true"></Column>
+    <Column field="passes_total" header="P total" :sortable="true">
+      <template #body="slotProps">
+        <button
+          type="button"
+          class="stat-search-button"
+          :aria-label="`Search passes attempted by ${slotProps.data.player}`"
+          @click="searchForRow('pass-attempt', slotProps.data.id)"
+        >
+          {{ slotProps.data.passes_total }}
+        </button>
+      </template>
+    </Column>
+    <Column field="passes_success" header="P success" :sortable="true">
+      <template #body="slotProps">
+        <button
+          type="button"
+          class="stat-search-button"
+          :aria-label="`Search successful passes for ${slotProps.data.player}`"
+          @click="
+            searchForRow('pass-attempt', slotProps.data.id, [
+              { field: 'outcome', operator: 'equals', value: 'completed' },
+            ])
+          "
+        >
+          {{ slotProps.data.passes_success }}
+        </button>
+      </template>
+    </Column>
     <Column header="P success rate">
       <template #body="slotProps">
         {{ formatSuccessRate(slotProps.data.passes_success, slotProps.data.passes_total) }}
       </template>
     </Column>
-    <Column field="passes_fail" header="P fail" :sortable="true"></Column>
-    <Column field="long_success" header="L success" :sortable="true"></Column>
-    <Column header="L success rate">
+    <Column field="passes_fail" header="P fail" :sortable="true">
       <template #body="slotProps">
-        {{
-          formatSuccessRate(
-            slotProps.data.long_success,
-            slotProps.data.long_success + slotProps.data.long_fail,
-          )
-        }}
+        <button
+          type="button"
+          class="stat-search-button"
+          :aria-label="`Search failed passes for ${slotProps.data.player}`"
+          @click="
+            searchForRow('pass-attempt', slotProps.data.id, [
+              { field: 'outcome', operator: 'equals', value: 'failed' },
+            ])
+          "
+        >
+          {{ slotProps.data.passes_fail }}
+        </button>
       </template>
     </Column>
-    <Column field="long_fail" header="L fail" :sortable="true"></Column>
+    <Column field="long_success" header="L success" :sortable="true">
+      <template #body="slotProps">
+        <button
+          type="button"
+          class="stat-search-button"
+          :aria-label="`Search successful long passes for ${slotProps.data.player}`"
+          @click="
+            searchForRow('pass-attempt', slotProps.data.id, [
+              { field: 'isLong', operator: 'equals', value: true },
+              { field: 'outcome', operator: 'equals', value: 'completed' },
+            ])
+          "
+        >
+          {{ slotProps.data.long_success }}
+        </button>
+      </template>
+    </Column>
+    <Column header="L success rate">
+      <template #body="slotProps">
+        {{ formatSuccessRate(slotProps.data.long_success, slotProps.data.long_total) }}
+      </template>
+    </Column>
+    <Column field="long_fail" header="L fail" :sortable="true">
+      <template #body="slotProps">
+        <button
+          type="button"
+          class="stat-search-button"
+          :aria-label="`Search failed long passes for ${slotProps.data.player}`"
+          @click="
+            searchForRow('pass-attempt', slotProps.data.id, [
+              { field: 'isLong', operator: 'equals', value: true },
+              { field: 'outcome', operator: 'equals', value: 'failed' },
+            ])
+          "
+        >
+          {{ slotProps.data.long_fail }}
+        </button>
+      </template>
+    </Column>
     <Column field="passes_D" header="P D" :sortable="true">
       <template #body="slotProps">
-        {{ slotProps.data.passes_D[0] }}
+        <button
+          type="button"
+          class="stat-search-button"
+          :aria-label="`Search score-leading passes by ${slotProps.data.player}`"
+          @click="
+            searchForRow('score-assist', slotProps.data.id, [
+              { field: 'level', operator: 'equals', value: 0 },
+            ])
+          "
+        >
+          {{ slotProps.data.passes_D[0] }}
+        </button>
       </template>
     </Column>
     <Column field="passes_D" header="P D -1" :sortable="true">
       <template #body="slotProps">
-        {{ slotProps.data.passes_D[1] }}
+        <button
+          type="button"
+          class="stat-search-button"
+          :aria-label="`Search one-pass-earlier score-leading passes by ${slotProps.data.player}`"
+          @click="
+            searchForRow('score-assist', slotProps.data.id, [
+              { field: 'level', operator: 'equals', value: 1 },
+            ])
+          "
+        >
+          {{ slotProps.data.passes_D[1] }}
+        </button>
       </template>
     </Column>
     <Column field="passes_D" header="P D -2" :sortable="true">
       <template #body="slotProps">
-        {{ slotProps.data.passes_D[2] }}
+        <button
+          type="button"
+          class="stat-search-button"
+          :aria-label="`Search two-passes-earlier score-leading passes by ${slotProps.data.player}`"
+          @click="
+            searchForRow('score-assist', slotProps.data.id, [
+              { field: 'level', operator: 'equals', value: 2 },
+            ])
+          "
+        >
+          {{ slotProps.data.passes_D[2] }}
+        </button>
       </template>
     </Column>
     <Column field="points" header="Points" :sortable="true"></Column>
-    <Column field="defenses" header="Defenses" :sortable="true"></Column>
+    <Column field="defenses" header="Defenses" :sortable="true">
+      <template #body="slotProps">
+        <button
+          type="button"
+          class="stat-search-button"
+          :aria-label="`Search defenses by ${slotProps.data.player}`"
+          @click="searchForRow('defense', slotProps.data.id)"
+        >
+          {{ slotProps.data.defenses }}
+        </button>
+      </template>
+    </Column>
     <Column field="played_points" header="Played Points" :sortable="true"></Column>
     <Column field="played_time" header="Played Time" :sortable="true">
       <template #body="slotProps">
@@ -108,8 +224,30 @@
         <TargetsCell :value="slotProps.data.passesType" />
       </template>
     </Column>
-    <Column field="pulls" header="Pulls" :sortable="true"></Column>
-    <Column field="pickUps" header="Pick Ups" :sortable="true"></Column>
+    <Column field="pulls" header="Pulls" :sortable="true">
+      <template #body="slotProps">
+        <button
+          type="button"
+          class="stat-search-button"
+          :aria-label="`Search pulls by ${slotProps.data.player}`"
+          @click="searchForRow('pull', slotProps.data.id)"
+        >
+          {{ slotProps.data.pulls }}
+        </button>
+      </template>
+    </Column>
+    <Column field="pickUps" header="Pick Ups" :sortable="true">
+      <template #body="slotProps">
+        <button
+          type="button"
+          class="stat-search-button"
+          :aria-label="`Search pick ups by ${slotProps.data.player}`"
+          @click="searchForRow('pick-up', slotProps.data.id)"
+        >
+          {{ slotProps.data.pickUps }}
+        </button>
+      </template>
+    </Column>
   </DataTable>
 </template>
 
@@ -124,6 +262,23 @@
 }
 
 .player-name {
+  padding: 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  cursor: pointer;
+  font: inherit;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.stat-search-button {
+  padding: 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  cursor: pointer;
+  font: inherit;
   text-decoration: underline;
   text-underline-offset: 3px;
 }
@@ -136,14 +291,23 @@ import { useTeamStore } from '@/stores/Team'
 import { useJournalStore, type JournalEntry } from '@/stores/journal'
 import { useStateStore } from '@/stores/StateStore'
 import { usePassesStore } from '@/stores/passesStore'
-import type { Point } from '@/stores/pointsStore'
-import { JournalEntryType as jet, type journalPass } from '@/types/journaltypes'
+import { getPointsForStats } from '@/stores/pointsStore'
+import { JournalEntryType as jet } from '@/types/journaltypes'
 import PlayedTimeCell from './stats/PlayedTimeCell.vue'
 import TargetsCell from './stats/TargetsCell.vue'
 import type { VideoPlayerInstance } from '@/components/VideoPlayer.vue'
-import { hasPassModifier } from '@/types/passModifiers'
 import { isActionRecord, isScoreActionRecord } from '@/types/scoreAction'
 import { ACTION_IDS } from '@/types/catalogIds'
+import {
+  buildStatEvents,
+  createStatSearchRequest,
+  type StatEvent,
+  type StatEventCriterion,
+  type StatSearchRequest,
+} from '@/stats/statEvents'
+const emit = defineEmits<{
+  'select-search': [request: StatSearchRequest]
+}>()
 const videoPlayerRef = ref<VideoPlayerInstance | null>(null)
 const setVideoPlayerRef = (ref: Ref<VideoPlayerInstance | null>) => {
   videoPlayerRef.value = ref.value
@@ -152,6 +316,22 @@ const teamStore = useTeamStore()
 const journalStore = useJournalStore()
 const stateStore = useStateStore()
 const passesStore = usePassesStore()
+
+const getSearchPlayerIds = (id: string) => {
+  const team = teamStore.teams.find((candidate) => candidate.id === id)
+  return [id, ...(team?.players.map((player) => player.id) ?? [])]
+}
+
+const searchForRow = (
+  kind: StatEvent['kind'],
+  id: string,
+  additionalCriteria: readonly StatEventCriterion[] = [],
+) => {
+  emit(
+    'select-search',
+    createStatSearchRequest(kind, id, getSearchPlayerIds(id), additionalCriteria),
+  )
+}
 
 const getStatsTeamColor = (id: string) => {
   const teamIndex = teamStore.teams.findIndex(
@@ -201,6 +381,7 @@ interface Row {
   passesType: StringNumberMap
   long_success: number
   long_fail: number
+  long_total: number
   pulls: number
   pickUps: number
   offensives_points: [number, number]
@@ -243,6 +424,7 @@ const initRow = (id: string) => {
     passesType: new StringNumberMap(),
     long_success: 0,
     long_fail: 0,
+    long_total: 0,
     pulls: 0,
     pickUps: 0,
     offensives_points: [0, 0] as [number, number],
@@ -269,7 +451,7 @@ const getStatsForOnePoint = (records: JournalEntry[]) => {
       for (let j = i + 1; j < records.length; j++) {
         const nextRecord = records[j]
         if (nextRecord.type === jet.PLAYER) break
-        if(nextRecord.name === ACTION_IDS.PICK_UP_DISC) {
+        if (nextRecord.name === ACTION_IDS.PICK_UP_DISC) {
           catchTS = nextRecord.ts
         }
         if (nextRecord.type === jet.PASS) {
@@ -286,84 +468,11 @@ const getStatsForOnePoint = (records: JournalEntry[]) => {
           break
         }
       }
-
-      const thrower = teamStore.getPlayerByID(r.name)!
-      for (let j = i + 1; j < records.length; j++) {
-        const nextRecord = records[j]
-
-        if (nextRecord.type === jet.PLAYER) {
-          const receiver = teamStore.getPlayerByID(records[j].name)!
-          let passType = 'pass'
-          let passModifiers = new Set<string>()
-          //get type of pass
-          for (let k = i + 1; k < j; k++) {
-            if (records[k].type === jet.PASS) {
-              const pass = records[k] as journalPass
-              passType = passesStore.passes.find((catalogPass) => catalogPass.id === pass.name)?.name
-                ?? pass.name
-              passModifiers = pass.modifiers
-              break
-            }
-          }
-          baseValues.get(thrower.id)!.passes_total += 1
-          baseValues.get(thrower.id)!.passesType.increment(passType)
-          const isLong = hasPassModifier(passModifiers, 'long')
-          const success = teamStore.getPlayerTeam(thrower) === teamStore.getPlayerTeam(receiver)
-
-          if (success) {
-            baseValues.get(thrower.id)!.passes_success += 1
-            if (isLong) {
-              baseValues.get(thrower.id)!.long_success += 1
-            }
-          } else {
-            baseValues.get(thrower.id)!.passes_fail += 1
-            if (isLong) {
-              baseValues.get(thrower.id)!.long_fail += 1
-            }
-          }
-          //count receivers
-          if (success) {
-            baseValues.get(thrower.id)!.targets.increment(receiver.id)
-            baseValues.get(receiver.id)!.providers.increment(thrower.id)
-          }
-          break
-        } else if (isActionRecord(nextRecord, ACTION_IDS.PULL)) {
-          baseValues.get(thrower.id)!.pulls += 1
-          break
-        } else if (isActionRecord(nextRecord, ACTION_IDS.PICK_UP_DISC)) {
-          baseValues.get(thrower.id)!.pickUps += 1
-          // no break needed, same player has disc
-        } else if (
-          isScoreActionRecord(nextRecord) ||
-          isActionRecord(nextRecord, ACTION_IDS.PULL) ||
-          isActionRecord(nextRecord, ACTION_IDS.BLOCK) ||
-          isActionRecord(nextRecord, ACTION_IDS.DROP)
-        ) {
-          break
-        }
-      }
     } else if (isScoreActionRecord(r)) {
       // get scorer
       for (let j = i - 1; j >= 0; j--) {
         if (records[j].type === jet.PLAYER) {
           baseValues.get(records[j].name)!.points += 1
-          const scoreTeam = teamStore.getPlayerTeam(teamStore.getPlayerByID(records[j].name)!)
-          // get passe D
-          let pass_D_level = 0
-          for (let k = j - 1; k >= 0; k--) {
-            if (records[k].type === jet.PLAYER) {
-              // calahan is counted as a pass D
-              const passerTeam = teamStore.getPlayerTeam(teamStore.getPlayerByID(records[k].name)!)
-              if (passerTeam != scoreTeam) {
-                break
-              }
-              baseValues.get(records[k].name)!.passes_D[pass_D_level] += 1
-              pass_D_level += 1
-              if (pass_D_level > 3) {
-                break
-              }
-            }
-          }
           break
         }
       }
@@ -386,17 +495,54 @@ const getStatsForOnePoint = (records: JournalEntry[]) => {
           break
         }
       }
-    } else if (
-      isActionRecord(r, ACTION_IDS.BLOCK) ||
-      isActionRecord(r, ACTION_IDS.INTERCEPT) ||
-      isActionRecord(r, ACTION_IDS.DEFENSE)
-    ) {
-      for (let j = i - 1; j >= 0; j--) {
-        if (records[j].type === jet.PLAYER) {
-          baseValues.get(records[j].name)!.defenses += 1
-          break
-        }
-      }
+    }
+  })
+
+  const statEvents = buildStatEvents(records, (playerId) => {
+    const player = teamStore.getPlayerByID(playerId)
+    return player ? teamStore.getPlayerTeam(player) : -1
+  })
+  statEvents.forEach((event) => {
+    if (event.kind === 'defense') {
+      const playerStats = baseValues.get(event.playerId)
+      if (playerStats) playerStats.defenses += 1
+      return
+    }
+    if (event.kind === 'pull') {
+      const playerStats = baseValues.get(event.playerId)
+      if (playerStats) playerStats.pulls += 1
+      return
+    }
+    if (event.kind === 'pick-up') {
+      const playerStats = baseValues.get(event.playerId)
+      if (playerStats) playerStats.pickUps += 1
+      return
+    }
+    if (event.kind === 'score-assist') {
+      const playerStats = baseValues.get(event.playerId)
+      if (playerStats) playerStats.passes_D[event.level] += 1
+      return
+    }
+    if (event.kind !== 'pass-attempt') return
+
+    const playerStats = baseValues.get(event.playerId)
+    if (!playerStats) return
+
+    playerStats.passes_total += 1
+    playerStats.passesType.increment(
+      passesStore.passes.find((pass) => pass.id === event.record.name)?.name ?? event.record.name,
+    )
+    if (event.outcome === 'completed') playerStats.passes_success += 1
+    if (event.outcome === 'failed') playerStats.passes_fail += 1
+    if (event.isLong) {
+      playerStats.long_total += 1
+      if (event.outcome === 'completed') playerStats.long_success += 1
+      if (event.outcome === 'failed') playerStats.long_fail += 1
+    }
+
+    if (event.outcome === 'completed' && event.receiver) {
+      playerStats.targets.increment(event.receiver.name)
+      baseValues.get(event.receiver.name)?.providers.increment(event.playerId)
     }
   })
 
@@ -418,6 +564,7 @@ const getStatsForOnePoint = (records: JournalEntry[]) => {
       teamStats.pickUps += playerStats.pickUps
       teamStats.long_success += playerStats.long_success
       teamStats.long_fail += playerStats.long_fail
+      teamStats.long_total += playerStats.long_total
 
       playerStats.targets.forEach((value, key) => {
         teamStats.targets.set(key, teamStats.targets.getOrDefault(key) + value)
@@ -434,22 +581,6 @@ const getStatsForOnePoint = (records: JournalEntry[]) => {
   return baseValues
 }
 
-const getPointsForStats = (points: Point[]) => {
-  const p = new Array<Point>()
-  if (stateStore.statsScope === 0) {
-    p.push(points[stateStore.pointIndex])
-  } else if (stateStore.statsScope === 1) {
-    for (let i = 0; i <= stateStore.pointIndex; i++) {
-      p.push(points[i])
-    }
-  } else if (stateStore.statsScope === 2) {
-    for (let i = 0; i < points.length; i++) {
-      p.push(points[i])
-    }
-  }
-  return p
-}
-
 stateStore.$subscribe((mutation, state) => {
   console.log(' watch stateStore', state.statsScope, state.pointIndex)
   updateStatGrid()
@@ -459,7 +590,11 @@ stateStore.$subscribe((mutation, state) => {
 const updateStatGrid = () => {
   const statsMap = initMap()
   if (journalStore.recordsAsPoints?.length === 0) return
-  const pointsForStats = getPointsForStats(journalStore.recordsAsPoints)
+  const pointsForStats = getPointsForStats(
+    journalStore.recordsAsPoints,
+    stateStore.statsScope,
+    stateStore.pointIndex,
+  )
   pointsForStats.forEach((p) => {
     const pointStats = getStatsForOnePoint(p.records)
     pointStats.forEach((r) => {
@@ -480,6 +615,7 @@ const updateStatGrid = () => {
       playerTotalStats.time_in_hand_count += r.time_in_hand_count
       playerTotalStats.long_success += r.long_success
       playerTotalStats.long_fail += r.long_fail
+      playerTotalStats.long_total += r.long_total
       r.targets.forEach((v, k) => {
         playerTotalStats.targets.set(k, playerTotalStats.targets.getOrDefault(k) + v)
       })

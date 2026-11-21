@@ -14,7 +14,7 @@ export enum JournalEntrySource {
 }
 
 export interface journalLine {
-  type: JournalEntryType
+  type: JournalEntryType.LINE
   name: string
   id: number
   players: Set<string>
@@ -22,7 +22,7 @@ export interface journalLine {
   source: JournalEntrySource
 }
 export interface journalPass {
-  type: JournalEntryType
+  type: JournalEntryType.PASS
   id: number
   ts: number
   name: string
@@ -31,7 +31,7 @@ export interface journalPass {
 }
 
 export interface journalPlayer {
-  type: JournalEntryType
+  type: JournalEntryType.PLAYER
   id: number
   ts: number
   name: string
@@ -39,7 +39,7 @@ export interface journalPlayer {
 }
 
 export interface journalAction {
-  type: JournalEntryType
+  type: JournalEntryType.POSITIVE_ACTION | JournalEntryType.NEGATIVE_ACTION
   id: number
   name: string
   ts: number
@@ -47,7 +47,7 @@ export interface journalAction {
 }
 
 export interface journalComment {
-  type: JournalEntryType
+  type: JournalEntryType.COMMENT
   id: number
   name: string
   ts: number

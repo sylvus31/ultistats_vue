@@ -57,7 +57,7 @@ export const useJournalStore = defineStore('journal', () => {
   }
 
   const addPlayerEntry = (name: string) => {
-    const entry = {
+    const entry: journalPlayer = {
       id: getNextIdIndex(),
       name: name,
       ts: getTs(),
@@ -68,7 +68,7 @@ export const useJournalStore = defineStore('journal', () => {
   }
 
   const addPassEntry = (name: string, modifiers: Set<string>) => {
-    const entry = {
+    const entry: journalPass = {
       id: getNextIdIndex(),
       name: name,
       ts: getTs(),
@@ -80,7 +80,7 @@ export const useJournalStore = defineStore('journal', () => {
   }
 
   const addActionEntry = (name: string, positive: boolean) => {
-    const entry = {
+    const entry: journalAction = {
       id: getNextIdIndex(),
       name: name,
       ts: getTs(),
@@ -91,7 +91,7 @@ export const useJournalStore = defineStore('journal', () => {
   }
 
   const addCommentEntry = (title: string, details: string) => {
-    const entry = {
+    const entry: journalComment = {
       id: getNextIdIndex(),
       name: title,
       ts: getTs(),
@@ -141,7 +141,7 @@ export const useJournalStore = defineStore('journal', () => {
     const ts = (entry.ts + getPrecedentEntryByTypes(entry, Object.values(jet))!.ts) / 2
     // player to player
     if (lastMeaningFulEntry.type === jet.PLAYER && entry.type === jet.PLAYER) {
-      const aiEntry = {
+      const aiEntry: journalPass = {
         id: getNextIdIndex(),
         name: 'a0',
         ts: ts,
@@ -162,7 +162,7 @@ export const useJournalStore = defineStore('journal', () => {
         const player = teamStore.getPlayerByID(lastPlayerEntry.name)!
         const teamIndex = teamStore.getPlayerTeam(player)
         const name = teamStore.teams[teamIndex].id
-        const aiEntry = {
+        const aiEntry: journalPlayer = {
           id: getNextIdIndex(),
           name: name,
           ts: ts,
@@ -192,7 +192,7 @@ export const useJournalStore = defineStore('journal', () => {
   }
 
   const addLineEntry = (players: Set<string>) => {
-    const entry = {
+    const entry: journalLine = {
       id: getNextIdIndex(),
       name: 'Line',
       ts: getTs(),
@@ -204,7 +204,7 @@ export const useJournalStore = defineStore('journal', () => {
   }
 
   const addEventEntry = (name: string) => {
-    const entry = {
+    const entry: journalEvent = {
       id: getNextIdIndex(),
       name: name,
       ts: getTs(),
