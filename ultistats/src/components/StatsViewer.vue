@@ -146,7 +146,7 @@ import { useTeamStore } from '@/stores/Team'
 import { useJournalStore, type JournalEntry } from '@/stores/journal'
 import { useStateStore } from '@/stores/StateStore'
 import { usePassesStore } from '@/stores/passesStore'
-import type { Point } from '@/stores/pointsStore'
+import { getPointsForStats } from '@/stores/pointsStore'
 import { JournalEntryType as jet, type journalPass } from '@/types/journaltypes'
 import PlayedTimeCell from './stats/PlayedTimeCell.vue'
 import TargetsCell from './stats/TargetsCell.vue'
@@ -447,22 +447,6 @@ const getStatsForOnePoint = (records: JournalEntry[]) => {
   return baseValues
 }
 
-const getPointsForStats = (points: Point[]) => {
-  const p = new Array<Point>()
-  if (stateStore.statsScope === 0) {
-    p.push(points[stateStore.pointIndex])
-  } else if (stateStore.statsScope === 1) {
-    for (let i = 0; i <= stateStore.pointIndex; i++) {
-      p.push(points[i])
-    }
-  } else if (stateStore.statsScope === 2) {
-    for (let i = 0; i < points.length; i++) {
-      p.push(points[i])
-    }
-  }
-  return p
-}
-
 stateStore.$subscribe((mutation, state) => {
   console.log(' watch stateStore', state.statsScope, state.pointIndex)
   updateStatGrid()
@@ -472,7 +456,11 @@ stateStore.$subscribe((mutation, state) => {
 const updateStatGrid = () => {
   const statsMap = initMap()
   if (journalStore.recordsAsPoints?.length === 0) return
-  const pointsForStats = getPointsForStats(journalStore.recordsAsPoints)
+  const pointsForStats = getPointsForStats(
+    journalStore.recordsAsPoints,
+    stateStore.statsScope,
+    stateStore.pointIndex,
+  )
   pointsForStats.forEach((p) => {
     const pointStats = getStatsForOnePoint(p.records)
     pointStats.forEach((r) => {

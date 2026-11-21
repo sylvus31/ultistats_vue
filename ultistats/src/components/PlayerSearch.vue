@@ -6,6 +6,8 @@ import { useActionsStore } from '@/stores/ActionsStore'
 import { useEventsStore } from '@/stores/EventsStore'
 import { usePassesStore } from '@/stores/passesStore'
 import { useTeamStore } from '@/stores/Team'
+import { useStateStore } from '@/stores/StateStore'
+import { getPointsForStats } from '@/stores/pointsStore'
 import type { VideoPlayerInstance } from '@/components/VideoPlayer.vue'
 import { JournalEntryType as jet } from '@/types/journaltypes'
 
@@ -15,6 +17,7 @@ const props = defineProps<{
 const selectedPlayerId = defineModel<string | null>('selectedPlayerId', { default: null })
 
 const journalStore = useJournalStore()
+const stateStore = useStateStore()
 const teamStore = useTeamStore()
 const actionsStore = useActionsStore()
 const eventsStore = useEventsStore()
@@ -31,10 +34,17 @@ const selectedPlayerIds = computed(() => {
     ...(selectedTeam?.players.map((player) => player.id) ?? []),
   ])
 })
+const selectedRecords = computed(() =>
+  getPointsForStats(
+    journalStore.recordsAsPoints,
+    stateStore.statsScope,
+    stateStore.pointIndex,
+  ).flatMap((point) => point.records),
+)
 const occurrences = computed(() => {
   if (!selectedPlayerId.value) return []
 
-  const records = journalStore.sortedRecords
+  const records = selectedRecords.value
   return records.flatMap((record, index) =>
     record.type === jet.PLAYER && selectedPlayerIds.value.has(record.name)
       ? [

@@ -6,8 +6,10 @@ import { useActionsStore } from '@/stores/ActionsStore'
 import { useEventsStore } from '@/stores/EventsStore'
 import { useJournalStore, type JournalEntry } from '@/stores/journal'
 import { usePassesStore } from '@/stores/passesStore'
+import { useStateStore } from '@/stores/StateStore'
 import { useTeamStore } from '@/stores/Team'
 import { ActionType } from '@/types/ActionsType'
+import { ACTION_IDS } from '@/types/catalogIds'
 import { JournalEntrySource, JournalEntryType } from '@/types/journaltypes'
 
 describe('PlayerSearch', () => {
@@ -165,6 +167,80 @@ describe('PlayerSearch', () => {
     expect(wrapper.findAll('.result-entry').map((entry) => entry.find('strong').text())).toEqual([
       'Player One',
       'Home',
+    ])
+
+    wrapper.unmount()
+  })
+
+  it('limits occurrences to the points included in the selected stats scope', async () => {
+    const teamStore = useTeamStore()
+    await vi.waitFor(() => expect(teamStore.teams[0].players).toHaveLength(1))
+
+    const journalStore = useJournalStore()
+    const records: JournalEntry[] = [
+      {
+        id: 1,
+        type: JournalEntryType.PLAYER,
+        name: 'p1',
+        ts: 5,
+        source: JournalEntrySource.USER,
+      },
+      {
+        id: 2,
+        type: JournalEntryType.POSITIVE_ACTION,
+        name: ACTION_IDS.SCORE,
+        ts: 10,
+        source: JournalEntrySource.USER,
+      },
+      {
+        id: 3,
+        type: JournalEntryType.PLAYER,
+        name: 'p1',
+        ts: 15,
+        source: JournalEntrySource.USER,
+      },
+      {
+        id: 4,
+        type: JournalEntryType.POSITIVE_ACTION,
+        name: ACTION_IDS.SCORE,
+        ts: 20,
+        source: JournalEntrySource.USER,
+      },
+      {
+        id: 5,
+        type: JournalEntryType.PLAYER,
+        name: 'p1',
+        ts: 25,
+        source: JournalEntrySource.USER,
+      },
+    ]
+    records.forEach((record) => journalStore.addRecord(record))
+
+    const stateStore = useStateStore()
+    stateStore.pointIndex = 1
+    const wrapper = mount(PlayerSearch, {
+      props: {
+        videoPlayer: null,
+        selectedPlayerId: 'p1',
+      },
+    })
+
+    await vi.waitFor(() => expect(wrapper.findAll('.result-entry')).toHaveLength(1))
+    expect(wrapper.find('.result-entry').attributes('aria-label')).toContain('15 seconds')
+
+    stateStore.statsScope = 1
+    await vi.waitFor(() => expect(wrapper.findAll('.result-entry')).toHaveLength(2))
+    expect(wrapper.findAll('.result-entry').map((entry) => entry.attributes('aria-label'))).toEqual([
+      expect.stringContaining('5 seconds'),
+      expect.stringContaining('15 seconds'),
+    ])
+
+    stateStore.statsScope = 2
+    await vi.waitFor(() => expect(wrapper.findAll('.result-entry')).toHaveLength(3))
+    expect(wrapper.findAll('.result-entry').map((entry) => entry.attributes('aria-label'))).toEqual([
+      expect.stringContaining('5 seconds'),
+      expect.stringContaining('15 seconds'),
+      expect.stringContaining('25 seconds'),
     ])
 
     wrapper.unmount()

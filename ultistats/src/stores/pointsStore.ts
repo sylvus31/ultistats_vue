@@ -63,3 +63,13 @@ export const separateRecordsInPoints = (records: JournalEntry[]) => {
   })
   return tmp_points
 }
+
+export const getPointsForStats = (points: Point[], statsScope: number, pointIndex: number) => {
+  if (statsScope === 0) {
+    const point = points[pointIndex]
+    return point ? [point] : []
+  }
+  if (statsScope === 1) return points.slice(0, pointIndex + 1)
+  if (statsScope === 2) return points
+  return []
+}
