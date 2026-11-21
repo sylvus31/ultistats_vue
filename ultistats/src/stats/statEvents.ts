@@ -27,6 +27,11 @@ export type StatEvent =
       scoreRecord: journalAction
       level: 0 | 1 | 2
     }
+  | {
+      kind: 'defense'
+      playerId: string
+      record: journalAction
+    }
 
 export type StatEventCriterion =
   | {
@@ -72,6 +77,15 @@ function isScoreEntry(record: JournalEntry): record is journalAction {
   return (
     (record.type === jet.POSITIVE_ACTION || record.type === jet.NEGATIVE_ACTION) &&
     record.name === ACTION_IDS.SCORE
+  )
+}
+
+function isDefenseEntry(record: JournalEntry): record is journalAction {
+  return (
+    (record.type === jet.POSITIVE_ACTION || record.type === jet.NEGATIVE_ACTION) &&
+    (record.name === ACTION_IDS.BLOCK ||
+      record.name === ACTION_IDS.INTERCEPT ||
+      record.name === ACTION_IDS.DEFENSE)
   )
 }
 
@@ -159,6 +173,12 @@ export function buildStatEvents(
       }
       events.push(event)
       passAttempts.push(event)
+    } else if (isDefenseEntry(record) && latestPlayer) {
+      events.push({
+        kind: 'defense',
+        playerId: latestPlayer.name,
+        record,
+      })
     }
   })
 

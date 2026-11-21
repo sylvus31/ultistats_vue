@@ -162,7 +162,18 @@
       </template>
     </Column>
     <Column field="points" header="Points" :sortable="true"></Column>
-    <Column field="defenses" header="Defenses" :sortable="true"></Column>
+    <Column field="defenses" header="Defenses" :sortable="true">
+      <template #body="slotProps">
+        <button
+          type="button"
+          class="stat-search-button"
+          :aria-label="`Search defenses by ${slotProps.data.player}`"
+          @click="searchForRow('defense', slotProps.data.id)"
+        >
+          {{ slotProps.data.defenses }}
+        </button>
+      </template>
+    </Column>
     <Column field="played_points" header="Played Points" :sortable="true"></Column>
     <Column field="played_time" header="Played Time" :sortable="true">
       <template #body="slotProps">
@@ -480,17 +491,6 @@ const getStatsForOnePoint = (records: JournalEntry[]) => {
           break
         }
       }
-    } else if (
-      isActionRecord(r, ACTION_IDS.BLOCK) ||
-      isActionRecord(r, ACTION_IDS.INTERCEPT) ||
-      isActionRecord(r, ACTION_IDS.DEFENSE)
-    ) {
-      for (let j = i - 1; j >= 0; j--) {
-        if (records[j].type === jet.PLAYER) {
-          baseValues.get(records[j].name)!.defenses += 1
-          break
-        }
-      }
     }
   })
 
@@ -499,6 +499,11 @@ const getStatsForOnePoint = (records: JournalEntry[]) => {
     return player ? teamStore.getPlayerTeam(player) : -1
   })
   statEvents.forEach((event) => {
+    if (event.kind === 'defense') {
+      const playerStats = baseValues.get(event.playerId)
+      if (playerStats) playerStats.defenses += 1
+      return
+    }
     if (event.kind === 'score-assist') {
       const playerStats = baseValues.get(event.playerId)
       if (playerStats) playerStats.passes_D[event.level] += 1

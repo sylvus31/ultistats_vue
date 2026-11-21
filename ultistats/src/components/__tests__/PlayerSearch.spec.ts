@@ -437,6 +437,66 @@ describe('PlayerSearch', () => {
     wrapper.unmount()
   })
 
+  it('finds defense actions for a selected player', async () => {
+    const teamStore = useTeamStore()
+    await vi.waitFor(() => expect(teamStore.teams[0].players).toHaveLength(1))
+
+    useActionsStore().setActions(
+      [
+        { id: ACTION_IDS.DEFENSE, name: 'Defense', type: ActionType.POSITIVE },
+        { id: ACTION_IDS.BLOCK, name: 'Block', type: ActionType.POSITIVE },
+        { id: ACTION_IDS.INTERCEPT, name: 'Intercept', type: ActionType.POSITIVE },
+      ],
+      [],
+    )
+    const journalStore = useJournalStore()
+    const records: JournalEntry[] = [
+      { id: 1, type: JournalEntryType.PLAYER, name: 'p1', ts: 1, source: JournalEntrySource.USER },
+      {
+        id: 2,
+        type: JournalEntryType.POSITIVE_ACTION,
+        name: ACTION_IDS.DEFENSE,
+        ts: 2,
+        source: JournalEntrySource.USER,
+      },
+      { id: 3, type: JournalEntryType.PLAYER, name: 'p2', ts: 3, source: JournalEntrySource.USER },
+      {
+        id: 4,
+        type: JournalEntryType.POSITIVE_ACTION,
+        name: ACTION_IDS.BLOCK,
+        ts: 4,
+        source: JournalEntrySource.USER,
+      },
+      { id: 5, type: JournalEntryType.PLAYER, name: 'p1', ts: 5, source: JournalEntrySource.USER },
+      {
+        id: 6,
+        type: JournalEntryType.POSITIVE_ACTION,
+        name: ACTION_IDS.INTERCEPT,
+        ts: 6,
+        source: JournalEntrySource.USER,
+      },
+    ]
+    records.forEach((record) => journalStore.addRecord(record))
+
+    const wrapper = mount(PlayerSearch, {
+      props: {
+        videoPlayer: null,
+        searchRequest: createStatSearchRequest('defense', 'p1', ['p1']),
+      },
+    })
+
+    const results = wrapper.findAll('.result-entry')
+    expect(results).toHaveLength(2)
+    expect(results.map((result) => result.text())).toEqual(
+      expect.arrayContaining([
+        expect.stringContaining('Defense'),
+        expect.stringContaining('Intercept'),
+      ]),
+    )
+
+    wrapper.unmount()
+  })
+
   it('limits occurrences to the points included in the selected stats scope', async () => {
     const teamStore = useTeamStore()
     await vi.waitFor(() => expect(teamStore.teams[0].players).toHaveLength(1))

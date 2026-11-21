@@ -224,6 +224,36 @@ describe('StatsViewer', () => {
     wrapper.unmount()
   })
 
+  it('counts and searches block, interception, and defense actions', async () => {
+    const wrapper = mount(StatsViewer)
+    const journalStore = useJournalStore()
+
+    await vi.waitFor(() => expect(wrapper.text()).toContain('Player Four'))
+    journalStore.addPlayerEntry('p1')
+    journalStore.addActionEntry(ACTION_IDS.DEFENSE, true)
+    journalStore.addPlayerEntry('p2')
+    journalStore.addActionEntry(ACTION_IDS.BLOCK, true)
+    journalStore.addPlayerEntry('p1')
+    journalStore.addActionEntry(ACTION_IDS.INTERCEPT, true)
+
+    const defenseButton = wrapper.find('[aria-label="Search defenses by Player One"]')
+    await vi.waitFor(() => expect(defenseButton.text()).toBe('2'))
+    expect(wrapper.find('[aria-label="Search defenses by Player Two"]').text()).toBe('1')
+
+    await defenseButton.trigger('click')
+    expect(wrapper.emitted('select-search')?.at(-1)).toEqual([
+      {
+        subjectId: 'p1',
+        criteria: [
+          { field: 'kind', operator: 'equals', value: 'defense' },
+          { field: 'playerId', operator: 'in', value: ['p1'] },
+        ],
+      },
+    ])
+
+    wrapper.unmount()
+  })
+
   it('shows pass names instead of pass ids in the pass type statistics', async () => {
     const wrapper = mount(StatsViewer)
     const journalStore = useJournalStore()
