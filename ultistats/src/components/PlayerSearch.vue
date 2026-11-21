@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, ref } from 'vue'
+import { computed } from 'vue'
 import type { JournalEntry } from '@/stores/journal'
 import { useJournalStore } from '@/stores/journal'
 import { useActionsStore } from '@/stores/ActionsStore'
@@ -12,21 +12,31 @@ import { JournalEntryType as jet } from '@/types/journaltypes'
 const props = defineProps<{
   videoPlayer: Pick<VideoPlayerInstance, 'goTo' | 'play'> | null
 }>()
+const selectedPlayerId = defineModel<string | null>('selectedPlayerId', { default: null })
 
 const journalStore = useJournalStore()
 const teamStore = useTeamStore()
 const actionsStore = useActionsStore()
 const eventsStore = useEventsStore()
 const passesStore = usePassesStore()
-const selectedPlayerId = ref<string | null>(null)
 
 const players = computed(() => teamStore.teams.flatMap((team) => team.players))
+const selectedPlayerIds = computed(() => {
+  const selectedId = selectedPlayerId.value
+  if (!selectedId) return new Set<string>()
+
+  const selectedTeam = teamStore.teams.find((team) => team.id === selectedId)
+  return new Set([
+    selectedId,
+    ...(selectedTeam?.players.map((player) => player.id) ?? []),
+  ])
+})
 const occurrences = computed(() => {
   if (!selectedPlayerId.value) return []
 
   const records = journalStore.sortedRecords
   return records.flatMap((record, index) =>
-    record.type === jet.PLAYER && record.name === selectedPlayerId.value
+    record.type === jet.PLAYER && selectedPlayerIds.value.has(record.name)
       ? [
           {
             record,

@@ -14,11 +14,15 @@
       style="background-color: #1a1a1a; font-weight: bold"
     >
       <template #body="slotProps">
-        <span
+        <button
+          type="button"
           class="player-name"
+          :aria-label="`Show search results for ${slotProps.data.player}`"
           :style="{ textDecorationColor: getStatsTeamColor(slotProps.data.id) }"
-          >{{ slotProps.data.player }}</span
+          @click="emit('select-player', slotProps.data.id)"
         >
+          {{ slotProps.data.player }}
+        </button>
       </template>
     </Column>
     <Column field="passes_total" header="P total" :sortable="true"></Column>
@@ -124,6 +128,12 @@
 }
 
 .player-name {
+  padding: 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  cursor: pointer;
+  font: inherit;
   text-decoration: underline;
   text-underline-offset: 3px;
 }
@@ -144,6 +154,9 @@ import type { VideoPlayerInstance } from '@/components/VideoPlayer.vue'
 import { hasPassModifier } from '@/types/passModifiers'
 import { isActionRecord, isScoreActionRecord } from '@/types/scoreAction'
 import { ACTION_IDS } from '@/types/catalogIds'
+const emit = defineEmits<{
+  'select-player': [playerId: string]
+}>()
 const videoPlayerRef = ref<VideoPlayerInstance | null>(null)
 const setVideoPlayerRef = (ref: Ref<VideoPlayerInstance | null>) => {
   videoPlayerRef.value = ref.value

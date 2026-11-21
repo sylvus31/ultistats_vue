@@ -123,4 +123,50 @@ describe('PlayerSearch', () => {
     expect(goTo).toHaveBeenCalledWith(7)
     expect(play).toHaveBeenCalled()
   })
+
+  it('shows roster and team-ID occurrences when selected from the stats table', async () => {
+    const teamStore = useTeamStore()
+    await vi.waitFor(() => expect(teamStore.teams[0].players).toHaveLength(1))
+
+    const journalStore = useJournalStore()
+    const records: JournalEntry[] = [
+      {
+        id: 1,
+        type: JournalEntryType.PLAYER,
+        name: 'p1',
+        ts: 5,
+        source: JournalEntrySource.USER,
+      },
+      {
+        id: 2,
+        type: JournalEntryType.PLAYER,
+        name: 't0',
+        ts: 10,
+        source: JournalEntrySource.USER,
+      },
+      {
+        id: 3,
+        type: JournalEntryType.PLAYER,
+        name: 'p2',
+        ts: 15,
+        source: JournalEntrySource.USER,
+      },
+    ]
+    records.forEach((record) => journalStore.addRecord(record))
+
+    const wrapper = mount(PlayerSearch, {
+      props: {
+        videoPlayer: null,
+        selectedPlayerId: 't0',
+      },
+    })
+
+    await vi.waitFor(() => expect(wrapper.findAll('.result-entry')).toHaveLength(2))
+    expect(wrapper.findAll('.result-entry').map((entry) => entry.find('strong').text())).toEqual([
+      'Player One',
+      'Home',
+    ])
+
+    wrapper.unmount()
+  })
 })

@@ -64,6 +64,11 @@ describe('StatsViewer', () => {
       '#b05959',
     )
 
+    await playerOne?.trigger('click')
+    const homeTeam = wrapper.findAll('.player-name').find((name) => name.text() === 'Home')
+    await homeTeam?.trigger('click')
+    expect(wrapper.emitted('select-player')).toEqual([['p1'], ['t0']])
+
     wrapper.unmount()
   })
 

@@ -28,6 +28,7 @@ const fileInputRef = ref<HTMLInputElement | null>(null) // Ref for the hidden fi
 const journalViewerRef = ref<InstanceType<typeof JournalViewer> | null>(null)
 const statsViewerRef = ref<InstanceType<typeof StatsViewer> | null>(null)
 const onlyLinePlayers = ref(false)
+const selectedSearchPlayerId = ref<string | null>(null)
 const journalStore = useJournalStore()
 
 const warnBeforeUnload = (event: BeforeUnloadEvent) => {
@@ -118,7 +119,7 @@ provide('videoPlayerRef', videoPlayerRef)
       <JournalViewer ref="journalViewerRef"/>
       <WindowHolder title="Stats players" allowFullscreen>
         <template v-slot:menu><StatViewerMenu/></template>
-        <template v-slot:main><StatsViewer ref="statsViewerRef"/></template>
+        <template v-slot:main><StatsViewer ref="statsViewerRef" @select-player="selectedSearchPlayerId = $event"/></template>
       </WindowHolder>
     </div>
     <div slot="end">
@@ -162,7 +163,12 @@ provide('videoPlayerRef', videoPlayerRef)
         <template v-slot:main><FreeComment/></template>
       </WindowHolder>
       <WindowHolder title="Search by player">
-        <template v-slot:main><PlayerSearch :video-player="videoPlayerRef" /></template>
+        <template v-slot:main>
+          <PlayerSearch
+            :video-player="videoPlayerRef"
+            v-model:selected-player-id="selectedSearchPlayerId"
+          />
+        </template>
       </WindowHolder>
     </div>
   </sl-split-panel>
