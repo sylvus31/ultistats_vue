@@ -70,6 +70,8 @@ describe('StatsViewer', () => {
     await wrapper.find('[aria-label="Search passes attempted by Player One"]').trigger('click')
     await wrapper.find('[aria-label="Search successful passes for Player One"]').trigger('click')
     await wrapper.find('[aria-label="Search failed passes for Player One"]').trigger('click')
+    await wrapper.find('[aria-label="Search successful long passes for Player One"]').trigger('click')
+    await wrapper.find('[aria-label="Search failed long passes for Player One"]').trigger('click')
     expect(wrapper.emitted('select-search')).toEqual([
       [
         {
@@ -114,6 +116,28 @@ describe('StatsViewer', () => {
           criteria: [
             { field: 'kind', operator: 'equals', value: 'pass-attempt' },
             { field: 'playerId', operator: 'in', value: ['p1'] },
+            { field: 'outcome', operator: 'equals', value: 'failed' },
+          ],
+        },
+      ],
+      [
+        {
+          subjectId: 'p1',
+          criteria: [
+            { field: 'kind', operator: 'equals', value: 'pass-attempt' },
+            { field: 'playerId', operator: 'in', value: ['p1'] },
+            { field: 'isLong', operator: 'equals', value: true },
+            { field: 'outcome', operator: 'equals', value: 'completed' },
+          ],
+        },
+      ],
+      [
+        {
+          subjectId: 'p1',
+          criteria: [
+            { field: 'kind', operator: 'equals', value: 'pass-attempt' },
+            { field: 'playerId', operator: 'in', value: ['p1'] },
+            { field: 'isLong', operator: 'equals', value: true },
             { field: 'outcome', operator: 'equals', value: 'failed' },
           ],
         },

@@ -74,7 +74,23 @@
         </button>
       </template>
     </Column>
-    <Column field="long_success" header="L success" :sortable="true"></Column>
+    <Column field="long_success" header="L success" :sortable="true">
+      <template #body="slotProps">
+        <button
+          type="button"
+          class="stat-search-button"
+          :aria-label="`Search successful long passes for ${slotProps.data.player}`"
+          @click="
+            searchForRow('pass-attempt', slotProps.data.id, [
+              { field: 'isLong', operator: 'equals', value: true },
+              { field: 'outcome', operator: 'equals', value: 'completed' },
+            ])
+          "
+        >
+          {{ slotProps.data.long_success }}
+        </button>
+      </template>
+    </Column>
     <Column header="L success rate">
       <template #body="slotProps">
         {{
@@ -82,7 +98,23 @@
         }}
       </template>
     </Column>
-    <Column field="long_fail" header="L fail" :sortable="true"></Column>
+    <Column field="long_fail" header="L fail" :sortable="true">
+      <template #body="slotProps">
+        <button
+          type="button"
+          class="stat-search-button"
+          :aria-label="`Search failed long passes for ${slotProps.data.player}`"
+          @click="
+            searchForRow('pass-attempt', slotProps.data.id, [
+              { field: 'isLong', operator: 'equals', value: true },
+              { field: 'outcome', operator: 'equals', value: 'failed' },
+            ])
+          "
+        >
+          {{ slotProps.data.long_fail }}
+        </button>
+      </template>
+    </Column>
     <Column field="passes_D" header="P D" :sortable="true">
       <template #body="slotProps">
         {{ slotProps.data.passes_D[0] }}

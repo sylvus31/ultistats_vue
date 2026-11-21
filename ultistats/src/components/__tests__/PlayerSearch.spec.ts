@@ -12,6 +12,7 @@ import { ActionType } from '@/types/ActionsType'
 import { ACTION_IDS } from '@/types/catalogIds'
 import { JournalEntrySource, JournalEntryType } from '@/types/journaltypes'
 import { createStatSearchRequest } from '@/stats/statEvents'
+import { getPassModifierId } from '@/types/passModifiers'
 
 describe('PlayerSearch', () => {
   beforeEach(() => {
@@ -253,11 +254,12 @@ describe('PlayerSearch', () => {
     wrapper.unmount()
   })
 
-  it('filters successful and failed pass searches for a selected team', async () => {
+  it('filters successful, failed, and long-pass searches for a selected team', async () => {
     const teamStore = useTeamStore()
     await vi.waitFor(() => expect(teamStore.teams[0].players).toHaveLength(1))
 
     usePassesStore().setPasses([{ id: 'pass', name: 'Forehand', isActive: true }])
+    const longModifier = getPassModifierId('long')
     const journalStore = useJournalStore()
     const records: JournalEntry[] = [
       { id: 1, type: JournalEntryType.PLAYER, name: 'p1', ts: 1, source: JournalEntrySource.USER },
@@ -267,7 +269,7 @@ describe('PlayerSearch', () => {
         name: 'pass',
         ts: 2,
         source: JournalEntrySource.USER,
-        modifiers: new Set(),
+        modifiers: new Set([longModifier]),
       },
       { id: 3, type: JournalEntryType.PLAYER, name: 'p1', ts: 3, source: JournalEntrySource.USER },
       { id: 4, type: JournalEntryType.PLAYER, name: 'p1', ts: 4, source: JournalEntrySource.USER },
@@ -277,7 +279,7 @@ describe('PlayerSearch', () => {
         name: 'pass',
         ts: 5,
         source: JournalEntrySource.USER,
-        modifiers: new Set(),
+        modifiers: new Set([longModifier]),
       },
       { id: 6, type: JournalEntryType.PLAYER, name: 'p2', ts: 6, source: JournalEntrySource.USER },
       { id: 7, type: JournalEntryType.PLAYER, name: 't0', ts: 7, source: JournalEntrySource.USER },
@@ -287,9 +289,19 @@ describe('PlayerSearch', () => {
         name: 'pass',
         ts: 8,
         source: JournalEntrySource.USER,
-        modifiers: new Set(),
+        modifiers: new Set([longModifier]),
       },
       { id: 9, type: JournalEntryType.PLAYER, name: 't0', ts: 9, source: JournalEntrySource.USER },
+      { id: 10, type: JournalEntryType.PLAYER, name: 'p1', ts: 10, source: JournalEntrySource.USER },
+      {
+        id: 11,
+        type: JournalEntryType.PASS,
+        name: 'pass',
+        ts: 11,
+        source: JournalEntrySource.USER,
+        modifiers: new Set(),
+      },
+      { id: 12, type: JournalEntryType.PLAYER, name: 'p1', ts: 12, source: JournalEntrySource.USER },
     ]
     records.forEach((record) => journalStore.addRecord(record))
 
@@ -303,14 +315,35 @@ describe('PlayerSearch', () => {
     })
 
     const results = wrapper.findAll('.result-entry')
-    expect(results).toHaveLength(2)
+    expect(results).toHaveLength(3)
     expect(results.map((result) => result.attributes('aria-label'))).toEqual([
       expect.stringContaining('2 seconds'),
       expect.stringContaining('8 seconds'),
+      expect.stringContaining('11 seconds'),
     ])
 
     await wrapper.setProps({
       searchRequest: createStatSearchRequest('pass-attempt', 't0', ['t0', 'p1'], [
+        { field: 'outcome', operator: 'equals', value: 'failed' },
+      ]),
+    })
+    await vi.waitFor(() => expect(wrapper.findAll('.result-entry')).toHaveLength(1))
+    expect(wrapper.find('.result-entry').attributes('aria-label')).toContain('5 seconds')
+
+    await wrapper.setProps({
+      searchRequest: createStatSearchRequest('pass-attempt', 't0', ['t0', 'p1'], [
+        { field: 'isLong', operator: 'equals', value: true },
+        { field: 'outcome', operator: 'equals', value: 'completed' },
+      ]),
+    })
+    await vi.waitFor(() => expect(wrapper.findAll('.result-entry')).toHaveLength(2))
+    expect(wrapper.findAll('.result-entry').map((result) => result.attributes('aria-label'))).toEqual(
+      [expect.stringContaining('2 seconds'), expect.stringContaining('8 seconds')],
+    )
+
+    await wrapper.setProps({
+      searchRequest: createStatSearchRequest('pass-attempt', 't0', ['t0', 'p1'], [
+        { field: 'isLong', operator: 'equals', value: true },
         { field: 'outcome', operator: 'equals', value: 'failed' },
       ]),
     })

@@ -36,6 +36,11 @@ export type StatEventCriterion =
       operator: 'equals'
       value: Extract<StatEvent, { kind: 'pass-attempt' }>['outcome']
     }
+  | {
+      field: 'isLong'
+      operator: 'equals'
+      value: boolean
+    }
 
 export interface StatSearchRequest {
   subjectId: string
@@ -152,6 +157,12 @@ export function searchStatEvents(
             event.kind === 'pass-attempt' &&
             criterion.operator === 'equals' &&
             event.outcome === criterion.value
+          )
+        case 'isLong':
+          return (
+            event.kind === 'pass-attempt' &&
+            criterion.operator === 'equals' &&
+            event.isLong === criterion.value
           )
       }
     }),
