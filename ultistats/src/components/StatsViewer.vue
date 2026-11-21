@@ -58,7 +58,22 @@
         {{ formatSuccessRate(slotProps.data.passes_success, slotProps.data.passes_total) }}
       </template>
     </Column>
-    <Column field="passes_fail" header="P fail" :sortable="true"></Column>
+    <Column field="passes_fail" header="P fail" :sortable="true">
+      <template #body="slotProps">
+        <button
+          type="button"
+          class="stat-search-button"
+          :aria-label="`Search failed passes for ${slotProps.data.player}`"
+          @click="
+            searchForRow('pass-attempt', slotProps.data.id, [
+              { field: 'outcome', operator: 'equals', value: 'failed' },
+            ])
+          "
+        >
+          {{ slotProps.data.passes_fail }}
+        </button>
+      </template>
+    </Column>
     <Column field="long_success" header="L success" :sortable="true"></Column>
     <Column header="L success rate">
       <template #body="slotProps">

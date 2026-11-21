@@ -253,7 +253,7 @@ describe('PlayerSearch', () => {
     wrapper.unmount()
   })
 
-  it('filters successful pass searches for all players included in a selected team', async () => {
+  it('filters successful and failed pass searches for a selected team', async () => {
     const teamStore = useTeamStore()
     await vi.waitFor(() => expect(teamStore.teams[0].players).toHaveLength(1))
 
@@ -308,6 +308,14 @@ describe('PlayerSearch', () => {
       expect.stringContaining('2 seconds'),
       expect.stringContaining('8 seconds'),
     ])
+
+    await wrapper.setProps({
+      searchRequest: createStatSearchRequest('pass-attempt', 't0', ['t0', 'p1'], [
+        { field: 'outcome', operator: 'equals', value: 'failed' },
+      ]),
+    })
+    await vi.waitFor(() => expect(wrapper.findAll('.result-entry')).toHaveLength(1))
+    expect(wrapper.find('.result-entry').attributes('aria-label')).toContain('5 seconds')
 
     wrapper.unmount()
   })
