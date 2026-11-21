@@ -11,6 +11,7 @@ import { useTeamStore } from '@/stores/Team'
 import { ActionType } from '@/types/ActionsType'
 import { ACTION_IDS } from '@/types/catalogIds'
 import { JournalEntrySource, JournalEntryType } from '@/types/journaltypes'
+import { createStatSearchRequest } from '@/stats/statEvents'
 
 describe('PlayerSearch', () => {
   beforeEach(() => {
@@ -159,7 +160,7 @@ describe('PlayerSearch', () => {
     const wrapper = mount(PlayerSearch, {
       props: {
         videoPlayer: null,
-        selectedPlayerId: 't0',
+        searchRequest: createStatSearchRequest('player-occurrence', 't0', ['t0', 'p1']),
       },
     })
 
@@ -168,6 +169,86 @@ describe('PlayerSearch', () => {
       'Player One',
       'Home',
     ])
+
+    wrapper.unmount()
+  })
+
+  it('shows only pass-attempt records matching the selected criteria', async () => {
+    const teamStore = useTeamStore()
+    await vi.waitFor(() => expect(teamStore.teams[0].players).toHaveLength(1))
+
+    usePassesStore().setPasses([{ id: 'pass', name: 'Forehand', isActive: true }])
+    const journalStore = useJournalStore()
+    const records: JournalEntry[] = [
+      {
+        id: 1,
+        type: JournalEntryType.PLAYER,
+        name: 'p1',
+        ts: 5,
+        source: JournalEntrySource.USER,
+      },
+      {
+        id: 2,
+        type: JournalEntryType.PASS,
+        name: 'pass',
+        ts: 6,
+        source: JournalEntrySource.USER,
+        modifiers: new Set(),
+      },
+      {
+        id: 3,
+        type: JournalEntryType.PLAYER,
+        name: 'p2',
+        ts: 7,
+        source: JournalEntrySource.USER,
+      },
+      {
+        id: 4,
+        type: JournalEntryType.PASS,
+        name: 'pass',
+        ts: 8,
+        source: JournalEntrySource.USER,
+        modifiers: new Set(),
+      },
+      {
+        id: 5,
+        type: JournalEntryType.PLAYER,
+        name: 'p1',
+        ts: 9,
+        source: JournalEntrySource.USER,
+      },
+      {
+        id: 6,
+        type: JournalEntryType.PLAYER,
+        name: 't0',
+        ts: 10,
+        source: JournalEntrySource.USER,
+      },
+      {
+        id: 7,
+        type: JournalEntryType.PASS,
+        name: 'pass',
+        ts: 11,
+        source: JournalEntrySource.USER,
+        modifiers: new Set(),
+      },
+    ]
+    records.forEach((record) => journalStore.addRecord(record))
+
+    const wrapper = mount(PlayerSearch, {
+      props: {
+        videoPlayer: null,
+        searchRequest: createStatSearchRequest('pass-attempt', 't0', ['t0', 'p1']),
+      },
+    })
+
+    const results = wrapper.findAll('.result-entry')
+    expect(results).toHaveLength(2)
+    expect(results[0].attributes('aria-label')).toContain('Forehand')
+    expect(results[0].attributes('aria-label')).toContain('6 seconds')
+    expect(results[0].text()).toContain('Player One')
+    expect(results[1].attributes('aria-label')).toContain('11 seconds')
+    expect(results[1].text()).toContain('Home')
 
     wrapper.unmount()
   })
@@ -221,7 +302,7 @@ describe('PlayerSearch', () => {
     const wrapper = mount(PlayerSearch, {
       props: {
         videoPlayer: null,
-        selectedPlayerId: 'p1',
+        searchRequest: createStatSearchRequest('player-occurrence', 'p1', ['p1']),
       },
     })
 

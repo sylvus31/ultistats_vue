@@ -10,11 +10,17 @@ import { useStateStore } from '@/stores/StateStore'
 import { getPointsForStats } from '@/stores/pointsStore'
 import type { VideoPlayerInstance } from '@/components/VideoPlayer.vue'
 import { JournalEntryType as jet } from '@/types/journaltypes'
+import {
+  buildStatEvents,
+  createStatSearchRequest,
+  searchStatEvents,
+  type StatSearchRequest,
+} from '@/stats/statEvents'
 
 const props = defineProps<{
   videoPlayer: Pick<VideoPlayerInstance, 'goTo' | 'play'> | null
 }>()
-const selectedPlayerId = defineModel<string | null>('selectedPlayerId', { default: null })
+const searchRequest = defineModel<StatSearchRequest | null>('searchRequest', { default: null })
 
 const journalStore = useJournalStore()
 const stateStore = useStateStore()
@@ -24,39 +30,41 @@ const eventsStore = useEventsStore()
 const passesStore = usePassesStore()
 
 const players = computed(() => teamStore.teams.flatMap((team) => team.players))
-const selectedPlayerIds = computed(() => {
-  const selectedId = selectedPlayerId.value
-  if (!selectedId) return new Set<string>()
-
-  const selectedTeam = teamStore.teams.find((team) => team.id === selectedId)
-  return new Set([
-    selectedId,
-    ...(selectedTeam?.players.map((player) => player.id) ?? []),
-  ])
-})
-const selectedRecords = computed(() =>
+const selectedPoints = computed(() =>
   getPointsForStats(
     journalStore.recordsAsPoints,
     stateStore.statsScope,
     stateStore.pointIndex,
-  ).flatMap((point) => point.records),
+  ),
+)
+const selectedRecords = computed(() => selectedPoints.value.flatMap((point) => point.records))
+const statEvents = computed(() =>
+  selectedPoints.value.flatMap((point) =>
+    buildStatEvents(point.records, (playerId) => {
+      const player = teamStore.getPlayerByID(playerId)
+      return player ? teamStore.getPlayerTeam(player) : -1
+    }),
+  ),
 )
 const occurrences = computed(() => {
-  if (!selectedPlayerId.value) return []
-
+  if (!searchRequest.value) return []
   const records = selectedRecords.value
-  return records.flatMap((record, index) =>
-    record.type === jet.PLAYER && selectedPlayerIds.value.has(record.name)
-      ? [
-          {
-            record,
-            previous: records[index - 1],
-            next: records[index + 1],
-          },
-        ]
-      : [],
-  )
+  return searchStatEvents(statEvents.value, searchRequest.value.criteria).flatMap((event) => {
+    const index = records.findIndex((record) => record.id === event.record.id)
+    if (index < 0) return []
+    return [
+      {
+        record: event.record,
+        previous: records[index - 1],
+        next: records[index + 1],
+      },
+    ]
+  })
 })
+
+function selectPlayer(playerId: string) {
+  searchRequest.value = createStatSearchRequest('player-occurrence', playerId, [playerId])
+}
 
 function getPlayerNameColor(playerId: string): string | undefined {
   const player = teamStore.getPlayerByID(playerId)
@@ -98,9 +106,9 @@ function goToOccurrence(timestamp: number) {
       <sl-button
         v-for="player in players"
         :key="player.id"
-        :class="{ active: selectedPlayerId === player.id }"
-        :aria-pressed="selectedPlayerId === player.id"
-        @click="selectedPlayerId = player.id"
+        :class="{ active: searchRequest?.subjectId === player.id }"
+        :aria-pressed="searchRequest?.subjectId === player.id"
+        @click="selectPlayer(player.id)"
       >
         <span
           class="player-name"
@@ -126,7 +134,7 @@ function goToOccurrence(timestamp: number) {
           </button>
         </li>
       </ol>
-      <p v-else-if="selectedPlayerId">No occurrences found.</p>
+      <p v-else-if="searchRequest">No occurrences found.</p>
       <p v-else>Select a player to see their journal occurrences.</p>
     </section>
   </div>

@@ -67,7 +67,36 @@ describe('StatsViewer', () => {
     await playerOne?.trigger('click')
     const homeTeam = wrapper.findAll('.player-name').find((name) => name.text() === 'Home')
     await homeTeam?.trigger('click')
-    expect(wrapper.emitted('select-player')).toEqual([['p1'], ['t0']])
+    await wrapper.find('[aria-label="Search passes attempted by Player One"]').trigger('click')
+    expect(wrapper.emitted('select-search')).toEqual([
+      [
+        {
+          subjectId: 'p1',
+          criteria: [
+            { field: 'kind', operator: 'equals', value: 'player-occurrence' },
+            { field: 'playerId', operator: 'in', value: ['p1'] },
+          ],
+        },
+      ],
+      [
+        {
+          subjectId: 't0',
+          criteria: [
+            { field: 'kind', operator: 'equals', value: 'player-occurrence' },
+            { field: 'playerId', operator: 'in', value: ['t0', 'p1', 'p4'] },
+          ],
+        },
+      ],
+      [
+        {
+          subjectId: 'p1',
+          criteria: [
+            { field: 'kind', operator: 'equals', value: 'pass-attempt' },
+            { field: 'playerId', operator: 'in', value: ['p1'] },
+          ],
+        },
+      ],
+    ])
 
     wrapper.unmount()
   })
@@ -114,6 +143,35 @@ describe('StatsViewer', () => {
 
       expect(playerOneRow?.text()).toContain('Forehand: 1')
       expect(playerOneRow?.text()).not.toContain('pass-id')
+    })
+
+    wrapper.unmount()
+  })
+
+  it('counts explicit passes without a receiver as attempts and includes them in success-rate denominators', async () => {
+    const wrapper = mount(StatsViewer)
+    const journalStore = useJournalStore()
+    const longModifier = getPassModifierId('long')
+    useStateStore().statsScope = 2
+
+    await vi.waitFor(() => expect(wrapper.text()).toContain('Player One'))
+    journalStore.addPlayerEntry('p1')
+    journalStore.addPassEntry('pass', new Set([longModifier]))
+    journalStore.addActionEntry(ACTION_IDS.DROP, false)
+    journalStore.addPlayerEntry('p1')
+    journalStore.addPassEntry('pass', new Set([longModifier]))
+
+    await vi.waitFor(() => {
+      const headers = wrapper.findAll('thead th').map((header) => header.text())
+      const rows = wrapper.findAll('tbody tr')
+      const playerOne = rows.find((row) => row.find('td').text() === 'Player One')
+      const cells = playerOne?.findAll('td')
+
+      expect(cells?.[headers.indexOf('P total')].text()).toBe('2')
+      expect(cells?.[headers.indexOf('P success')].text()).toBe('0')
+      expect(cells?.[headers.indexOf('P success rate')].text()).toBe('0.0%')
+      expect(cells?.[headers.indexOf('P fail')].text()).toBe('1')
+      expect(cells?.[headers.indexOf('L success rate')].text()).toBe('0.0%')
     })
 
     wrapper.unmount()

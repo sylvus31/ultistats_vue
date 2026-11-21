@@ -19,13 +19,24 @@
           class="player-name"
           :aria-label="`Show search results for ${slotProps.data.player}`"
           :style="{ textDecorationColor: getStatsTeamColor(slotProps.data.id) }"
-          @click="emit('select-player', slotProps.data.id)"
+          @click="searchForRow('player-occurrence', slotProps.data.id)"
         >
           {{ slotProps.data.player }}
         </button>
       </template>
     </Column>
-    <Column field="passes_total" header="P total" :sortable="true"></Column>
+    <Column field="passes_total" header="P total" :sortable="true">
+      <template #body="slotProps">
+        <button
+          type="button"
+          class="stat-search-button"
+          :aria-label="`Search passes attempted by ${slotProps.data.player}`"
+          @click="searchForRow('pass-attempt', slotProps.data.id)"
+        >
+          {{ slotProps.data.passes_total }}
+        </button>
+      </template>
+    </Column>
     <Column field="passes_success" header="P success" :sortable="true"></Column>
     <Column header="P success rate">
       <template #body="slotProps">
@@ -37,10 +48,7 @@
     <Column header="L success rate">
       <template #body="slotProps">
         {{
-          formatSuccessRate(
-            slotProps.data.long_success,
-            slotProps.data.long_success + slotProps.data.long_fail,
-          )
+          formatSuccessRate(slotProps.data.long_success, slotProps.data.long_total)
         }}
       </template>
     </Column>
@@ -137,6 +145,17 @@
   text-decoration: underline;
   text-underline-offset: 3px;
 }
+
+.stat-search-button {
+  padding: 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  cursor: pointer;
+  font: inherit;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
 </style>
 
 <script setup lang="ts">
@@ -147,15 +166,20 @@ import { useJournalStore, type JournalEntry } from '@/stores/journal'
 import { useStateStore } from '@/stores/StateStore'
 import { usePassesStore } from '@/stores/passesStore'
 import { getPointsForStats } from '@/stores/pointsStore'
-import { JournalEntryType as jet, type journalPass } from '@/types/journaltypes'
+import { JournalEntryType as jet } from '@/types/journaltypes'
 import PlayedTimeCell from './stats/PlayedTimeCell.vue'
 import TargetsCell from './stats/TargetsCell.vue'
 import type { VideoPlayerInstance } from '@/components/VideoPlayer.vue'
-import { hasPassModifier } from '@/types/passModifiers'
 import { isActionRecord, isScoreActionRecord } from '@/types/scoreAction'
 import { ACTION_IDS } from '@/types/catalogIds'
+import {
+  buildStatEvents,
+  createStatSearchRequest,
+  type StatEvent,
+  type StatSearchRequest,
+} from '@/stats/statEvents'
 const emit = defineEmits<{
-  'select-player': [playerId: string]
+  'select-search': [request: StatSearchRequest]
 }>()
 const videoPlayerRef = ref<VideoPlayerInstance | null>(null)
 const setVideoPlayerRef = (ref: Ref<VideoPlayerInstance | null>) => {
@@ -165,6 +189,15 @@ const teamStore = useTeamStore()
 const journalStore = useJournalStore()
 const stateStore = useStateStore()
 const passesStore = usePassesStore()
+
+const getSearchPlayerIds = (id: string) => {
+  const team = teamStore.teams.find((candidate) => candidate.id === id)
+  return [id, ...(team?.players.map((player) => player.id) ?? [])]
+}
+
+const searchForRow = (kind: StatEvent['kind'], id: string) => {
+  emit('select-search', createStatSearchRequest(kind, id, getSearchPlayerIds(id)))
+}
 
 const getStatsTeamColor = (id: string) => {
   const teamIndex = teamStore.teams.findIndex(
@@ -214,6 +247,7 @@ interface Row {
   passesType: StringNumberMap
   long_success: number
   long_fail: number
+  long_total: number
   pulls: number
   pickUps: number
   offensives_points: [number, number]
@@ -256,6 +290,7 @@ const initRow = (id: string) => {
     passesType: new StringNumberMap(),
     long_success: 0,
     long_fail: 0,
+    long_total: 0,
     pulls: 0,
     pickUps: 0,
     offensives_points: [0, 0] as [number, number],
@@ -300,55 +335,17 @@ const getStatsForOnePoint = (records: JournalEntry[]) => {
         }
       }
 
-      const thrower = teamStore.getPlayerByID(r.name)!
       for (let j = i + 1; j < records.length; j++) {
         const nextRecord = records[j]
 
-        if (nextRecord.type === jet.PLAYER) {
-          const receiver = teamStore.getPlayerByID(records[j].name)!
-          let passType = 'pass'
-          let passModifiers = new Set<string>()
-          //get type of pass
-          for (let k = i + 1; k < j; k++) {
-            if (records[k].type === jet.PASS) {
-              const pass = records[k] as journalPass
-              passType = passesStore.passes.find((catalogPass) => catalogPass.id === pass.name)?.name
-                ?? pass.name
-              passModifiers = pass.modifiers
-              break
-            }
-          }
-          baseValues.get(thrower.id)!.passes_total += 1
-          baseValues.get(thrower.id)!.passesType.increment(passType)
-          const isLong = hasPassModifier(passModifiers, 'long')
-          const success = teamStore.getPlayerTeam(thrower) === teamStore.getPlayerTeam(receiver)
-
-          if (success) {
-            baseValues.get(thrower.id)!.passes_success += 1
-            if (isLong) {
-              baseValues.get(thrower.id)!.long_success += 1
-            }
-          } else {
-            baseValues.get(thrower.id)!.passes_fail += 1
-            if (isLong) {
-              baseValues.get(thrower.id)!.long_fail += 1
-            }
-          }
-          //count receivers
-          if (success) {
-            baseValues.get(thrower.id)!.targets.increment(receiver.id)
-            baseValues.get(receiver.id)!.providers.increment(thrower.id)
-          }
-          break
-        } else if (isActionRecord(nextRecord, ACTION_IDS.PULL)) {
-          baseValues.get(thrower.id)!.pulls += 1
+        if (nextRecord.type === jet.PLAYER) break
+        if (isActionRecord(nextRecord, ACTION_IDS.PULL)) {
+          baseValues.get(r.name)!.pulls += 1
           break
         } else if (isActionRecord(nextRecord, ACTION_IDS.PICK_UP_DISC)) {
-          baseValues.get(thrower.id)!.pickUps += 1
-          // no break needed, same player has disc
+          baseValues.get(r.name)!.pickUps += 1
         } else if (
           isScoreActionRecord(nextRecord) ||
-          isActionRecord(nextRecord, ACTION_IDS.PULL) ||
           isActionRecord(nextRecord, ACTION_IDS.BLOCK) ||
           isActionRecord(nextRecord, ACTION_IDS.DROP)
         ) {
@@ -413,6 +410,34 @@ const getStatsForOnePoint = (records: JournalEntry[]) => {
     }
   })
 
+  const statEvents = buildStatEvents(records, (playerId) => {
+    const player = teamStore.getPlayerByID(playerId)
+    return player ? teamStore.getPlayerTeam(player) : -1
+  })
+  statEvents.forEach((event) => {
+    if (event.kind !== 'pass-attempt') return
+
+    const playerStats = baseValues.get(event.playerId)
+    if (!playerStats) return
+
+    playerStats.passes_total += 1
+    playerStats.passesType.increment(
+      passesStore.passes.find((pass) => pass.id === event.record.name)?.name ?? event.record.name,
+    )
+    if (event.outcome === 'completed') playerStats.passes_success += 1
+    if (event.outcome === 'failed') playerStats.passes_fail += 1
+    if (event.isLong) {
+      playerStats.long_total += 1
+      if (event.outcome === 'completed') playerStats.long_success += 1
+      if (event.outcome === 'failed') playerStats.long_fail += 1
+    }
+
+    if (event.outcome === 'completed' && event.receiver) {
+      playerStats.targets.increment(event.receiver.name)
+      baseValues.get(event.receiver.name)?.providers.increment(event.playerId)
+    }
+  })
+
   teamStore.teams.forEach((team) => {
     const teamStats = baseValues.get(team.id)!
     team.players.forEach((player) => {
@@ -431,6 +456,7 @@ const getStatsForOnePoint = (records: JournalEntry[]) => {
       teamStats.pickUps += playerStats.pickUps
       teamStats.long_success += playerStats.long_success
       teamStats.long_fail += playerStats.long_fail
+      teamStats.long_total += playerStats.long_total
 
       playerStats.targets.forEach((value, key) => {
         teamStats.targets.set(key, teamStats.targets.getOrDefault(key) + value)
@@ -481,6 +507,7 @@ const updateStatGrid = () => {
       playerTotalStats.time_in_hand_count += r.time_in_hand_count
       playerTotalStats.long_success += r.long_success
       playerTotalStats.long_fail += r.long_fail
+      playerTotalStats.long_total += r.long_total
       r.targets.forEach((v, k) => {
         playerTotalStats.targets.set(k, playerTotalStats.targets.getOrDefault(k) + v)
       })

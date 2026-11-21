@@ -23,12 +23,13 @@ import StatsViewer from './components/StatsViewer.vue'
 import StatViewerMenu from './components/StatViewerMenu.vue'
 import FreeComment from './components/FreeComment.vue'
 import PlayerSearch from './components/PlayerSearch.vue'
+import type { StatSearchRequest } from './stats/statEvents'
 const videoPlayerRef = ref<VideoPlayerInstance | null>(null)
 const fileInputRef = ref<HTMLInputElement | null>(null) // Ref for the hidden file input
 const journalViewerRef = ref<InstanceType<typeof JournalViewer> | null>(null)
 const statsViewerRef = ref<InstanceType<typeof StatsViewer> | null>(null)
 const onlyLinePlayers = ref(false)
-const selectedSearchPlayerId = ref<string | null>(null)
+const selectedSearchRequest = ref<StatSearchRequest | null>(null)
 const journalStore = useJournalStore()
 
 const warnBeforeUnload = (event: BeforeUnloadEvent) => {
@@ -119,7 +120,7 @@ provide('videoPlayerRef', videoPlayerRef)
       <JournalViewer ref="journalViewerRef"/>
       <WindowHolder title="Stats players" allowFullscreen>
         <template v-slot:menu><StatViewerMenu/></template>
-        <template v-slot:main><StatsViewer ref="statsViewerRef" @select-player="selectedSearchPlayerId = $event"/></template>
+        <template v-slot:main><StatsViewer ref="statsViewerRef" @select-search="selectedSearchRequest = $event"/></template>
       </WindowHolder>
     </div>
     <div slot="end">
@@ -166,7 +167,7 @@ provide('videoPlayerRef', videoPlayerRef)
         <template v-slot:main>
           <PlayerSearch
             :video-player="videoPlayerRef"
-            v-model:selected-player-id="selectedSearchPlayerId"
+            v-model:search-request="selectedSearchRequest"
           />
         </template>
       </WindowHolder>
