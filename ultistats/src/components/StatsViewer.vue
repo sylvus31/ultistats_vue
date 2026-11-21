@@ -93,9 +93,7 @@
     </Column>
     <Column header="L success rate">
       <template #body="slotProps">
-        {{
-          formatSuccessRate(slotProps.data.long_success, slotProps.data.long_total)
-        }}
+        {{ formatSuccessRate(slotProps.data.long_success, slotProps.data.long_total) }}
       </template>
     </Column>
     <Column field="long_fail" header="L fail" :sortable="true">
@@ -117,17 +115,50 @@
     </Column>
     <Column field="passes_D" header="P D" :sortable="true">
       <template #body="slotProps">
-        {{ slotProps.data.passes_D[0] }}
+        <button
+          type="button"
+          class="stat-search-button"
+          :aria-label="`Search score-leading passes by ${slotProps.data.player}`"
+          @click="
+            searchForRow('score-assist', slotProps.data.id, [
+              { field: 'level', operator: 'equals', value: 0 },
+            ])
+          "
+        >
+          {{ slotProps.data.passes_D[0] }}
+        </button>
       </template>
     </Column>
     <Column field="passes_D" header="P D -1" :sortable="true">
       <template #body="slotProps">
-        {{ slotProps.data.passes_D[1] }}
+        <button
+          type="button"
+          class="stat-search-button"
+          :aria-label="`Search one-pass-earlier score-leading passes by ${slotProps.data.player}`"
+          @click="
+            searchForRow('score-assist', slotProps.data.id, [
+              { field: 'level', operator: 'equals', value: 1 },
+            ])
+          "
+        >
+          {{ slotProps.data.passes_D[1] }}
+        </button>
       </template>
     </Column>
     <Column field="passes_D" header="P D -2" :sortable="true">
       <template #body="slotProps">
-        {{ slotProps.data.passes_D[2] }}
+        <button
+          type="button"
+          class="stat-search-button"
+          :aria-label="`Search two-passes-earlier score-leading passes by ${slotProps.data.player}`"
+          @click="
+            searchForRow('score-assist', slotProps.data.id, [
+              { field: 'level', operator: 'equals', value: 2 },
+            ])
+          "
+        >
+          {{ slotProps.data.passes_D[2] }}
+        </button>
       </template>
     </Column>
     <Column field="points" header="Points" :sortable="true"></Column>
@@ -387,7 +418,7 @@ const getStatsForOnePoint = (records: JournalEntry[]) => {
       for (let j = i + 1; j < records.length; j++) {
         const nextRecord = records[j]
         if (nextRecord.type === jet.PLAYER) break
-        if(nextRecord.name === ACTION_IDS.PICK_UP_DISC) {
+        if (nextRecord.name === ACTION_IDS.PICK_UP_DISC) {
           catchTS = nextRecord.ts
         }
         if (nextRecord.type === jet.PASS) {
@@ -427,23 +458,6 @@ const getStatsForOnePoint = (records: JournalEntry[]) => {
       for (let j = i - 1; j >= 0; j--) {
         if (records[j].type === jet.PLAYER) {
           baseValues.get(records[j].name)!.points += 1
-          const scoreTeam = teamStore.getPlayerTeam(teamStore.getPlayerByID(records[j].name)!)
-          // get passe D
-          let pass_D_level = 0
-          for (let k = j - 1; k >= 0; k--) {
-            if (records[k].type === jet.PLAYER) {
-              // calahan is counted as a pass D
-              const passerTeam = teamStore.getPlayerTeam(teamStore.getPlayerByID(records[k].name)!)
-              if (passerTeam != scoreTeam) {
-                break
-              }
-              baseValues.get(records[k].name)!.passes_D[pass_D_level] += 1
-              pass_D_level += 1
-              if (pass_D_level > 3) {
-                break
-              }
-            }
-          }
           break
         }
       }
@@ -485,6 +499,11 @@ const getStatsForOnePoint = (records: JournalEntry[]) => {
     return player ? teamStore.getPlayerTeam(player) : -1
   })
   statEvents.forEach((event) => {
+    if (event.kind === 'score-assist') {
+      const playerStats = baseValues.get(event.playerId)
+      if (playerStats) playerStats.passes_D[event.level] += 1
+      return
+    }
     if (event.kind !== 'pass-attempt') return
 
     const playerStats = baseValues.get(event.playerId)

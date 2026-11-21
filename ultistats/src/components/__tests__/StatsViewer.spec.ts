@@ -70,8 +70,17 @@ describe('StatsViewer', () => {
     await wrapper.find('[aria-label="Search passes attempted by Player One"]').trigger('click')
     await wrapper.find('[aria-label="Search successful passes for Player One"]').trigger('click')
     await wrapper.find('[aria-label="Search failed passes for Player One"]').trigger('click')
-    await wrapper.find('[aria-label="Search successful long passes for Player One"]').trigger('click')
+    await wrapper
+      .find('[aria-label="Search successful long passes for Player One"]')
+      .trigger('click')
     await wrapper.find('[aria-label="Search failed long passes for Player One"]').trigger('click')
+    await wrapper.find('[aria-label="Search score-leading passes by Player One"]').trigger('click')
+    await wrapper
+      .find('[aria-label="Search one-pass-earlier score-leading passes by Player One"]')
+      .trigger('click')
+    await wrapper
+      .find('[aria-label="Search two-passes-earlier score-leading passes by Player One"]')
+      .trigger('click')
     expect(wrapper.emitted('select-search')).toEqual([
       [
         {
@@ -142,6 +151,16 @@ describe('StatsViewer', () => {
           ],
         },
       ],
+      ...[0, 1, 2].map((level) => [
+        {
+          subjectId: 'p1',
+          criteria: [
+            { field: 'kind', operator: 'equals', value: 'score-assist' },
+            { field: 'playerId', operator: 'in', value: ['p1'] },
+            { field: 'level', operator: 'equals', value: level },
+          ],
+        },
+      ]),
     ])
 
     wrapper.unmount()
@@ -167,6 +186,39 @@ describe('StatsViewer', () => {
       expect(homeCells[1].text()).toBe('0')
       expect(awayCells[1].text()).toBe('1')
       expect(awayCells[2].text()).toBe('1')
+    })
+
+    wrapper.unmount()
+  })
+
+  it('counts direct and preceding score-leading passes by assist level', async () => {
+    const wrapper = mount(StatsViewer)
+    const journalStore = useJournalStore()
+
+    await vi.waitFor(() => expect(wrapper.text()).toContain('Player Four'))
+    journalStore.addPlayerEntry('p1')
+    journalStore.addPassEntry('pass', new Set())
+    journalStore.addPlayerEntry('p4')
+    journalStore.addPassEntry('pass', new Set())
+    journalStore.addPlayerEntry('p1')
+    journalStore.addPassEntry('pass', new Set())
+    journalStore.addPlayerEntry('p4')
+    journalStore.addActionEntry(ACTION_IDS.SCORE, true)
+
+    await vi.waitFor(() => {
+      expect(wrapper.find('[aria-label="Search score-leading passes by Player One"]').text()).toBe(
+        '1',
+      )
+      expect(
+        wrapper
+          .find('[aria-label="Search one-pass-earlier score-leading passes by Player Four"]')
+          .text(),
+      ).toBe('1')
+      expect(
+        wrapper
+          .find('[aria-label="Search two-passes-earlier score-leading passes by Player One"]')
+          .text(),
+      ).toBe('1')
     })
 
     wrapper.unmount()
@@ -297,7 +349,9 @@ describe('StatsViewer', () => {
     const addAt = (ts: number, addEntry: () => void) => {
       addEntry()
       const records = journalStore.sortedRecords
-      const addedRecord = records.reduce((latest, record) => (record.id > latest.id ? record : latest))
+      const addedRecord = records.reduce((latest, record) =>
+        record.id > latest.id ? record : latest,
+      )
       addedRecord.ts = ts
     }
 
