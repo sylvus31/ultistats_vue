@@ -12,7 +12,6 @@ import type { VideoPlayerInstance } from '@/components/VideoPlayer.vue'
 import { JournalEntryType as jet } from '@/types/journaltypes'
 import {
   buildStatEvents,
-  createStatSearchRequest,
   searchStatEvents,
   type StatSearchRequest,
 } from '@/stats/statEvents'
@@ -29,7 +28,6 @@ const actionsStore = useActionsStore()
 const eventsStore = useEventsStore()
 const passesStore = usePassesStore()
 
-const players = computed(() => teamStore.teams.flatMap((team) => team.players))
 const selectedPoints = computed(() =>
   getPointsForStats(
     journalStore.recordsAsPoints,
@@ -62,15 +60,6 @@ const occurrences = computed(() => {
   })
 })
 
-function selectPlayer(playerId: string) {
-  searchRequest.value = createStatSearchRequest('player-occurrence', playerId, [playerId])
-}
-
-function getPlayerNameColor(playerId: string): string | undefined {
-  const player = teamStore.getPlayerByID(playerId)
-  if (!player) return undefined
-  return teamStore.teams[teamStore.getPlayerTeam(player)]?.color
-}
 
 function getRecordName(record: JournalEntry | undefined): string {
   if (!record) return '—'
@@ -102,24 +91,7 @@ function goToOccurrence(timestamp: number) {
 
 <template>
   <div class="player-search">
-    <div class="player-buttons" aria-label="Players">
-      <sl-button
-        v-for="player in players"
-        :key="player.id"
-        :class="{ active: searchRequest?.subjectId === player.id }"
-        :aria-pressed="searchRequest?.subjectId === player.id"
-        @click="selectPlayer(player.id)"
-      >
-        <span
-          class="player-name"
-          :style="{ textDecorationColor: getPlayerNameColor(player.id) }"
-          >{{ player.name }}</span
-        >
-      </sl-button>
-    </div>
-
     <section class="results" aria-labelledby="player-search-results-title">
-      <h3 id="player-search-results-title">Results</h3>
       <ol v-if="occurrences.length">
         <li v-for="occurrence in occurrences" :key="occurrence.record.id">
           <button
@@ -135,7 +107,7 @@ function goToOccurrence(timestamp: number) {
         </li>
       </ol>
       <p v-else-if="searchRequest">No occurrences found.</p>
-      <p v-else>Select a player to see their journal occurrences.</p>
+      <p v-else>Click a stat or player name in the statistics panel.</p>
     </section>
   </div>
 </template>
@@ -173,6 +145,26 @@ function goToOccurrence(timestamp: number) {
   margin: 0;
   padding: 0;
   list-style: none;
+}
+
+:global(.window-container-vertically-expanded .player-search) {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  min-height: 0;
+}
+
+:global(.window-content-vertically-expanded .results) {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  min-height: 0;
+}
+
+:global(.window-content-vertically-expanded .results ol) {
+  flex: 1 1 auto;
+  max-height: none;
+  min-height: 0;
 }
 
 .result-entry {

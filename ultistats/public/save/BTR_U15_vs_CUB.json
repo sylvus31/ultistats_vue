@@ -1487,7 +1487,7 @@
   "passesModifiers": [
     { "id": "pm1", "name": "Long", "key": "Shift", "description": "", "isActive": false },
     { "id": "pm2", "name": "Break", "key": "Ctrl", "description": "", "isActive": false },
-    { "id": "pm3", "name": "Off-hand", "key": "Alt", "description": "", "isActive": false }
+    { "id": "pm3", "name": "Off-hand", "key": "o", "description": "", "isActive": false }
   ],
   "positiveActions": [
     {

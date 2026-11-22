@@ -11,6 +11,6 @@
   "passesModifiers": [
     { "id": "pm1", "name": "Long", "key": "Shift", "description": "You decide what is a long pass" },
     { "id": "pm2", "name": "Break", "key": "Ctrl", "description": "" },
-    { "id": "pm3", "name": "Off-hand", "key": "Alt", "description": "" }
+    { "id": "pm3", "name": "Off-hand", "key": "o", "description": "" }
   ]
 }

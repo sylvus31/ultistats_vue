@@ -7,6 +7,7 @@ import { useJournalStore } from '@/stores/journal'
 import { JournalEntrySource, JournalEntryType } from '@/types/journaltypes'
 import { useActionsStore } from '@/stores/ActionsStore'
 import { useTeamStore } from '@/stores/Team'
+import { useStateStore } from '@/stores/StateStore'
 
 describe('ScoreEvolution', () => {
   beforeEach(() => {
@@ -39,18 +40,22 @@ describe('ScoreEvolution', () => {
     vi.unstubAllGlobals()
   })
 
-  it('updates the displayed score when a score action is recorded', async () => {
+  it('displays the team store names and updates the score when a score action is recorded', async () => {
     const journalStore = useJournalStore()
     const actionsStore = useActionsStore()
     const teamStore = useTeamStore()
+    const stateStore = useStateStore()
+    const videoPlayerRef = ref({ elapsedTimeValue: 1, goTo: vi.fn() })
     const wrapper = mount(ScoreEvolution, {
-      global: { provide: { videoPlayerRef: ref(null) } },
+      global: { provide: { videoPlayerRef } },
     })
-    await vi.waitFor(() => expect(wrapper.text()).toContain('BTR: 0 - 0 ADV'))
     await vi.waitFor(() => {
       expect(actionsStore.positiveActions).toHaveLength(2)
       expect(teamStore.teams[0].players).toHaveLength(1)
     })
+    teamStore.teams[0].name = 'Falcons'
+    teamStore.teams[1].name = 'Wolves'
+    await vi.waitFor(() => expect(wrapper.text()).toContain('Falcons: 0 - 0 Wolves'))
 
     journalStore.addRecord({
       id: 1,
@@ -74,7 +79,47 @@ describe('ScoreEvolution', () => {
       source: JournalEntrySource.USER,
     })
 
-    await vi.waitFor(() => expect(wrapper.text()).toContain('BTR: 1 - 0 ADV'))
+    await vi.waitFor(() => expect(wrapper.text()).toContain('Falcons: 1 - 0 Wolves'))
+
+    journalStore.addRecord({
+      id: 4,
+      name: 'pa5',
+      ts: 4,
+      type: JournalEntryType.POSITIVE_ACTION,
+      source: JournalEntrySource.USER,
+    })
+    journalStore.addRecord({
+      id: 5,
+      name: 'p1',
+      ts: 5,
+      type: JournalEntryType.PLAYER,
+      source: JournalEntrySource.USER,
+    })
+
+    await vi.waitFor(() => expect(wrapper.findAll('.score-circle')).toHaveLength(2))
+    expect(wrapper.findAll('.current-point-indicator')).toHaveLength(1)
+    expect(wrapper.findAll('.score-circle')[0]?.find('.current-point-indicator').exists()).toBe(
+      true,
+    )
+
+    await wrapper.findAll('.score-circle')[1]?.trigger('click')
+    await vi.waitFor(() => expect(stateStore.pointIndex).toBe(1))
+    expect(wrapper.findAll('.current-point-indicator')).toHaveLength(1)
+    expect(wrapper.findAll('.score-circle')[1]?.find('.current-point-indicator').exists()).toBe(
+      true,
+    )
+
+    videoPlayerRef.value.elapsedTimeValue = 1.5
+    await vi.waitFor(() => expect(stateStore.pointIndex).toBe(0))
+    expect(wrapper.findAll('.score-circle')[0]?.find('.current-point-indicator').exists()).toBe(
+      true,
+    )
+
+    videoPlayerRef.value.elapsedTimeValue = 4.5
+    await vi.waitFor(() => expect(stateStore.pointIndex).toBe(1))
+    expect(wrapper.findAll('.score-circle')[1]?.find('.current-point-indicator').exists()).toBe(
+      true,
+    )
     wrapper.unmount()
   })
 })
