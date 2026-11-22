@@ -124,6 +124,14 @@ provide('videoPlayerRef', videoPlayerRef)
       </WindowHolder>
     </div>
     <div slot="end">
+      <WindowHolder title="Search results">
+        <template v-slot:main>
+          <PlayerSearch
+            :video-player="videoPlayerRef"
+            v-model:search-request="selectedSearchRequest"
+          />
+        </template>
+      </WindowHolder>
       <WindowHolder title="Players" allowEdit editorComponent='./PlayerEditor.vue'>
         <template #before-edit>
           <button
@@ -138,15 +146,15 @@ provide('videoPlayerRef', videoPlayerRef)
               class="mdi"
               :class="onlyLinePlayers ? 'mdi-account' : 'mdi-account-multiple'"
               aria-hidden="true"
-            ></span>
-          </button>
-        </template>
-        <template v-slot:menu>
-          <div class="players-menu">
-            <TeamSelector />
-            <SetLine />
-          </div>
-        </template>
+              ></span>
+            </button>
+          </template>
+          <template v-slot:menu>
+            <div class="players-menu">
+              <TeamSelector />
+              <SetLine />
+            </div>
+          </template>
         <template v-slot:main><PlayerSelector :only-line-players="onlyLinePlayers" /></template>
       </WindowHolder>
       <WindowHolder title="Passes" allowEdit editorComponent='./PassEditor.vue'>
@@ -162,14 +170,6 @@ provide('videoPlayerRef', videoPlayerRef)
       </WindowHolder>
       <WindowHolder title="Free comment">
         <template v-slot:main><FreeComment/></template>
-      </WindowHolder>
-      <WindowHolder title="Search by player">
-        <template v-slot:main>
-          <PlayerSearch
-            :video-player="videoPlayerRef"
-            v-model:search-request="selectedSearchRequest"
-          />
-        </template>
       </WindowHolder>
     </div>
   </sl-split-panel>
