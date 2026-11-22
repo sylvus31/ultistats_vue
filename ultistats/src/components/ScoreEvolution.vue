@@ -5,6 +5,7 @@ import type { VideoPlayerInstance } from '@/components/VideoPlayer.vue'
 import { useStateStore } from '@/stores/StateStore'
 import { Point } from '@/stores/pointsStore'
 import { useActionsStore } from '@/stores/ActionsStore'
+import { useTeamStore } from '@/stores/Team'
 
 const videoPlayerRef = inject<Ref<VideoPlayerInstance | null>>('videoPlayerRef')
 
@@ -12,8 +13,10 @@ const stateStore = useStateStore()
 
 const journalStore = useJournalStore()
 const actionsStore = useActionsStore()
+const teamStore = useTeamStore()
 
 const totalScore = ref<[number, number]>([0, 0])
+type ScorePoint = Pick<Point, 'pullTime' | 'scoringTeam' | 'attackingTeam'>
 const updateTotalScore = (points: Point[] = journalStore.recordsAsPoints) => {
   totalScore.value = [0, 0]
   points.forEach((p) => {
@@ -23,17 +26,30 @@ const updateTotalScore = (points: Point[] = journalStore.recordsAsPoints) => {
   })
   console.log('totalScore', totalScore.value)
 }
-const scoreEvolution = ref<Point[]>([])
+const scoreEvolution = ref<Array<{ point: ScorePoint; index: number }>>([])
 watch(
   () => [journalStore.sortedRecords, actionsStore.positiveActions, actionsStore.negativeActions],
   () => {
     console.log('journalStore.recordsAsPoints', journalStore.recordsAsPoints)
-    scoreEvolution.value = journalStore.recordsAsPoints.filter((p) => p.hasPull)
+    scoreEvolution.value = journalStore.recordsAsPoints.flatMap((point, index) =>
+      point.hasPull ? [{ point, index }] : [],
+    )
     updateTotalScore()
   },
   { deep: true, immediate: true },
 )
-const setVideoToBeginningOfPoint = (point: { pullTime: number }, index: number) => {
+watch(
+  [() => videoPlayerRef?.value?.elapsedTimeValue, () => journalStore.recordsAsPoints],
+  ([videoTime]) => {
+    if (videoTime === undefined) return
+    const currentPoint =
+      [...scoreEvolution.value].reverse().find(({ point }) => point.pullTime - 2 <= videoTime) ??
+      scoreEvolution.value[0]
+    if (currentPoint) stateStore.pointIndex = currentPoint.index
+  },
+  { immediate: true },
+)
+const setVideoToBeginningOfPoint = (point: ScorePoint, index: number) => {
   if (videoPlayerRef?.value) {
     console.log('setVideoToBeginningOfPoint', point)
 
@@ -49,24 +65,31 @@ const score = computed(() => {
 defineExpose({})
 </script>
 <template>
-  <div>BTR: {{ score[0] }} - {{ score[1] }} ADV</div>
+  <div>
+    {{ teamStore.teams[0].name }}: {{ score[0] }} - {{ score[1] }} {{ teamStore.teams[1].name }}
+  </div>
   <div>&nbsp;&nbsp;&nbsp;</div>
-  <div v-for="(score, index) in scoreEvolution" :key="index">
+  <div v-for="item in scoreEvolution" :key="item.index">
     <div
       class="score-circle"
       :style="{
         'background-color':
-          score.scoringTeam === 0 ? '#035812ac' : score.scoringTeam === 1 ? '#8b0a1a' : 'white',
+          item.point.scoringTeam === 0
+            ? '#035812ac'
+            : item.point.scoringTeam === 1
+              ? '#8b0a1a'
+              : 'white',
       }"
-      @click="setVideoToBeginningOfPoint(score, index)"
+      @click="setVideoToBeginningOfPoint(item.point, item.index)"
     >
       <!-- <div class="red-possession-circle"></div> -->
       <div
         class="start-circle"
         :style="{
-          'background-color': score.attackingTeam === 0 ? '#035812ac' : '#8b0a1a',
+          'background-color': item.point.attackingTeam === 0 ? '#035812ac' : '#8b0a1a',
         }"
       ></div>
+      <div v-if="stateStore.pointIndex === item.index" class="current-point-indicator"></div>
     </div>
   </div>
 </template>
@@ -88,6 +111,18 @@ defineExpose({})
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
+  z-index: 1;
+}
+.current-point-indicator {
+  width: 4px;
+  height: 4px;
+  position: absolute;
+  top: calc(100% + 2px);
+  left: 50%;
+  transform: translateX(-50%);
+  border: 1px solid #222;
+  border-radius: 50%;
+  background-color: white;
   z-index: 1;
 }
 .red-possession-circle {
