@@ -124,7 +124,7 @@ provide('videoPlayerRef', videoPlayerRef)
       </WindowHolder>
     </div>
     <div slot="end">
-      <WindowHolder title="Search results">
+      <WindowHolder title="Search results" allowVerticalExpand>
         <template v-slot:main>
           <PlayerSearch
             :video-player="videoPlayerRef"

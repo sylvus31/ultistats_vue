@@ -147,6 +147,26 @@ function goToOccurrence(timestamp: number) {
   list-style: none;
 }
 
+:global(.window-container-vertically-expanded .player-search) {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  min-height: 0;
+}
+
+:global(.window-content-vertically-expanded .results) {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  min-height: 0;
+}
+
+:global(.window-content-vertically-expanded .results ol) {
+  flex: 1 1 auto;
+  max-height: none;
+  min-height: 0;
+}
+
 .result-entry {
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);

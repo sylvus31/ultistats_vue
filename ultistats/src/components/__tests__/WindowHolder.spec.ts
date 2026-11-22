@@ -34,6 +34,26 @@ describe('WindowHolder fullscreen control', () => {
     expect(wrapper.find('.window-container').classes()).not.toContain('window-container-fullscreen')
   })
 
+  it('expands vertically within the viewport without entering fullscreen', async () => {
+    const wrapper = mount(WindowHolder, {
+      props: { title: 'Search results', allowVerticalExpand: true },
+    })
+
+    await wrapper.get('[aria-label="Expand vertically"]').trigger('click')
+
+    const container = wrapper.get<HTMLElement>('.window-container')
+    const maxHeight = Number.parseFloat(container.element.style.maxHeight)
+    expect(container.classes()).toContain('window-container-vertically-expanded')
+    expect(container.classes()).not.toContain('window-container-fullscreen')
+    expect(maxHeight).toBeGreaterThan(0)
+    expect(maxHeight).toBeLessThan(window.innerHeight)
+
+    await wrapper.get('[aria-label="Restore height"]').trigger('click')
+    expect(container.classes()).not.toContain('window-container-vertically-expanded')
+    expect(container.element.style.maxHeight).toBe('')
+    wrapper.unmount()
+  })
+
   it('renders the before-edit slot immediately before Edit', () => {
     const wrapper = mount(WindowHolder, {
       props: { title: 'Players', allowEdit: true },
